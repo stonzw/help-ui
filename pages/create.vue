@@ -191,7 +191,7 @@ export default {
     this.fetchUser()
   },
   methods: {
-    ...mapActions(['fetchUser', 'loginDialogOn']),
+    ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
     putHelp (imageBase64) {
       const data = {

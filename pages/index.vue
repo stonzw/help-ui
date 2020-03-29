@@ -1,20 +1,6 @@
 <template>
   <v-layout>
-    <v-container>
-      <div class="work-area">
-        <h2>仕事の悩み</h2>
-        <v-row
-          v-if="isAuthenticated()"
-          align="center"
-          justify="center"
-        >
-          <v-col v-for="item in workProblems" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
-            <v-card :href="item.url" elevation="0">
-              <img :src="item.image_url" width="100%">
-            </v-card>
-          </v-col>
-        </v-row>
-      </div>
+    <v-container v-if="isAuthenticated()">
       <div class="human-area">
         <h2>人間関係の悩み</h2>
         <v-row
@@ -22,7 +8,21 @@
           align="center"
           justify="center"
         >
-          <v-col v-for="item in humanProblems" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
+          <v-col v-for="item in getHumanProblem()" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
+            <v-card :href="item.url" elevation="0">
+              <img :src="item.image_url" width="100%">
+            </v-card>
+          </v-col>
+        </v-row>
+      </div>
+      <div class="work-area">
+        <h2>仕事の悩み</h2>
+        <v-row
+          v-if="isAuthenticated()"
+          align="center"
+          justify="center"
+        >
+          <v-col v-for="item in getWorkProblem()" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
             <v-card :href="item.url" elevation="0">
               <img :src="item.image_url" width="100%">
             </v-card>
@@ -36,7 +36,7 @@
           align="center"
           justify="center"
         >
-          <v-col v-for="item in helthProblems" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
+          <v-col v-for="item in getHelthProblem()" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
             <v-card :href="item.url" elevation="0">
               <img :src="item.image_url" width="100%">
             </v-card>
@@ -44,11 +44,12 @@
         </v-row>
       </div>
     </v-container>
+    <v-container v-else>
+    </v-container>
   </v-layout>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import axios from 'axios'
 
 export default {
   head () {
@@ -56,48 +57,21 @@ export default {
       title: 'トップページ'
     }
   },
-  data () {
-    return {
-      workProblems: [],
-      humanProblems: [],
-      helthProblems: []
-    }
-  },
   computed () {
     this.fetchUser()
-    this.fetchProblems()
+    if (this.isAuthenticated()) {
+      this.fetchProblem()
+    }
   },
   mounted () {
     this.fetchUser()
-    this.fetchProblems()
+    if (this.isAuthenticated()) {
+      this.fetchProblem()
+    }
   },
   methods: {
-    ...mapActions(['fetchUser', 'login', 'logout', 'login_redirect']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
-    fetchProblems () {
-      const companyId = 1
-      const workId = 2
-      const humanId = 1
-      const helthId = 3
-      axios.get(
-        `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${workId}`,
-        { headers: this.getCred() }
-      ).then((res) => {
-        this.workProblems = res.data.map((p) => { return { 'id': p.id, 'image_url': p.image_url, 'url': '/help/' + p.id } })
-      })
-      axios.get(
-        `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${humanId}`,
-        { headers: this.getCred() }
-      ).then((res) => {
-        this.humanProblems = res.data.map((p) => { return { 'id': p.id, 'image_url': p.image_url, 'url': '/help/' + p.id } })
-      })
-      axios.get(
-        `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${helthId}`,
-        { headers: this.getCred() }
-      ).then((res) => {
-        this.helthProblems = res.data.map((p) => { return { 'id': p.id, 'image_url': p.image_url, 'url': '/help/' + p.id } })
-      })
-    }
+    ...mapActions(['fetchUser', 'login', 'logout', 'fetchProblem']),
+    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHelthProblem', 'getHumanProblem'])
   }
 }
 </script>

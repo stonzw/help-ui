@@ -3,7 +3,11 @@ import axios from 'axios'
 export const state = () => ({
   user: null,
   cred: null,
-  loginRes: null
+  loading: false,
+  message: { 'message': null, 'level': null },
+  workProblem: [],
+  humanProblem: [],
+  helthProblem: []
 })
 
 export const getters = {
@@ -15,6 +19,21 @@ export const getters = {
   },
   getCred (state) {
     return state.cred
+  },
+  getMessage (state) {
+    return state.message
+  },
+  getWorkProblem (state) {
+    return state.workProblem
+  },
+  getHumanProblem (state) {
+    return state.humanProblem
+  },
+  getHelthProblem (state) {
+    return state.helthProblem
+  },
+  isLoading (state) {
+    return state.loading
   }
 }
 
@@ -25,8 +44,23 @@ export const mutations = {
   setCred (state, cred) {
     state.cred = cred
   },
-  setLoginRes (state, res) {
-    state.res = res
+  setMessage (state, msg) {
+    state.message = msg
+  },
+  setWorkProblem (state, problem) {
+    state.workProblem = problem
+  },
+  setHumanProblem (state, problem) {
+    state.humanProblem = problem
+  },
+  setHelthProblem (state, problem) {
+    state.helthProblem = problem
+  },
+  startLoad (state) {
+    state.loading = true
+  },
+  finishLoad (state) {
+    state.loading = false
   }
 }
 
@@ -49,6 +83,7 @@ export const actions = {
       email,
       password
     }
+    commit('startLoad')
     axios.post(`${process.env.API_URL}/auth/sign_in`, data)
       .then(
         (res) => {
@@ -62,7 +97,10 @@ export const actions = {
           const user = res.data.data
           commit('setCred', cred)
           commit('setUser', user)
-          commit('setLoginRes', res)
+          commit('setMessage', {
+            'message': 'ログインに成功しました。',
+            'level': 'success'
+          })
           this.$cookies.set('user', user, {
             path: '/',
             maxAge: 60 * 60 * 24
@@ -71,11 +109,16 @@ export const actions = {
             path: '/',
             maxAge: 60 * 60 * 24
           })
+          commit('finishLoad')
         }
       )
       .catch(
         (res) => {
-          commit('setLoginRes', res)
+          commit('setMessage', {
+            'message': 'ログインに失敗しました。メールアドレスとパスワードをご確認ください。',
+            'level': 'error'
+          })
+          commit('finishLoad')
         }
       )
   },
@@ -83,5 +126,58 @@ export const actions = {
     commit('setUser', null)
     commit('setCred', null)
     this.$cookies.removeAll()
+  },
+  fetchProblem ({ commit }) {
+    commit('startLoad')
+    const companyId = 1
+    const workId = 2
+    axios.get(
+      `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${workId}`,
+      { headers: this.state.cred }
+    ).then((res) => {
+      const problem = res.data.map(
+        (p) => {
+          return {
+            'id': p.id,
+            'image_url': p.image_url,
+            'url': '/help/' + p.id
+          }
+        }
+      )
+      commit('setWorkProblem', problem)
+    })
+    const humanId = 1
+    axios.get(
+      `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${humanId}`,
+      { headers: this.state.cred }
+    ).then((res) => {
+      const problem = res.data.map(
+        (p) => {
+          return {
+            'id': p.id,
+            'image_url': p.image_url,
+            'url': '/help/' + p.id
+          }
+        }
+      )
+      commit('setHumanProblem', problem)
+    })
+    const helthId = 3
+    axios.get(
+      `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${helthId}`,
+      { headers: this.state.cred }
+    ).then((res) => {
+      const problem = res.data.map(
+        (p) => {
+          return {
+            'id': p.id,
+            'image_url': p.image_url,
+            'url': '/help/' + p.id
+          }
+        }
+      )
+      commit('setHelthProblem', problem)
+      commit('finishLoad')
+    })
   }
 }

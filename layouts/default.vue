@@ -110,6 +110,9 @@
             ログイン
           </v-card-title>
           <v-card-text>
+            <v-alert v-if="getMessage().level == 'error'" type="error">
+              {{ getMessage().message }}
+            </v-alert>
             <v-form id="login-form">
               <v-text-field v-model="email" label="メールアドレス" outlined />
               <v-text-field v-model="password" label="パスワード" type="password" outlined />
@@ -144,6 +147,16 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <v-overlay
+        v-if="isLoading()"
+        max-width="100%"
+      >
+        <v-progress-circular
+          :size="50"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </v-overlay>
     </v-content>
   </v-app>
 </template>
@@ -164,10 +177,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchUser', 'login', 'logout', 'login_redirect']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
+    ...mapActions(['fetchUser', 'login', 'logout']),
+    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getMessage', 'isLoading']),
     clickLoginButton () {
-      this.login({ email: this.email, password: this.password })
+      this.login(
+        {
+          email: this.email,
+          password: this.password
+        }
+      )
     },
     redirect () {
       if (this.isAuthenticated()) {
