@@ -1,13 +1,9 @@
 <template>
   <v-layout>
     <v-container>
-      <v-row>
-        <v-col v-for="item in chartValuesTable" :key="item.id" cols="4">
-          <v-card>
-            <line-chart :chart-data="lineData(item.vals)" :options="chartOptions" />
-          </v-card>
-        </v-col>
-      </v-row>
+      <v-card>
+        <line-chart :chart-data="lineData()" :options="chartOptions" />
+      </v-card>
       <v-row>
         <v-col v-for="item in chartValuesTable" :key="item.id" cols="4">
           <v-card>
@@ -66,14 +62,30 @@ export default {
         labels: this.chartLabels
       }
     },
-    lineData (vals) {
+    lineData () {
       return {
-        labels: ['A', 'B', 'C', 'D', 'E'],
+        labels: ['2020-02-01', '2020-02-08', '2020-02-15', '2020-02-22', '2020-03-01'],
         datasets: [
           {
-            label: 'Data One',
-            data: [1, 5, 3, 4, 3],
+            label: 'ログインユーザー数',
+            data: [10, 8, 12, 7, 6],
+            borderColor: 'red',
+            backgroundColor: 'rgba(0, 255, 0, 0.4)',
+            fill: false,
+            tension: 0 // 線を真っ直ぐにする
+          },
+          {
+            label: '回答ユーザー数',
+            data: [7, 5, 8, 4, 5],
             borderColor: 'green',
+            backgroundColor: 'rgba(0, 255, 0, 0.4)',
+            fill: false,
+            tension: 0 // 線を真っ直ぐにする
+          },
+          {
+            label: '質問投稿ユーザー数',
+            data: [6, 4, 8, 2, 5],
+            borderColor: 'yellow',
             backgroundColor: 'rgba(0, 255, 0, 0.4)',
             fill: false,
             tension: 0 // 線を真っ直ぐにする

@@ -3,9 +3,7 @@
     <v-container>
       <svg id="canvas" ref="svgCard" width="640" height="360" xmlns="http://www.w3.org/2000/svg">
         <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
-
         <g>
-          <title>background</title>
           <rect
             id="canvas_background"
             fill="#f45353"
@@ -50,25 +48,13 @@
             fill="#ffffff"
           >{{ getSvgTitle(helpTitle) }}</text>
           <text
-            id="svg_6"
-            stroke="#000"
-            transform="matrix(38.48314666748047,0,0,1,-20376.77560710907,0) "
-            xml:space="preserve"
-            text-anchor="start"
-            font-family="Helvetica, Arial, sans-serif"
-            font-size="20"
-            y="173.453125"
-            x="532.5"
-            stroke-width="0"
-            fill="#ffffff"
-          />
-          <text
             id="svg_9"
             xml:space="preserve"
             text-anchor="start"
             font-family="Helvetica, Arial, sans-serif"
-            font-size="22"
-            y="129.453125"
+            font-size="24"
+            font-weight="bold"
+            y="109.453125"
             x="64.5"
             fill-opacity="null"
             stroke-opacity="null"
@@ -120,44 +106,79 @@
           >{{ getSvgText(helpContent, 3) }}</text>
         </g>
       </svg>
-      <v-form id="create-help-form">
-        <v-select
-          v-model="selectedGenre"
-          :items="genres"
-          item-text="label"
-          item-value="value"
-          label="どんな悩みですか?"
-        />
-        <v-text-field v-model="helpTitle" label="20文字程度でどんな悩みか教えてください" outlined rounded />
-        <v-textarea v-model="helpContent" label="もっと詳しく教えてください" outlined rounded />
-        <v-btn
-          :disabled="!processing"
-          @click="click"
-          block
-          rounded
-          dark
-          color="red"
+      <v-row
+        align="center"
+        justify="center"
+      >
+        <v-col
+          md="10"
+          sm="10"
+          xs="12"
         >
-          相談してみる
-        </v-btn>
-      </v-form>
+          <v-card>
+            <v-card-title>
+              相談してみましょう
+            </v-card-title>
+            <v-card-text>
+              <v-form id="create-help-form">
+                <v-select
+                  v-model="selectedGenre"
+                  :items="genres"
+                  item-text="label"
+                  item-value="value"
+                  label="どんな悩みですか?"
+                />
+                <v-select
+                  v-model="selectedTime"
+                  :items="howlong"
+                  item-text="label"
+                  item-value="value"
+                  label="いつまでに答えて欲しいですか？"
+                />
+                <v-text-field v-model="helpTitle" label="25文字以内でどんな悩みか教えてください。 (例: 人間関係で悩んでいます)" counter="25" outlined />
+                <v-textarea v-model="helpUserInfo" label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目のエンジニア職で...)" counter="200" outlined />
+                <v-textarea v-model="helpContent" label="悩みについてもっと詳しく教えてください。 " counter="200" outlined />
+                <v-btn
+                  :disabled="!processing"
+                  @click="click"
+                  block
+                  rounded
+                  dark
+                  color="red"
+                >
+                  相談してみる
+                </v-btn>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </v-layout>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
+import moment from 'moment'
 export default {
   data () {
     return {
       helpTitle: '',
+      helpUserInfo: '',
       helpContent: '',
       processing: true,
       selectedGenre: { label: '', value: null },
+      selectedTime: { label: '', value: null },
       genres: [
         { label: '人間関係', value: 1 },
         { label: '仕事', value: 2 },
         { label: '健康', value: 3 }
+      ],
+      howlong: [
+        { label: '3日', value: 60 * 60 * 24 * 3 },
+        { label: '1週間', value: 60 * 60 * 24 * 7 },
+        { label: '2週間', value: 60 * 60 * 24 * 14 },
+        { label: '1ヶ月', value: 60 * 60 * 24 * 30 }
       ]
     }
   },
@@ -172,12 +193,14 @@ export default {
         user_id: this.getUser().id,
         genre_id: this.selectedGenre,
         base64_image: imageBase64,
-        company_id: 1
+        company_id: 1,
+        deadline: Math.floor(Date.now() / 1000) + this.selectedTime
       }
 
       axios.post(`${process.env.API_URL}/problems`, data, { headers: this.getCred() })
         .then(
           (res) => {
+            console.log(res.data)
             const data1 = {
               content: this.helpTitle,
               department_id: 1,
@@ -191,7 +214,7 @@ export default {
             axios.post(`${process.env.API_URL}/answers`, data1, { headers: this.getCred() })
               .then((res2) => {
                 const data2 = {
-                  content: this.helpContent,
+                  content: this.helpUserInfo,
                   department_id: 1,
                   company_id: 1,
                   user_id: this.getUser().id,
@@ -201,9 +224,21 @@ export default {
                 console.log(res2)
                 axios.post(`${process.env.API_URL}/answers`, data2, { headers: this.getCred() })
                   .then((res3) => {
-                    this.processing = false
-                    this.$nuxt.$router.push({ path: '/help/' + res.data.id })
-                    console.log(res3)
+                    const data3 = {
+                      content: this.helpContent,
+                      department_id: 1,
+                      company_id: 1,
+                      user_id: this.getUser().id,
+                      question_id: 3,
+                      problem_id: res.data.id
+                    }
+                    axios.post(`${process.env.API_URL}/answers`, data3, { headers: this.getCred() })
+                      .then((res4) => {
+                        this.processing = false
+                        this.$nuxt.$router.push({ path: '/help/' + res.data.id })
+                        console.log(res4)
+                      })
+                      .catch(err => console.log(err))
                   })
                   .catch(err => console.log(err))
               })
@@ -226,10 +261,14 @@ export default {
     getSvgText (text, idx) {
       const ONELINECOUNT = 23
       const LINENUM = 4
+      const deadline = Math.floor(Date.now() / 1000) + this.selectedTime
+      const dayStr = moment.unix(deadline).format('YYYY年MM月DD日 締切')
       if (idx === (LINENUM - 1) && LINENUM * ONELINECOUNT < text.length) {
-        return text.substr(idx * ONELINECOUNT, ONELINECOUNT - 1) + '...'
+        return text.substr((idx - 1) * ONELINECOUNT, ONELINECOUNT - 1) + '...'
+      } else if (idx === 0) {
+        return dayStr
       } else {
-        return text.substr(idx * ONELINECOUNT, ONELINECOUNT)
+        return text.substr((idx - 1) * ONELINECOUNT, ONELINECOUNT)
       }
     }
   }
@@ -243,7 +282,5 @@ export default {
 }
 #create-help-form {
   margin-top: 2rem;
-}
-.v-btn {
 }
 </style>
