@@ -19,6 +19,11 @@ import colors from 'vuetify/es5/util/colors'
 import { mapGetters, mapActions } from 'vuex'
 // import axios from 'axios'
 export default {
+  head () {
+    return {
+      title: 'ダッシュボード'
+    }
+  },
   data () {
     return {
       chartValuesTable: [

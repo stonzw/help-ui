@@ -92,12 +92,18 @@ import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
 export default {
+  head () {
+    return {
+      title: this.title
+    }
+  },
   data () {
     return {
       commentContent: '',
       owner: null,
       imageURL: '',
       sender: null,
+      title: '',
       receiver: null,
       headlines: {},
       contents: {},
@@ -129,7 +135,14 @@ export default {
         const url = `${process.env.API_URL}/search-answer${query}`
         axios.get(url, { headers: this.getCred() }).then(
           (answers) => {
-            this.contents = answers.data.map((x) => { return { 'id': x.question_id, 'content': x.content } })
+            this.contents = answers.data.map(
+              (x) => {
+                if (x.question_id === 1) {
+                  this.title = x.content
+                }
+                return { 'id': x.question_id, 'content': x.content }
+              }
+            )
           }
         )
         axios.get(`${process.env.API_URL}/questions`).then(

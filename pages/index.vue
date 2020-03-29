@@ -51,6 +51,11 @@ import { mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 
 export default {
+  head () {
+    return {
+      title: 'トップページ'
+    }
+  },
   data () {
     return {
       workProblems: [],

@@ -25,6 +25,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 export default {
+  head () {
+    return {
+      title: '設定画面'
+    }
+  },
   data () {
     return {
       password1: '',

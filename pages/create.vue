@@ -161,6 +161,11 @@ import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
 export default {
+  head () {
+    return {
+      title: '相談ページ'
+    }
+  },
   data () {
     return {
       helpTitle: '',
