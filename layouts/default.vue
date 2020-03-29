@@ -152,8 +152,9 @@
         max-width="100%"
       >
         <v-progress-circular
-          :size="50"
-          color="primary"
+          size="100"
+          width="5"
+          color="red"
           indeterminate
         ></v-progress-circular>
       </v-overlay>

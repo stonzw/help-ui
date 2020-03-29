@@ -157,7 +157,7 @@
   </v-layout>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
 export default {
@@ -191,6 +191,7 @@ export default {
     this.fetchUser()
   },
   methods: {
+    ...mapMutations(['startLoad', 'finishLoad']),
     ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
     putHelp (imageBase64) {
@@ -201,11 +202,10 @@ export default {
         company_id: 1,
         deadline: Math.floor(Date.now() / 1000) + this.selectedTime
       }
-
+      this.startLoad()
       axios.post(`${process.env.API_URL}/problems`, data, { headers: this.getCred() })
         .then(
           (res) => {
-            console.log(res.data)
             const data1 = {
               content: this.helpTitle,
               department_id: 1,
@@ -214,7 +214,6 @@ export default {
               question_id: 1,
               problem_id: res.data.id
             }
-            console.log(res)
 
             axios.post(`${process.env.API_URL}/answers`, data1, { headers: this.getCred() })
               .then((res2) => {
@@ -226,7 +225,6 @@ export default {
                   question_id: 2,
                   problem_id: res.data.id
                 }
-                console.log(res2)
                 axios.post(`${process.env.API_URL}/answers`, data2, { headers: this.getCred() })
                   .then((res3) => {
                     const data3 = {
@@ -241,15 +239,15 @@ export default {
                       .then((res4) => {
                         this.processing = false
                         this.$nuxt.$router.push({ path: '/help/' + res.data.id })
-                        console.log(res4)
+                        this.finishLoad()
                       })
-                      .catch(err => console.log(err))
+                      .catch(() => { this.finishLoad() })
                   })
-                  .catch(err => console.log(err))
+                  .catch(() => { this.finishLoad() })
               })
-              .catch(err => console.log(err))
+              .catch(() => { this.finishLoad() })
           })
-        .catch(err => console.log(err))
+        .catch(() => { this.finishLoad() })
     },
     click () {
       if (this.helpTitle !== '' && this.helpContent !== '') {
