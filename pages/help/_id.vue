@@ -20,7 +20,8 @@
             </p>
             <v-card-text v-else>
               <v-textarea v-model="textEditInput" outlined></v-textarea>
-              <v-btn block @click="clickEditSaveButton(item.id, item.content)">保存</v-btn>
+              <v-btn color="primary" class="margin-bottom" block @click="clickEditSaveButton(item.id, item.content)">保存</v-btn>
+              <v-btn color="red" dark block @click="editableId=-1">キャンセル</v-btn>
             </v-card-text>
           </v-card>
           <h2>コメント</h2>
@@ -258,5 +259,8 @@ export default {
 }
 .alert {
   color: #ff0000;
+}
+.margin-bottom {
+  margin-bottom: 1rem;
 }
 </style>
