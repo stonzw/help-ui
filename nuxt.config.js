@@ -20,7 +20,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#ff0000' },
   /*
   ** Global CSS
   */
@@ -93,6 +93,7 @@ export default {
     }
   },
   env: {
-    'API_URL': 'http://localhost:3000'
+    'API_URL': 'http://localhost:3000',
+    'THEMA_COLOR': '#ff0000'
   }
 }
