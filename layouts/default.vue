@@ -4,11 +4,6 @@
       id="header"
       app
     >
-      <v-app-bar-nav-icon
-        v-if="isAuthenticated()"
-        @click.stop="leftDrawer = !leftDrawer"
-      />
-      <v-spacer />
       <v-toolbar-title>
         <span id="logo">HELP!</span>
       </v-toolbar-title>
@@ -18,7 +13,7 @@
         @click="redirect()"
         class="top-help-btn"
         to="/create"
-        color="red"
+        :color="helpButtonColor"
         dark
         x-large
         rounded
@@ -26,6 +21,10 @@
         HELP!
         <v-icon>mdi-human-handsup</v-icon>
       </v-btn>
+      <v-app-bar-nav-icon
+        v-if="isAuthenticated()"
+        @click.stop="leftDrawer = !leftDrawer"
+      />
       <v-btn
         v-else
         @click.stop="loginDialog = true"
@@ -40,6 +39,7 @@
       v-model="leftDrawer"
       fixed
       temporary
+      right
     >
       <v-list
         nav
@@ -154,7 +154,7 @@
         <v-progress-circular
           size="100"
           width="5"
-          color="red"
+          :color="loadingColor"
           indeterminate
         ></v-progress-circular>
       </v-overlay>
@@ -174,7 +174,9 @@ export default {
       notificationDialog: false,
       messages: null,
       notificationCount: 0,
-      leftDrawer: false
+      leftDrawer: false,
+      loadingColor: `${process.env.THEMA_COLOR}`,
+      helpButtonColor: `${process.env.THEMA_COLOR}`
     }
   },
   methods: {
