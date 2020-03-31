@@ -4,6 +4,11 @@
       id="header"
       app
     >
+      <v-app-bar-nav-icon
+        v-if="isAuthenticated()"
+        @click.stop="leftDrawer = !leftDrawer"
+      />
+      <v-spacer />
       <v-toolbar-title>
         <span id="logo">HELP!</span>
       </v-toolbar-title>
@@ -21,10 +26,6 @@
         HELP!
         <v-icon>mdi-human-handsup</v-icon>
       </v-btn>
-      <v-app-bar-nav-icon
-        v-if="isAuthenticated()"
-        @click.stop="leftDrawer = !leftDrawer"
-      />
       <v-btn
         v-else
         @click.stop="loginDialog = true"
@@ -39,7 +40,6 @@
       v-model="leftDrawer"
       fixed
       temporary
-      right
     >
       <v-list
         nav
