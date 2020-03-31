@@ -196,6 +196,7 @@ export default {
     ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
     putHelp (imageBase64) {
       const data = {
+        title: this.helpTitle,
         user_id: this.getUser().id,
         genre_id: this.selectedGenre,
         base64_image: imageBase64,
