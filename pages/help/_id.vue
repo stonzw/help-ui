@@ -9,9 +9,19 @@
             <v-card-title>
               {{ headlines[item.id - 1] }}
             </v-card-title>
-            <p class="text-content">
+            <p class="text-content" v-if="editableId != item.id">
               {{ item.content }}
+              <v-btn text block color="green" @click="clickEditButton(item.id, item.content)">
+                編集する
+                <v-icon>
+                  mdi-pencil
+                </v-icon>
+              </v-btn>
             </p>
+            <v-card-text v-else>
+              <v-textarea v-model="textEditInput" outlined></v-textarea>
+              <v-btn block @click="clickEditSaveButton(item.id, item.content)">保存</v-btn>
+            </v-card-text>
           </v-card>
           <h2>コメント</h2>
           <v-card v-for="comment in comments" :key="'comment-' + comment.id" class="comment">
@@ -23,6 +33,7 @@
               @click="clickSendButton(comment.user_id)"
               text
               color="green"
+              block
             >
               メッセージを贈る
               <v-icon>
@@ -104,12 +115,14 @@ export default {
       imageURL: '',
       sender: null,
       title: '',
+      textEditInput: '',
       receiver: null,
       headlines: {},
       contents: {},
       comments: [],
       relatedProblems: [],
       deadline: 0,
+      editableId: -1,
       messageDialog: false,
       messages: [
         { label: 'ありがとうございました。', value: 'ありがとうございました。' },
@@ -188,6 +201,21 @@ export default {
       this.sender = this.getUser().id
       this.receiver = userId
       this.messageDialog = true
+    },
+    clickEditButton (editId, comment) {
+      this.editableId = editId
+      this.textEditInput = comment
+    },
+    clickEditSaveButton (answerId) {
+      const body = {
+        content: this.textEditInput
+      }
+      const headers = this.getCred()
+      axios.put(`${process.env.API_URL}/answers/${answerId}`, body, { headers })
+        .then((res) => {
+          console.log(res)
+          this.editableId = -1
+        })
     },
     deadlineStr () {
       return moment.unix(this.deadline).format('YYYY年MM月DD日 HH時mm分')
