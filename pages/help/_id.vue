@@ -179,7 +179,7 @@ export default {
           const helpId = this.$nuxt.$route.params.id
           axios.get(`${process.env.API_URL}/comments?problem_id=${helpId}`).then(
             (comments) => {
-              this.comments = comments.data.map((x) => { return x.content })
+              this.comments = comments.data.map((x) => { return x })
             }
           )
         })
