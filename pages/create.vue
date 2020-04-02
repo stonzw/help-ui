@@ -197,6 +197,7 @@ export default {
     putHelp (imageBase64) {
       const data = {
         title: this.helpTitle,
+        visible: true,
         user_id: this.getUser().id,
         genre_id: this.selectedGenre,
         base64_image: imageBase64,

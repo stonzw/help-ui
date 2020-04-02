@@ -137,14 +137,12 @@ export const actions = {
     ).then((res) => {
       const problem = res.data.map(
         (p) => {
-          return {
-            'id': p.id,
-            'image_url': p.image_url,
-            'url': '/help/' + p.id
-          }
+          return p
         }
       )
       commit('setWorkProblem', problem)
+    }).catch(() => {
+      commit('finishLoad')
     })
     const humanId = 1
     axios.get(
@@ -153,11 +151,7 @@ export const actions = {
     ).then((res) => {
       const problem = res.data.map(
         (p) => {
-          return {
-            'id': p.id,
-            'image_url': p.image_url,
-            'url': '/help/' + p.id
-          }
+          return p
         }
       )
       commit('setHumanProblem', problem)
@@ -169,11 +163,7 @@ export const actions = {
     ).then((res) => {
       const problem = res.data.map(
         (p) => {
-          return {
-            'id': p.id,
-            'image_url': p.image_url,
-            'url': '/help/' + p.id
-          }
+          return p
         }
       )
       commit('setHelthProblem', problem)
