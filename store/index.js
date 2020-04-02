@@ -135,11 +135,12 @@ export const actions = {
       `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${workId}`,
       { headers: this.state.cred }
     ).then((res) => {
-      const problem = res.data.map(
-        (p) => {
-          return p
-        }
-      )
+      const problem = res.data.map((p) => {
+        const ret = p
+        ret.url = `/help/${p.id}`
+        console.log(ret)
+        return ret
+      })
       commit('setWorkProblem', problem)
     }).catch(() => {
       commit('finishLoad')
@@ -149,11 +150,12 @@ export const actions = {
       `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${humanId}`,
       { headers: this.state.cred }
     ).then((res) => {
-      const problem = res.data.map(
-        (p) => {
-          return p
-        }
-      )
+      const problem = res.data.map((p) => {
+        const ret = p
+        ret.url = `/help/${p.id}`
+        console.log(ret)
+        return ret
+      })
       commit('setHumanProblem', problem)
     })
     const helthId = 3
@@ -161,11 +163,12 @@ export const actions = {
       `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${helthId}`,
       { headers: this.state.cred }
     ).then((res) => {
-      const problem = res.data.map(
-        (p) => {
-          return p
-        }
-      )
+      const problem = res.data.map((p) => {
+        const ret = p
+        ret.url = `/help/${p.id}`
+        console.log(ret)
+        return ret
+      })
       commit('setHelthProblem', problem)
       commit('finishLoad')
     })
