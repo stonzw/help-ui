@@ -1,8 +1,8 @@
 <template>
   <v-layout>
     <v-container>
-      <v-row>
-        <div class="main-content col-xs-12 col-sm-7 col-md-7 col-lg-7 col-xl-7">
+      <v-row class="main-wrapper">
+        <div class="main-content col-8 col-xs-12">
           <span>{{ deadlineStr() }}締切</span>
           <img :src="imageURL">
           <v-card v-for="item in contents" :key="item.id">
@@ -59,7 +59,7 @@
             </v-card-text>
           </v-card>
         </div>
-        <div class="side-content col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+        <div class="side-content col-3 col-xs-12">
           <h2>関連するお悩み</h2>
           <v-card :href="item.url" v-for="item in relatedProblems" :key="item.id" elevation="0">
             <img :src="item.image_url" width="100%">
@@ -244,8 +244,11 @@ export default {
 }
 </script>
 <style scoped>
+.main-wrapper {
+  max-width: 960px;
+  margin: auto;
+}
 .main-content {
-  max-width: 624px;
   background-color: white;
 }
 .side-content {
