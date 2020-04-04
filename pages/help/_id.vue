@@ -245,7 +245,7 @@ export default {
 </script>
 <style scoped>
 .main-wrapper {
-  max-width: 960px;
+  max-width: 764px;
   margin: auto;
 }
 .main-content {
