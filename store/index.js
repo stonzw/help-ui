@@ -16,7 +16,10 @@ export const getters = {
     return !!state.user
   },
   isAdminUser (state) {
-    return state.userInfo.role === 'admin' || state.userInfo.role === 'system_admin'
+    if (state.userInfo) {
+      return state.userInfo.role === 'admin' || state.userInfo.role === 'system_admin'
+    }
+    return false
   },
   getUser (state) {
     return state.user
@@ -77,41 +80,17 @@ export const mutations = {
 export const actions = {
   fetchUser ({ commit }) {
     const user = this.$cookies.get('user')
+    const userInfo = this.$cookies.get('user_info')
     const cred = this.$cookies.get('cred')
     if (user) {
       if (Date.now() / 1000 < cred.expiry) {
         commit('setUser', user)
+        commit('setUserInfo', userInfo)
         commit('setCred', cred)
       } else {
         commit('setUser', null)
         commit('setUserInfo', null)
         commit('setCred', null)
-      }
-    }
-  },
-  fetchUserInfo ({ commit }) {
-    const userInfo = this.$cookies.get('user_info')
-    if (userInfo) {
-      if (Date.now() / 1000 < userInfo.expiry) {
-        commit('setUserInfo', userInfo)
-      } else {
-        commit('setUserInfo', null)
-      }
-    }
-    if (!userInfo) {
-      if (this.state.user) {
-        axios.get(
-          `${process.env.API_URL}/user_infos/${this.state.user.id}`,
-          { headers: this.state.cred }
-        ).then((res) => {
-          this.$cookies.set('user_info', userInfo, {
-            path: '/',
-            maxAge: 60 * 60 * 2
-          })
-          commit('setUserInfo', res.data)
-        }).catch(() => {
-          commit('finishLoad')
-        })
       }
     }
   },
@@ -145,6 +124,16 @@ export const actions = {
           this.$cookies.set('cred', cred, {
             path: '/',
             maxAge: 60 * 60 * 24
+          })
+          axios.get(
+            `${process.env.API_URL}/user_infos/${user.id}`,
+            { headers: cred }
+          ).then((res2) => {
+            commit('setUserInfo', res2.data)
+            this.$cookies.set('user_info', res2.data, {
+              path: '/',
+              maxAge: 60 * 60 * 24
+            })
           })
           commit('finishLoad')
         }
