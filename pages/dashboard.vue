@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-container>
+    <v-container v-if="isAdminUser()">
       <v-card>
         <line-chart :chart-data="lineData()" :options="chartOptions" />
       </v-card>
@@ -48,14 +48,11 @@ export default {
   },
   mounted () {
     this.fetchUser()
-    this.fetchData()
+    this.fetchUserInfo()
   },
   methods: {
-    ...mapActions(['fetchUser', 'loginDialogOn']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
-    fetchData () {
-      //
-    },
+    ...mapActions(['fetchUser', 'fetchUserInfo', 'loginDialogOn']),
+    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'isAdminUser']),
     chartData (vals) {
       return {
         datasets: [

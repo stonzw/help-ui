@@ -57,20 +57,15 @@ export default {
       title: 'トップページ'
     }
   },
-  computed () {
-    this.fetchUser()
-    if (this.isAuthenticated()) {
-      this.fetchProblem()
-    }
-  },
   mounted () {
     this.fetchUser()
+    this.fetchUserInfo()
     if (this.isAuthenticated()) {
       this.fetchProblem()
     }
   },
   methods: {
-    ...mapActions(['fetchUser', 'login', 'logout', 'fetchProblem']),
+    ...mapActions(['fetchUser', 'fetchUserInfo', 'login', 'logout', 'fetchProblem']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHelthProblem', 'getHumanProblem'])
   }
 }
