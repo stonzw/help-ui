@@ -138,9 +138,16 @@
                 <v-text-field v-model="helpTitle" label="25文字以内でどんな悩みか教えてください。 (例: 人間関係で悩んでいます)" counter="25" outlined />
                 <v-textarea v-model="helpUserInfo" label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目のエンジニア職で...)" counter="200" outlined />
                 <v-textarea v-model="helpContent" label="悩みについてもっと詳しく教えてください。 " counter="200" outlined />
+                <v-file-input
+                  :rules="rules"
+                  accept="image/png, image/jpeg, image/bmp"
+                  placeholder="見出し画像(任意)"
+                  prepend-icon="mdi-camera"
+                  @change="onImageChange"
+                />
                 <v-btn
                   :disabled="!processing"
-                  @click="click"
+                  @click="clickHelpButton"
                   block
                   rounded
                   dark
@@ -184,7 +191,11 @@ export default {
         { label: '1週間', value: 60 * 60 * 24 * 7 },
         { label: '2週間', value: 60 * 60 * 24 * 14 },
         { label: '1ヶ月', value: 60 * 60 * 24 * 30 }
-      ]
+      ],
+      rules: [
+        value => !value || value.size < 2000000 || '画像のサイズの上限は 2 MB　です。'
+      ],
+      imageBase64: ''
     }
   },
   mounted () {
@@ -252,13 +263,28 @@ export default {
           })
         .catch(() => { this.finishLoad() })
     },
-    click () {
+    clickHelpButton () {
       if (this.helpTitle !== '' && this.helpContent !== '') {
         const svgData = new XMLSerializer().serializeToString(this.$refs.svgCard)
-        const imageBase64Data = window.btoa(unescape(encodeURIComponent(svgData)))
         this.processing = true
-        this.putHelp(imageBase64Data)
+        if (this.imageBase64 === '') {
+          this.imageBase64 = 'data:image/svg;base64,' + window.btoa(unescape(encodeURIComponent(svgData)))
+        }
+        this.putHelp(this.imageBase64)
       }
+    },
+    convertImageBase64 (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error)
+      })
+    },
+    onImageChange (e) {
+      this.convertImageBase64(e)
+        .then((image) => { this.imageBase64 = image })
+        .catch((error) => { this.setError(error, '画像のアップロードに失敗しました。') })
     },
     getSvgTitle (title) {
       const MAXLEN = 15
