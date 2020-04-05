@@ -20,7 +20,7 @@
             </p>
             <v-card-text v-else>
               <v-textarea v-model="textEditInput" outlined></v-textarea>
-              <v-btn color="primary" class="margin-bottom" block @click="clickEditSaveButton(item.id, item.content)">保存</v-btn>
+              <v-btn color="primary" class="margin-bottom" block @click="clickEditSaveButton(item)">保存</v-btn>
               <v-btn color="red" dark block @click="editableId=-1">キャンセル</v-btn>
             </v-card-text>
           </v-card>
@@ -207,15 +207,15 @@ export default {
       this.editableId = editId
       this.textEditInput = comment
     },
-    clickEditSaveButton (answerId) {
+    clickEditSaveButton (answer) {
       const body = {
         content: this.textEditInput
       }
       const headers = this.getCred()
-      axios.put(`${process.env.API_URL}/answers/${answerId}`, body, { headers })
+      axios.put(`${process.env.API_URL}/answers/${answer.id}`, body, { headers })
         .then((res) => {
-          console.log(res)
           this.editableId = -1
+          answer.content = this.textEditInput
         })
     },
     deadlineStr () {
