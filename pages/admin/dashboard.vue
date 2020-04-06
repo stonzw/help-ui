@@ -2,32 +2,6 @@
   <v-layout>
     <v-container>
       <v-row>
-        <v-col cols="12" v-for="user_info in employeeInfos" :key="`employee-info${user_info.id}`">
-          <v-card>
-            <v-card-title>
-              {{ user_info.name }}
-            </v-card-title>
-            <v-card-text v-if="editableId != user_info.id">
-              部署: {{ departmentId2Name[user_info.department_id] }}
-              <v-btn text block color="green" @click="clickEditButton(user_info.id, user_info.department_id)">
-                編集する
-                <v-icon>
-                  mdi-pencil
-                </v-icon>
-              </v-btn>
-            </v-card-text>
-            <v-card-text v-else>
-              <v-select
-                v-model="selectedDepartment"
-                :items="departments"
-                item-text="name"
-                item-value="id"
-              />
-              <v-btn color="primary" block @click="clickEditSaveButton(user_info, user_info.id, user_info.department_id)">保存</v-btn>
-              <v-btn color="red" dark block @click="editableId=-1">キャンセル</v-btn>
-            </v-card-text>
-          </v-card>
-        </v-col>
         <v-col cols="12">
           <v-card>
             <line-chart :chart-data="lineData()" :options="chartOptions" />
@@ -64,7 +38,6 @@ export default {
         colors.blue.lighten1,
         colors.yellow.lighten1
       ],
-      departmentId2Name: {},
       chartLabels: ['人', '仕事', '健康'],
       chartOptions: {
         maintainAspectRatio: false,
@@ -72,11 +45,7 @@ export default {
           duration: 1500,
           easing: 'easeInOutCubic'
         }
-      },
-      employeeInfos: [],
-      editableId: -1,
-      departments: [],
-      selectedDepartment: {}
+      }
     }
   },
   mounted () {
