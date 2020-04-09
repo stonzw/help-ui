@@ -4,11 +4,6 @@
       id="header"
       app
     >
-      <v-app-bar-nav-icon
-        v-if="isAuthenticated()"
-        @click.stop="leftDrawer = !leftDrawer"
-      />
-      <v-spacer />
       <v-toolbar-title>
         <span id="logo">HELP!</span>
       </v-toolbar-title>
@@ -18,13 +13,12 @@
         @click="redirect()"
         class="top-help-btn"
         to="/create"
-        :color="helpButtonColor"
+        color="primary"
         dark
         x-large
         rounded
       >
-        HELP!
-        <v-icon>mdi-human-handsup</v-icon>
+        悩みを相談
       </v-btn>
       <v-btn
         v-else
@@ -35,6 +29,10 @@
       >
         ログイン
       </v-btn>
+      <v-app-bar-nav-icon
+        v-if="isAuthenticated()"
+        @click.stop="leftDrawer = !leftDrawer"
+      />
     </v-app-bar>
     <v-navigation-drawer
       v-model="leftDrawer"
@@ -176,7 +174,6 @@ export default {
       notificationCount: 0,
       leftDrawer: false,
       loadingColor: `${process.env.THEMA_COLOR}`,
-      helpButtonColor: `${process.env.THEMA_COLOR}`
     }
   },
   methods: {
@@ -242,13 +239,9 @@ export default {
   text-decoration: none;
 }
 #logo {
-  color: white;
+  color:#000000;
   font-size: 2rem;
   font-family: serif;
-  text-shadow: 1px 1px 0 #ff0000,
-    -1px -1px 0 #ff0000,
-    1px 1px 0 #ff0000,
-    -1px -1px 0 #ff0000;
 }
 img {
   width: 100%;

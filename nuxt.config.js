@@ -67,6 +67,10 @@ export default {
     customVariables: ['~/assets/variables.scss'],
     theme: {
       themes: {
+        light: {
+          primary: '#85E388',
+          secondary: 'E3BBCC'
+        }
       }
     }
   },
@@ -94,6 +98,7 @@ export default {
   },
   env: {
     'API_URL': 'http://localhost:3000',
-    'THEMA_COLOR': '#ff0000'
+    'THEMA_COLOR': '#E3BBCC',
+    'SECOND_COLOR': '#85E388'
   }
 }

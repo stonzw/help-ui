@@ -1,45 +1,96 @@
 <template>
   <v-layout>
     <v-container v-if="isAuthenticated()">
-      <div class="human-area">
+      <div class="human-area" v-if="mode == 'all' | mode == 'human'">
         <h2>人間関係の悩み</h2>
         <v-row
           v-if="isAuthenticated()"
           align="center"
           justify="center"
         >
-          <v-col v-for="item in getHumanProblem()" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
-            <v-card :href="item.url" elevation="0">
-              <img :src="item.image_url" width="100%">
+          <v-col v-for="item in getHumanProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+            <v-card :href="item.url" elevation="0" >
+              <div class="d-flex flex-no-wrap" >
+                <v-avatar
+                  class="ma-3"
+                  size="125"
+                  tile
+                  boarder
+                >
+                  <v-img :src="item.image_url"></v-img>
+                </v-avatar>
+                <div class="detail-card">
+                  <div class="help-title">{{ item.title }}</div>
+                  <div><v-icon>mdi-calendar</v-icon>{{ unix2daystr(item.deadline) }}</div>
+                </div>
+              </div>
             </v-card>
+          </v-col>
+          <v-col align="center" justify="center">
+            <v-btn v-if="mode == 'all'" color="primary" rounded @click="clickHumanButton">人間関係の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
+            <v-btn v-else color="primary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
           </v-col>
         </v-row>
       </div>
-      <div class="work-area">
+      <div class="work-area" v-if="mode == 'all' | mode == 'work'">
         <h2>仕事の悩み</h2>
         <v-row
-          v-if="isAuthenticated()"
+          v-if="isAuthenticated() & (mode == 'all' | mode == 'work')"
           align="center"
           justify="center"
         >
-          <v-col v-for="item in getWorkProblem()" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
+          <v-col v-for="item in getWorkProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
             <v-card :href="item.url" elevation="0">
-              <img :src="item.image_url" width="100%">
+              <div class="d-flex flex-no-wrap" >
+                <v-avatar
+                  class="ma-3"
+                  size="125"
+                  tile
+                  boarder
+                >
+                  <v-img :src="item.image_url"></v-img>
+                </v-avatar>
+                <div class="detail-card">
+                  <div class="help-title">{{ item.title }}</div>
+                  <div><v-icon>mdi-calendar</v-icon>{{ unix2daystr(item.deadline) }}</div>
+                </div>
+              </div>
             </v-card>
+          </v-col>
+          <v-col align="center" justify="center">
+            <v-btn v-if="mode == 'all'" color="primary" rounded @click="clickWorkButton">仕事の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
+            <v-btn v-else color="primary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
           </v-col>
         </v-row>
       </div>
-      <div class="health-area">
+      <div class="health-area" v-if="(mode == 'all' | mode == 'health')">
         <h2>健康の悩み</h2>
         <v-row
-          v-if="isAuthenticated()"
+          v-if="isAuthenticated() & (mode == 'all' | mode == 'health')"
           align="center"
           justify="center"
         >
-          <v-col v-for="item in getHelthProblem()" :key="item.id" class="col-12 col-md-6 col-lg-6 col-xl-6">
+          <v-col v-for="item in getHelthProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
             <v-card :href="item.url" elevation="0">
-              <img :src="item.image_url" width="100%">
+              <div class="d-flex flex-no-wrap" >
+                <v-avatar
+                  class="ma-3"
+                  size="125"
+                  tile
+                  boarder
+                >
+                  <v-img :src="item.image_url"></v-img>
+                </v-avatar>
+                <div class="detail-card">
+                  <div class="help-title">{{ item.title }}</div>
+                  <div><v-icon>mdi-calendar</v-icon> {{ unix2daystr(item.deadline) }} </div>
+                </div>
+              </div>
             </v-card>
+          </v-col>
+          <v-col align="center" justify="center">
+            <v-btn v-if="mode == 'all'" color="primary" rounded @click="clickHealthButton">健康の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
+            <v-btn v-else color="primary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
           </v-col>
         </v-row>
       </div>
@@ -50,11 +101,18 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
 
 export default {
   head () {
     return {
       title: 'トップページ'
+    }
+  },
+  data () {
+    return {
+      mode: 'all',
+      lastIdx: 4
     }
   },
   mounted () {
@@ -66,7 +124,26 @@ export default {
   },
   methods: {
     ...mapActions(['fetchUser', 'fetchUserInfo', 'login', 'logout', 'fetchProblem']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHelthProblem', 'getHumanProblem'])
+    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHelthProblem', 'getHumanProblem']),
+    unix2daystr (unix) {
+      return moment.unix(unix).format('YYYY年MM月DD日 締切')
+    },
+    clickHumanButton () {
+      this.mode = 'human'
+      this.lastIdx = this.getHumanProblem().length
+    },
+    clickWorkButton () {
+      this.mode = 'work'
+      this.lastIdx = this.getWorkProblem().length
+    },
+    clickHealthButton () {
+      this.mode = 'health'
+      this.lastIdx = this.getHelthProblem().length
+    },
+    clickResetButton () {
+      this.mode = 'all'
+      this.lastIdx = 4
+    }
   }
 }
 </script>
@@ -92,47 +169,34 @@ export default {
   background-color: white;
   margin-bottom: 2rem;
   padding: 2rem;
-  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-}
-.work-area h2{
-  padding: 3rem;
-  position: relative;
-  padding: 0.5em;
-  background:#a5cbda;
-  color: white;
-
+  max-width: 800px;
 }
 .human-area {
   background-color: white;
   margin-bottom: 2rem;
   padding: 2rem;
-  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-}
-.human-area h2{
-  padding: 3rem;
-  position: relative;
-  padding: 0.5em;
-  background: #d3a6ac;
-  color: white;
+  max-width: 800px;
 }
 .health-area {
   background-color: white;
   margin-bottom: 2rem;
   padding: 2rem;
-  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  max-width: 800px;
 }
-.health-area h2{
-  padding: 3rem;
-  position: relative;
-  padding: 0.5em;
-  background: #a6d3c8;
-  color: white;
-
+.detail-card {
+  height: 125px;
+}
+.help-title {
+  height: 90px;
+  overflow: hidden;
+  vertical-align: top;
+  font-weight: 600;
+  padding-top: 10px;
 }
 </style>

@@ -214,6 +214,7 @@ export default {
         genre_id: this.selectedGenre,
         base64_image: imageBase64,
         company_id: 1,
+        department_id: 1,
         deadline: Math.floor(Date.now() / 1000) + this.selectedTime
       }
       this.startLoad()
