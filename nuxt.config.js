@@ -68,8 +68,8 @@ export default {
     theme: {
       themes: {
         light: {
-          primary: '#85E388',
-          secondary: 'E3BBCC'
+          primary: 'E3BBCC',
+          secondary: '#85E388'
         }
       }
     }

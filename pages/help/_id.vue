@@ -51,7 +51,7 @@
                   block
                   rounded
                   dark
-                  color="red"
+                  color="secondary"
                 >
                   コメントする
                 </v-btn>
@@ -59,11 +59,25 @@
             </v-card-text>
           </v-card>
         </div>
-        <div class="side-content col-3 col-xs-12">
+        <div class="side-content col-4 col-xs-12">
           <h2>関連するお悩み</h2>
-          <v-card :href="item.url" v-for="item in relatedProblems" :key="item.id" elevation="0">
-            <img :src="item.image_url" width="100%">
-          </v-card>
+          <v-col v-for="item in relatedProblems" :key="item.id">
+            <v-card :href="item.url" elevation="0" >
+              <div class="d-flex flex-no-wrap" >
+                <v-avatar
+                  size="60"
+                  tile
+                  boarder
+                >
+                  <v-img :src="item.image_url"></v-img>
+                </v-avatar>
+                <div class="detail-card">
+                  <div class="help-title">{{ item.title }}</div>
+                  <div>{{ unix2daystr(item.deadline) }}</div>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
         </div>
       </v-row>
       <v-dialog
@@ -173,7 +187,17 @@ export default {
           `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${genreId}`,
           { headers: this.getCred() }
         ).then((res) => {
-          this.relatedProblems = res.data.map((p) => { return { 'id': p.id, 'image_url': p.image_url, 'url': '/help/' + p.id } })
+          this.relatedProblems = res.data.map(
+            (p) => {
+              return {
+                id: p.id,
+                image_url: p.image_url,
+                url: '/help/' + p.id,
+                title: this.getShortTitle(p.title),
+                deadline: p.deadline
+              }
+            }
+          )
         })
       })
   },
@@ -198,6 +222,10 @@ export default {
           )
         })
     },
+    getShortTitle (title) {
+      const MAXLEN = 9
+      if (title.length < MAXLEN) { return title } else { return title.substr(0, MAXLEN - 1) + '...' }
+    },
     clickSendButton (userId) {
       this.sender = this.getUser().id
       this.receiver = userId
@@ -217,6 +245,9 @@ export default {
           this.editableId = -1
           answer.content = this.textEditInput
         })
+    },
+    unix2daystr (unix) {
+      return moment.unix(unix).format('MM月DD日(締切)')
     },
     deadlineStr () {
       return moment.unix(this.deadline).format('YYYY年MM月DD日 HH時mm分')

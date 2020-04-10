@@ -13,9 +13,9 @@
         @click="redirect()"
         class="top-help-btn"
         to="/create"
-        color="primary"
+        color="secondary"
         dark
-        x-large
+        large
         rounded
       >
         悩みを相談
@@ -23,7 +23,7 @@
       <v-btn
         v-else
         @click.stop="loginDialog = true"
-        color="primary"
+        color="secondary"
         dark
         rounded
       >
@@ -31,13 +31,14 @@
       </v-btn>
       <v-app-bar-nav-icon
         v-if="isAuthenticated()"
-        @click.stop="leftDrawer = !leftDrawer"
+        @click.stop="rightDrawer = !rightDrawer"
       />
     </v-app-bar>
     <v-navigation-drawer
-      v-model="leftDrawer"
+      v-model="rightDrawer"
       fixed
       temporary
+      right
     >
       <v-list
         nav
@@ -172,8 +173,8 @@ export default {
       notificationDialog: false,
       messages: null,
       notificationCount: 0,
-      leftDrawer: false,
-      loadingColor: `${process.env.THEMA_COLOR}`,
+      rightDrawer: false,
+      loadingColor: `${process.env.THEMA_COLOR}`
     }
   },
   methods: {

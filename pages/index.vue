@@ -1,102 +1,116 @@
 <template>
   <v-layout>
-    <v-container v-if="isAuthenticated()">
-      <div class="human-area" v-if="mode == 'all' | mode == 'human'">
-        <h2>人間関係の悩み</h2>
-        <v-row
-          v-if="isAuthenticated()"
-          align="center"
-          justify="center"
-        >
-          <v-col v-for="item in getHumanProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
-            <v-card :href="item.url" elevation="0" >
-              <div class="d-flex flex-no-wrap" >
-                <v-avatar
-                  class="ma-3"
-                  size="125"
-                  tile
-                  boarder
-                >
-                  <v-img :src="item.image_url"></v-img>
-                </v-avatar>
-                <div class="detail-card">
-                  <div class="help-title">{{ item.title }}</div>
-                  <div><v-icon>mdi-calendar</v-icon>{{ unix2daystr(item.deadline) }}</div>
+    <div class="wrapper">
+      <v-jumbotron class="d-flex flex-column jumbotron">
+        <v-container>
+          <v-flex class="center">
+            <h2 class='copy-write'>あなたの悩みに寄り添える人が</h2>
+            <h2 class='copy-write'>ここにはいます</h2>
+            <div>
+              <h3 class='what'>助け合いのプラットフォームHELP!</h3>
+              <v-btn class='button-in-jumbo' x-large color="secondary" :to="'/create'" rounded>悩みを相談する</v-btn>
+            </div>
+          </v-flex>
+        </v-container>
+      </v-jumbotron>
+      <v-container v-if="isAuthenticated()" class="d-flex flex-column">
+        <div class="human-area" v-if="mode == 'all' | mode == 'human'">
+          <h2>人間関係の悩み</h2>
+          <v-row
+            v-if="isAuthenticated()"
+            align="center"
+            justify="center"
+          >
+            <v-col v-for="item in getHumanProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+              <v-card :href="item.url" elevation="0" >
+                <div class="d-flex flex-no-wrap" >
+                  <v-avatar
+                    class="ma-3"
+                    size="125"
+                    tile
+                    boarder
+                  >
+                    <v-img :src="item.image_url"></v-img>
+                  </v-avatar>
+                  <div class="detail-card">
+                    <div class="help-title">{{ item.title }}</div>
+                    <div><v-icon>mdi-calendar</v-icon>{{ unix2daystr(item.deadline) }}</div>
+                  </div>
                 </div>
-              </div>
-            </v-card>
-          </v-col>
-          <v-col align="center" justify="center">
-            <v-btn v-if="mode == 'all'" color="primary" rounded @click="clickHumanButton">人間関係の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
-            <v-btn v-else color="primary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
-          </v-col>
-        </v-row>
-      </div>
-      <div class="work-area" v-if="mode == 'all' | mode == 'work'">
-        <h2>仕事の悩み</h2>
-        <v-row
-          v-if="isAuthenticated() & (mode == 'all' | mode == 'work')"
-          align="center"
-          justify="center"
-        >
-          <v-col v-for="item in getWorkProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
-            <v-card :href="item.url" elevation="0">
-              <div class="d-flex flex-no-wrap" >
-                <v-avatar
-                  class="ma-3"
-                  size="125"
-                  tile
-                  boarder
-                >
-                  <v-img :src="item.image_url"></v-img>
-                </v-avatar>
-                <div class="detail-card">
-                  <div class="help-title">{{ item.title }}</div>
-                  <div><v-icon>mdi-calendar</v-icon>{{ unix2daystr(item.deadline) }}</div>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-btn v-if="mode == 'all'" color="secondary" rounded @click="clickHumanButton">人間関係の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
+            <v-btn v-else color="secondary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
+          </v-row>
+        </div>
+        <div class="work-area" v-if="mode == 'all' | mode == 'work'">
+          <h2>仕事の悩み</h2>
+          <v-row
+            v-if="isAuthenticated() & (mode == 'all' | mode == 'work')"
+            align="center"
+            justify="center"
+          >
+            <v-col v-for="item in getWorkProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+              <v-card :href="item.url" elevation="0">
+                <div class="d-flex flex-no-wrap" >
+                  <v-avatar
+                    class="ma-3"
+                    size="125"
+                    tile
+                    boarder
+                  >
+                    <v-img :src="item.image_url"></v-img>
+                  </v-avatar>
+                  <div class="detail-card">
+                    <div class="help-title">{{ item.title }}</div>
+                    <div><v-icon>mdi-calendar</v-icon>{{ unix2daystr(item.deadline) }}</div>
+                  </div>
                 </div>
-              </div>
-            </v-card>
-          </v-col>
-          <v-col align="center" justify="center">
-            <v-btn v-if="mode == 'all'" color="primary" rounded @click="clickWorkButton">仕事の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
-            <v-btn v-else color="primary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
-          </v-col>
-        </v-row>
-      </div>
-      <div class="health-area" v-if="(mode == 'all' | mode == 'health')">
-        <h2>健康の悩み</h2>
-        <v-row
-          v-if="isAuthenticated() & (mode == 'all' | mode == 'health')"
-          align="center"
-          justify="center"
-        >
-          <v-col v-for="item in getHelthProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
-            <v-card :href="item.url" elevation="0">
-              <div class="d-flex flex-no-wrap" >
-                <v-avatar
-                  class="ma-3"
-                  size="125"
-                  tile
-                  boarder
-                >
-                  <v-img :src="item.image_url"></v-img>
-                </v-avatar>
-                <div class="detail-card">
-                  <div class="help-title">{{ item.title }}</div>
-                  <div><v-icon>mdi-calendar</v-icon> {{ unix2daystr(item.deadline) }} </div>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-btn v-if="mode == 'all'" color="secondary" rounded @click="clickWorkButton">仕事の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
+            <v-btn v-else color="secondary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
+          </v-row>
+        </div>
+        <div class="health-area" v-if="(mode == 'all' | mode == 'health')">
+          <h2>健康の悩み</h2>
+          <v-row
+            v-if="isAuthenticated() & (mode == 'all' | mode == 'health')"
+            align="center"
+            justify="center"
+          >
+            <v-col v-for="item in getHelthProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+              <v-card :href="item.url" elevation="0">
+                <div class="d-flex flex-no-wrap" >
+                  <v-avatar
+                    class="ma-3"
+                    size="125"
+                    tile
+                    boarder
+                  >
+                    <v-img :src="item.image_url"></v-img>
+                  </v-avatar>
+                  <div class="detail-card">
+                    <div class="help-title">{{ item.title }}</div>
+                    <div><v-icon>mdi-calendar</v-icon> {{ unix2daystr(item.deadline) }} </div>
+                  </div>
                 </div>
-              </div>
-            </v-card>
-          </v-col>
-          <v-col align="center" justify="center">
-            <v-btn v-if="mode == 'all'" color="primary" rounded @click="clickHealthButton">健康の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
-            <v-btn v-else color="primary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
-          </v-col>
-        </v-row>
-      </div>
-    </v-container>
-    <v-container v-else>
-    </v-container>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-btn v-if="mode == 'all'" color="secondary" rounded @click="clickHealthButton">健康の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
+            <v-btn v-else color="secondary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
+          </v-row>
+        </div>
+      </v-container>
+      <v-container v-else>
+      </v-container>
+    </div>
   </v-layout>
 </template>
 <script>
@@ -198,5 +212,22 @@ export default {
   vertical-align: top;
   font-weight: 600;
   padding-top: 10px;
+}
+.wrapper {
+  width: 100%;
+}
+.jumbotron {
+  background-color: #E3BBCC;
+  text-align: center;
+  color: white;
+}
+.what {
+  margin-top: 2rem;
+}
+.button-in-jumbo {
+  text-transform: none;
+  font-weight: 700;
+  font-size: 1rem;
+
 }
 </style>
