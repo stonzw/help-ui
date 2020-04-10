@@ -184,7 +184,8 @@ export default {
       genres: [
         { label: '人間関係', value: 1 },
         { label: '仕事', value: 2 },
-        { label: '健康', value: 3 }
+        { label: '健康', value: 3 },
+        { label: 'その他', value: 4 }
       ],
       howlong: [
         { label: '3日', value: 60 * 60 * 24 * 3 },

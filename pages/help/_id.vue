@@ -5,13 +5,13 @@
         <div class="main-content col-8 col-xs-12">
           <span>{{ deadlineStr() }}締切</span>
           <img :src="imageURL">
-          <v-card v-for="item in contents" :key="item.id">
+          <v-card v-for="item in contents" :key="item.id" elevation="0">
             <v-card-title>
               {{ headlines[item.id - 1] }}
             </v-card-title>
             <p class="text-content" v-if="editableId != item.id">
               {{ item.content }}
-              <v-btn text block color="green" @click="clickEditButton(item.id, item.content)">
+              <v-btn v-if="owner === getUser().id" text block color="green" @click="clickEditButton(item.id, item.content)">
                 編集する
                 <v-icon>
                   mdi-pencil
@@ -25,7 +25,7 @@
             </v-card-text>
           </v-card>
           <h2>コメント</h2>
-          <v-card v-for="comment in comments" :key="'comment-' + comment.id" class="comment">
+          <v-card v-for="comment in comments" :key="'comment-' + comment.id" class="comment" elevation="0">
             <v-card-text>
               <p>{{ comment.content }}</p>
             </v-card-text>
@@ -42,7 +42,7 @@
               </v-icon>
             </v-btn>
           </v-card>
-          <v-card>
+          <v-card elevation="0">
             <v-card-text>
               <v-form>
                 <v-textarea v-model="commentContent" label="コメント" outlined />

@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <div class="wrapper">
-      <v-jumbotron class="d-flex flex-column jumbotron">
+      <div class="d-flex flex-column jumbotron">
         <v-container>
           <v-flex class="center">
             <h2 class='copy-write'>あなたの悩みに寄り添える人が</h2>
@@ -12,7 +12,7 @@
             </div>
           </v-flex>
         </v-container>
-      </v-jumbotron>
+      </div>
       <v-container v-if="isAuthenticated()" class="d-flex flex-column">
         <div class="human-area" v-if="mode == 'all' | mode == 'human'">
           <h2>人間関係の悩み</h2>
@@ -107,6 +107,37 @@
             <v-btn v-else color="secondary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
           </v-row>
         </div>
+        <div class="other-area" v-if="(mode == 'all' | mode == 'other')">
+          <h2>その他の悩み</h2>
+          <v-row
+            v-if="isAuthenticated() & (mode == 'all' | mode == 'other')"
+            align="center"
+            justify="center"
+          >
+            <v-col v-for="item in getOtherProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+              <v-card :href="item.url" elevation="0">
+                <div class="d-flex flex-no-wrap" >
+                  <v-avatar
+                    class="ma-3"
+                    size="125"
+                    tile
+                    boarder
+                  >
+                    <v-img :src="item.image_url"></v-img>
+                  </v-avatar>
+                  <div class="detail-card">
+                    <div class="help-title">{{ item.title }}</div>
+                    <div><v-icon>mdi-calendar</v-icon> {{ unix2daystr(item.deadline) }} </div>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-btn v-if="mode == 'all'" color="secondary" rounded @click="clickOtherButton">その他の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon></v-btn>
+            <v-btn v-else color="secondary" rounded @click="clickResetButton"><v-icon>mdi-chevron-left</v-icon>戻る</v-btn>
+          </v-row>
+        </div>
       </v-container>
       <v-container v-else>
       </v-container>
@@ -138,7 +169,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchUser', 'fetchUserInfo', 'login', 'logout', 'fetchProblem']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHelthProblem', 'getHumanProblem']),
+    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHelthProblem', 'getHumanProblem', 'getOtherProblem']),
     unix2daystr (unix) {
       return moment.unix(unix).format('YYYY年MM月DD日 締切')
     },
@@ -153,6 +184,10 @@ export default {
     clickHealthButton () {
       this.mode = 'health'
       this.lastIdx = this.getHelthProblem().length
+    },
+    clickOtherButton () {
+      this.mode = 'other'
+      this.lastIdx = this.getOtherProblem().length
     },
     clickResetButton () {
       this.mode = 'all'
@@ -186,6 +221,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   max-width: 800px;
+  min-width: 90%;
 }
 .human-area {
   background-color: white;
@@ -194,6 +230,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   max-width: 800px;
+  min-width: 90%;
 }
 .health-area {
   background-color: white;
@@ -202,6 +239,16 @@ export default {
   margin-left: auto;
   margin-right: auto;
   max-width: 800px;
+  min-width: 90%;
+}
+.other-area {
+  background-color: white;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+  min-width: 90%;
 }
 .detail-card {
   height: 125px;

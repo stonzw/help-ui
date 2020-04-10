@@ -8,7 +8,8 @@ export const state = () => ({
   userInfo: {},
   workProblem: [],
   humanProblem: [],
-  helthProblem: []
+  helthProblem: [],
+  otherProblem: []
 })
 
 export const getters = {
@@ -42,6 +43,9 @@ export const getters = {
   getHelthProblem (state) {
     return state.helthProblem
   },
+  getOtherProblem (state) {
+    return state.otherProblem
+  },
   isLoading (state) {
     return state.loading
   }
@@ -68,6 +72,9 @@ export const mutations = {
   },
   setHelthProblem (state, problem) {
     state.helthProblem = problem
+  },
+  setOtherProblem (state, problem) {
+    state.otherProblem = problem
   },
   startLoad (state) {
     state.loading = true
@@ -194,6 +201,19 @@ export const actions = {
         return ret
       })
       commit('setHelthProblem', problem)
+      commit('finishLoad')
+    })
+    const otherId = 4
+    axios.get(
+      `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${otherId}`,
+      { headers: this.state.cred }
+    ).then((res) => {
+      const problem = res.data.map((p) => {
+        const ret = p
+        ret.url = `/help/${p.id}`
+        return ret
+      })
+      commit('setOtherProblem', problem)
       commit('finishLoad')
     })
   }
