@@ -2,22 +2,15 @@
   <v-layout>
     <v-container>
       <v-row>
-        <v-col cols="12">
-          <v-card>
-            <line-chart :chart-data="lineData()" :options="chartOptions" />
-          </v-card>
-        </v-col>
-        <v-col v-for="item in chartValuesTable" :key="`chart${item.id}`" cols="4">
-          <v-card>
-            <doughnut-chart :chart-data="chartData(item.vals)" :options="chartOptions" />
-          </v-card>
-        </v-col>
+        <v-card v-for="item in departments" :key="`department-${item.id}`">
+          <v-card-title>{{ item.name }}</v-card-title>
+          <VueDoughnut :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
+        </v-card>
       </v-row>
     </v-container>
   </v-layout>
 </template>
 <script>
-import colors from 'vuetify/es5/util/colors'
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 export default {
@@ -28,111 +21,61 @@ export default {
   },
   data () {
     return {
-      chartValuesTable: [
-        { 'id': 1, 'vals': [30, 30, 30] },
-        { 'id': 2, 'vals': [40, 50, 60] },
-        { 'id': 3, 'vals': [40, 5, 6] }
-      ],
-      chartColors: [
-        colors.red.lighten1,
-        colors.blue.lighten1,
-        colors.yellow.lighten1
-      ],
-      chartLabels: ['人', '仕事', '健康'],
-      chartOptions: {
-        maintainAspectRatio: false,
-        animation: {
-          duration: 1500,
-          easing: 'easeInOutCubic'
-        }
-      }
+      enqueteOptions: {
+        legend: {
+          display: true
+        },
+        rotation: 1 * Math.PI,
+        circumference: 1 * Math.PI
+      },
+      surveyData: {},
+      departments: []
     }
   },
   mounted () {
     this.fetchUser()
-    this.fetchEmployeeInfos()
+    this.fetchData()
   },
   methods: {
     ...mapActions(['fetchUser', 'fetchUserInfo', 'loginDialogOn']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred', 'isAdminUser']),
-    chartData (vals) {
+    enqueteData (vals) {
       return {
+        labels: ['Human', 'Work', 'Health'],
         datasets: [
           {
             data: vals,
-            backgroundColor: this.chartColors
-          }
-        ],
-        labels: this.chartLabels
-      }
-    },
-    lineData () {
-      return {
-        labels: ['2020-02-01', '2020-02-08', '2020-02-15', '2020-02-22', '2020-03-01'],
-        datasets: [
-          {
-            label: 'ログインユーザー数',
-            data: [10, 8, 12, 7, 6],
-            borderColor: 'red',
-            backgroundColor: 'rgba(0, 255, 0, 0.4)',
-            fill: false,
-            tension: 0 // 線を真っ直ぐにする
-          },
-          {
-            label: '回答ユーザー数',
-            data: [7, 5, 8, 4, 5],
-            borderColor: 'green',
-            backgroundColor: 'rgba(0, 255, 0, 0.4)',
-            fill: false,
-            tension: 0 // 線を真っ直ぐにする
-          },
-          {
-            label: '質問投稿ユーザー数',
-            data: [6, 4, 8, 2, 5],
-            borderColor: 'yellow',
-            backgroundColor: 'rgba(0, 255, 0, 0.4)',
-            fill: false,
-            tension: 0 // 線を真っ直ぐにする
+            backgroundColor: ['#A4A1FB', '#FC8373', '#85E388']
           }
         ]
       }
     },
-    fetchEmployeeInfos (userInfo) {
+    fetchData () {
       const companyId = this.getUserInfo().company_id
       axios.get(
-        `http://localhost:3000/departments?company_id=${companyId}`,
+        `http://localhost:3000/survey-summary`,
         { headers: this.getCred() }
       )
-        .then((res) => {
-          this.departments = res.data
-          res.data.map((elem) => {
-            this.departmentId2Name[elem.id] = elem.name
-          })
+        .then((res1) => {
           axios.get(
-            `http://localhost:3000/search-user-info?company_id=${companyId}`,
+            `http://localhost:3000/departments?company_id=${companyId}`,
             { headers: this.getCred() }
           )
-            .then((res) => {
-              this.employeeInfos = res.data
+            .then((res2) => {
+              const survey = {}
+              res1.data.map((element) => {
+                survey[element.id] = element.vals
+              })
+              const departments = res2.data
+              this.departments = departments.map((department) => {
+                if (survey[department.id]) {
+                  department.vals = survey[department.id]
+                } else {
+                  department.vals = [0, 0, 0]
+                }
+                return department
+              })
             })
-        })
-    },
-    clickEditButton (userId, departmentId) {
-      this.editableId = userId
-      this.selectedDepartment = {
-        'id': departmentId,
-        'name': this.departmentId2Name[departmentId]
-      }
-    },
-    clickEditSaveButton (userInfo, departmentId) {
-      const body = {
-        department_id: this.selectedDepartment
-      }
-      const headers = this.getCred()
-      axios.put(`${process.env.API_URL}/user_infos/${userInfo.id}`, body, { headers })
-        .then((res) => {
-          userInfo.department_id = this.selectedDepartment
-          this.editableId = -1
         })
     }
   }

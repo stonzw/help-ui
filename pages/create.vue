@@ -140,10 +140,10 @@
                 <v-textarea v-model="helpContent" label="悩みについてもっと詳しく教えてください。 " counter="200" outlined />
                 <v-file-input
                   :rules="rules"
+                  @change="onImageChange"
                   accept="image/png, image/jpeg, image/bmp"
                   placeholder="見出し画像(任意)"
                   prepend-icon="mdi-camera"
-                  @change="onImageChange"
                 />
                 <v-btn
                   :disabled="!processing"

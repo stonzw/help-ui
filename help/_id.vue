@@ -2,7 +2,7 @@
   <v-layout>
     <v-container>
       <h2>{{ helpTitle }}</h2>
-      <v-img :src="imageURL" width="100%"></v-img>
+      <v-img :src="imageURL" width="100%" />
       <p>{{ helpContent }}</p>
       <v-btn
         :href="buildTweetLink()"

@@ -9,9 +9,9 @@
             <v-card-title>
               {{ headlines[item.id - 1] }}
             </v-card-title>
-            <p class="text-content" v-if="editableId != item.id">
+            <p v-if="editableId != item.id" class="text-content">
               {{ item.content }}
-              <v-btn v-if="owner === getUser().id" text block color="green" @click="clickEditButton(item.id, item.content)">
+              <v-btn v-if="owner === getUser().id" @click="clickEditButton(item.id, item.content)" text block color="green">
                 編集する
                 <v-icon>
                   mdi-pencil
@@ -19,9 +19,13 @@
               </v-btn>
             </p>
             <v-card-text v-else>
-              <v-textarea v-model="textEditInput" outlined></v-textarea>
-              <v-btn color="primary" class="margin-bottom" block @click="clickEditSaveButton(item)">保存</v-btn>
-              <v-btn color="red" dark block @click="editableId=-1">キャンセル</v-btn>
+              <v-textarea v-model="textEditInput" outlined />
+              <v-btn @click="clickEditSaveButton(item)" color="primary" class="margin-bottom" block>
+                保存
+              </v-btn>
+              <v-btn @click="editableId=-1" color="red" dark block>
+                キャンセル
+              </v-btn>
             </v-card-text>
           </v-card>
           <h2>コメント</h2>
@@ -62,17 +66,19 @@
         <div class="side-content col-4 col-xs-12">
           <h2>関連するお悩み</h2>
           <v-col v-for="item in relatedProblems" :key="item.id">
-            <v-card :href="item.url" elevation="0" >
-              <div class="d-flex flex-no-wrap" >
+            <v-card :href="item.url" elevation="0">
+              <div class="d-flex flex-no-wrap">
                 <v-avatar
                   size="60"
                   tile
                   boarder
                 >
-                  <v-img :src="item.image_url"></v-img>
+                  <v-img :src="item.image_url" />
                 </v-avatar>
                 <div class="detail-card">
-                  <div class="help-title">{{ item.title }}</div>
+                  <div class="help-title">
+                    {{ item.title }}
+                  </div>
                   <div>{{ unix2daystr(item.deadline) }}</div>
                 </div>
               </div>

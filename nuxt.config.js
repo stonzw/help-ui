@@ -69,7 +69,7 @@ export default {
       themes: {
         light: {
           primary: 'E3BBCC',
-          secondary: '#85E388'
+          secondary: 'E38687'
         }
       }
     }
@@ -99,6 +99,6 @@ export default {
   env: {
     'API_URL': 'http://localhost:3000',
     'THEMA_COLOR': '#E3BBCC',
-    'SECOND_COLOR': '#85E388'
+    'SECOND_COLOR': '#E38687'
   }
 }

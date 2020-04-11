@@ -100,6 +100,23 @@
     <v-content>
       <nuxt />
       <v-dialog
+        v-if="!isLoading() & isAuthenticated()"
+        v-model="notificationDialog"
+        max-width="100%"
+      >
+        <v-card v-if="isAuthenticated()">
+          <v-card-title v-if="!isLoading()">
+            メッセージ
+          </v-card-title>
+          <v-card-text v-for="m in messages" :key="m.id">
+            <v-icon v-if="!m.checked">
+              mdi-new-box
+            </v-icon>
+            {{ m.content }}
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog
         v-if="!isAuthenticated()"
         v-model="loginDialog"
         max-width="100%"
@@ -129,33 +146,16 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-dialog
-        v-if="isAuthenticated()"
-        v-model="notificationDialog"
-        max-width="100%"
-      >
-        <v-card>
-          <v-card-title>
-            メッセージ
-          </v-card-title>
-          <v-card-text v-for="m in messages" :key="m.id">
-            <v-icon v-if="!m.checked">
-              mdi-new-box
-            </v-icon>
-            {{ m.content }}
-          </v-card-text>
-        </v-card>
-      </v-dialog>
       <v-overlay
         v-if="isLoading()"
         max-width="100%"
       >
         <v-progress-circular
+          :color="loadingColor"
           size="100"
           width="5"
-          :color="loadingColor"
           indeterminate
-        ></v-progress-circular>
+        />
       </v-overlay>
     </v-content>
   </v-app>

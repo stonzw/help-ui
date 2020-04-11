@@ -142,6 +142,7 @@ export const actions = {
               maxAge: 60 * 60 * 24
             })
           })
+          document.location.reload()
           commit('finishLoad')
         }
       )
