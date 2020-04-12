@@ -2,12 +2,12 @@
   <v-layout>
     <v-container>
       <v-row>
-        <div class="d-flex flex-no-wrap">
-          <v-card v-for="item in departments" :key="`department-${item.id}`">
+        <v-col cols="4" v-for="item in departments" :key="`department-${item.id}`">
+          <v-card>
             <v-card-title>{{ item.name }}</v-card-title>
             <VueDoughnut :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
           </v-card>
-        </div>
+        </v-col>
       </v-row>
     </v-container>
   </v-layout>
@@ -25,7 +25,10 @@ export default {
     return {
       enqueteOptions: {
         legend: {
-          display: true
+          display: true,
+          labels: {
+            usePointStyle: true
+          }
         },
         rotation: 1 * Math.PI,
         circumference: 1 * Math.PI
