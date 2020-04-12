@@ -263,5 +263,6 @@ img {
   color: #383838;
   padding-bottom: 20px;
   line-height: 36px;
+  text-indent: 1em;
 }
 </style>

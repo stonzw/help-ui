@@ -7,7 +7,7 @@
           <img :src="imageURL">
           <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
             <v-card-title>
-              {{ headlines[item.id - 1] }}
+              <h2 class="content-title">{{ headlines[item.id - 1] }}</h2>
             </v-card-title>
             <p v-if="editableId != item.id" class="text-content">
               {{ item.content }}
@@ -302,5 +302,9 @@ export default {
 }
 .margin-bottom {
   margin-bottom: 1rem;
+}
+.content-title {
+  font-weight: 700;
+  font-size: 24px;
 }
 </style>

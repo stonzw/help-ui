@@ -11,7 +11,7 @@
               @click="clickPasswordButton"
               block
               dark
-              color="primary"
+              color="secondary"
             >
               変更する
             </v-btn>
