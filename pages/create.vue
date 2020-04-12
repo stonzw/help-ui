@@ -151,7 +151,7 @@
                   block
                   rounded
                   dark
-                  color="secondary"
+                  color="primary"
                 >
                   相談してみる
                 </v-btn>

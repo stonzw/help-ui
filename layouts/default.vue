@@ -13,7 +13,7 @@
         @click="redirect()"
         class="top-help-btn"
         to="/create"
-        color="secondary"
+        color="primary"
         dark
         large
         rounded
@@ -23,7 +23,7 @@
       <v-btn
         v-else
         @click.stop="loginDialog = true"
-        color="secondary"
+        color="primary"
         dark
         rounded
       >
@@ -135,7 +135,7 @@
               <v-btn
                 @click="clickLoginButton"
                 class="top-help-btn"
-                color="red"
+                color="primary"
                 dark
                 x-large
                 rounded

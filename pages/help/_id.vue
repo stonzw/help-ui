@@ -55,7 +55,7 @@
                   block
                   rounded
                   dark
-                  color="secondary"
+                  color="primary"
                 >
                   コメントする
                 </v-btn>

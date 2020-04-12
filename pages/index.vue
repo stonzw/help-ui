@@ -14,7 +14,7 @@
               <h3 class="what">
                 助け合いのプラットフォームHELP!
               </h3>
-              <v-btn :to="'/create'" class="button-in-jumbo" x-large color="secondary" rounded>
+              <v-btn :to="'/create'" class="button-in-jumbo" x-large color="primary" rounded>
                 悩みを相談する
               </v-btn>
             </div>
@@ -51,10 +51,10 @@
             </v-col>
           </v-row>
           <v-row align="center" justify="center">
-            <v-btn v-if="mode == 'all'" @click="clickHumanButton" color="secondary" rounded>
+            <v-btn v-if="mode == 'all'" @click="clickHumanButton" color="primary" rounded>
               人間関係の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon>
             </v-btn>
-            <v-btn v-else @click="clickResetButton" color="secondary" rounded>
+            <v-btn v-else @click="clickResetButton" color="primary" rounded>
               <v-icon>mdi-chevron-left</v-icon>戻る
             </v-btn>
           </v-row>
@@ -88,10 +88,10 @@
             </v-col>
           </v-row>
           <v-row align="center" justify="center">
-            <v-btn v-if="mode == 'all'" @click="clickWorkButton" color="secondary" rounded>
+            <v-btn v-if="mode == 'all'" @click="clickWorkButton" color="primary" rounded>
               仕事の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon>
             </v-btn>
-            <v-btn v-else @click="clickResetButton" color="secondary" rounded>
+            <v-btn v-else @click="clickResetButton" color="primary" rounded>
               <v-icon>mdi-chevron-left</v-icon>戻る
             </v-btn>
           </v-row>
@@ -125,10 +125,10 @@
             </v-col>
           </v-row>
           <v-row align="center" justify="center">
-            <v-btn v-if="mode == 'all'" @click="clickHealthButton" color="secondary" rounded>
+            <v-btn v-if="mode == 'all'" @click="clickHealthButton" color="primary" rounded>
               健康の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon>
             </v-btn>
-            <v-btn v-else @click="clickResetButton" color="secondary" rounded>
+            <v-btn v-else @click="clickResetButton" color="primary" rounded>
               <v-icon>mdi-chevron-left</v-icon>戻る
             </v-btn>
           </v-row>
@@ -162,10 +162,10 @@
             </v-col>
           </v-row>
           <v-row align="center" justify="center">
-            <v-btn v-if="mode == 'all'" @click="clickOtherButton" color="secondary" rounded>
+            <v-btn v-if="mode == 'all'" @click="clickOtherButton" color="primary" rounded>
               その他の悩みをもっとみる<v-icon>mdi-chevron-right</v-icon>
             </v-btn>
-            <v-btn v-else @click="clickResetButton" color="secondary" rounded>
+            <v-btn v-else @click="clickResetButton" color="primary" rounded>
               <v-icon>mdi-chevron-left</v-icon>戻る
             </v-btn>
           </v-row>
