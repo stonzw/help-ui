@@ -5,7 +5,7 @@
         <div class="main-content col-8 col-xs-12">
           <span>{{ deadlineStr() }}締切</span>
           <img :src="imageURL">
-          <v-card v-for="item in contents" :key="item.id" elevation="0">
+          <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
             <v-card-title>
               {{ headlines[item.id - 1] }}
             </v-card-title>
@@ -29,7 +29,7 @@
             </v-card-text>
           </v-card>
           <h2>コメント</h2>
-          <v-card v-for="comment in comments" :key="'comment-' + comment.id" class="comment" elevation="0">
+          <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
             <v-card-text>
               <p>{{ comment.content }}</p>
             </v-card-text>
@@ -65,7 +65,7 @@
         </div>
         <div class="side-content col-4 col-xs-12">
           <h2>関連するお悩み</h2>
-          <v-col v-for="item in relatedProblems" :key="item.id">
+          <v-col v-for="item in relatedProblems" :key="`related-problem-${item.id}`">
             <v-card :href="item.url" elevation="0">
               <div class="d-flex flex-no-wrap">
                 <v-avatar

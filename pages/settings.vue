@@ -41,7 +41,6 @@ export default {
   },
   mounted () {
     this.fetchUser()
-    console.log(this.getUser())
   },
   methods: {
     ...mapActions(['fetchUser']),

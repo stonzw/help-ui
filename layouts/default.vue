@@ -177,8 +177,26 @@ export default {
       loadingColor: `${process.env.THEMA_COLOR}`
     }
   },
+  mounted () {
+    if (this.isAuthenticated()) {
+      const receiverId = this.getUser().id
+      if (!this.messages) {
+        axios.get(`${process.env.API_URL}/talks?receiver_id=${receiverId}`, { headers: this.getCred() })
+          .then((res) => {
+            this.messages = res.data.reverse()
+            res.data.forEach((data) => {
+              if (!data.checked) {
+                this.notificationCount += 1
+              }
+            })
+          })
+      }
+    } else {
+      this.loginDialog = true
+    }
+  },
   methods: {
-    ...mapActions(['fetchUser', 'login', 'logout']),
+    ...mapActions(['login', 'logout']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getMessage', 'isLoading']),
     clickLoginButton () {
       this.login(
@@ -207,24 +225,6 @@ export default {
           }
         }
       )
-    }
-  },
-  mounted () {
-    if (this.isAuthenticated()) {
-      const receiverId = this.getUser().id
-      if (!this.messages) {
-        axios.get(`${process.env.API_URL}/talks?receiver_id=${receiverId}`, { headers: this.getCred() })
-          .then((res) => {
-            this.messages = res.data.reverse()
-            res.data.forEach((data) => {
-              if (!data.checked) {
-                this.notificationCount += 1
-              }
-            })
-          })
-      }
-    } else {
-      this.loginDialog = true
     }
   }
 }

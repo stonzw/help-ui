@@ -198,7 +198,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchUserInfo', 'login', 'logout', 'fetchProblem']),
+    ...mapActions(['fetchUser', 'login', 'logout', 'fetchProblem']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHelthProblem', 'getHumanProblem', 'getOtherProblem']),
     unix2daystr (unix) {
       return moment.unix(unix).format('YYYY年MM月DD日 締切')

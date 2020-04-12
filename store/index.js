@@ -141,8 +141,8 @@ export const actions = {
               path: '/',
               maxAge: 60 * 60 * 24
             })
+            document.location.reload()
           })
-          document.location.reload()
           commit('finishLoad')
         }
       )
@@ -157,10 +157,10 @@ export const actions = {
       )
   },
   logout ({ commit }) {
+    this.$cookies.removeAll()
     commit('setUser', null)
     commit('setUserInfo', null)
     commit('setCred', null)
-    this.$cookies.removeAll()
   },
   fetchProblem ({ commit }) {
     commit('startLoad')

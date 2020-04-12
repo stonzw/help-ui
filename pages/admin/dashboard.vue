@@ -2,10 +2,12 @@
   <v-layout>
     <v-container>
       <v-row>
-        <v-card v-for="item in departments" :key="`department-${item.id}`">
-          <v-card-title>{{ item.name }}</v-card-title>
-          <VueDoughnut :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
-        </v-card>
+        <div class="d-flex flex-no-wrap">
+          <v-card v-for="item in departments" :key="`department-${item.id}`">
+            <v-card-title>{{ item.name }}</v-card-title>
+            <VueDoughnut :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
+          </v-card>
+        </div>
       </v-row>
     </v-container>
   </v-layout>
@@ -37,7 +39,7 @@ export default {
     this.fetchData()
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchUserInfo', 'loginDialogOn']),
+    ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred', 'isAdminUser']),
     enqueteData (vals) {
       return {
