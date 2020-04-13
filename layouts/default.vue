@@ -104,17 +104,24 @@
         v-model="notificationDialog"
         max-width="100%"
       >
-        <v-card v-if="isAuthenticated()">
-          <v-card-title v-if="!isLoading()">
-            メッセージ
-          </v-card-title>
-          <v-card-text v-for="m in messages" :key="m.id">
-            <v-icon v-if="!m.checked">
-              mdi-new-box
-            </v-icon>
-            {{ m.content }}
-          </v-card-text>
-        </v-card>
+      <v-card color="#fafafa">
+        <v-card-title>
+          メッセージ
+        </v-card-title>
+        <v-col>
+          <v-card v-for="m in messages" :key="m.id" outlined>
+            <v-card-title>
+              <v-icon v-if="!m.checked">
+                mdi-new-box
+              </v-icon>
+              {{ m.content }}
+            </v-card-title>
+            <v-card-subtitle>
+              From: {{ m.department_name}} {{ m.sender_name }} さん({{ m.sender_email }})
+            </v-card-subtitle>
+          </v-card>
+        </v-col>
+      </v-card>
       </v-dialog>
       <v-dialog
         v-if="!isAuthenticated()"

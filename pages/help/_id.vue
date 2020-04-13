@@ -40,7 +40,7 @@
               color="green"
               block
             >
-              メッセージを贈る
+              メッセージを送る
               <v-icon>
                 mdi-pencil
               </v-icon>
@@ -98,13 +98,7 @@
           <v-card-text>
             <span class="alert">メッセージを送信するとあなたの氏名や部署名が受信者に共有されます。</span>
             <v-form>
-              <v-select
-                v-model="selectedMessage"
-                :items="messages"
-                item-text="label"
-                item-value="value"
-                label="本文"
-              />
+              <v-textarea v-model="message" label="" counter="100" outlined />
               <v-btn
                 @click="sendMessage"
                 color="primary"
@@ -151,7 +145,7 @@ export default {
         { label: '会って相談に乗って欲しいです。', value: '会って相談に乗って欲しいです。' },
         { label: '会って感謝の気持ちを伝えたいです。', value: '会って感謝の気持ちを伝えたいです。' }
       ],
-      selectedMessage: { label: '', value: null }
+      message: ''
     }
   },
   mounted () {
@@ -209,7 +203,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchUser']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
+    ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),
     click () {
       const helpId = this.$nuxt.$route.params.id
       const data = {
@@ -262,10 +256,12 @@ export default {
       const data = {
         sender_id: this.sender,
         receiver_id: this.receiver,
-        content: this.selectedMessage,
-        checkeed: false,
+        content: this.message,
+        checked: false,
         company_id: 1,
-        department_id: 1
+        department_id: 1,
+        sender_name: this.getUserInfo().name,
+        sender_email: this.getUser().email
       }
       if (this.owner === this.getUser().id) {
         axios.post(
