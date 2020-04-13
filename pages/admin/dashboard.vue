@@ -5,7 +5,10 @@
         <v-col cols="4" v-for="item in departments" :key="`department-${item.id}`">
           <v-card>
             <v-card-title>{{ item.name }}</v-card-title>
-            <VueDoughnut :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
+            <v-card-text>
+              <VueDoughnut :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
+            </v-card-text>
+            <v-btn :to="`/admin/department/${item.id}`" color="primary" block>詳細を確認</v-btn>
           </v-card>
         </v-col>
       </v-row>
