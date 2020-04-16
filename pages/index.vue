@@ -5,17 +5,17 @@
         <v-container>
           <v-flex class="center">
             <h2 class="copy-write">
-              あなたの悩みに寄り添える人が
-            </h2>
-            <h2 class="copy-write">
-              ここにはいます
+              誰かを助けたり誰かに助けられたり
             </h2>
             <div>
               <h3 class="what">
                 助け合いのプラットフォームHELP!
               </h3>
-              <v-btn :to="'/create'" class="button-in-jumbo" x-large color="primary" rounded>
-                悩みを相談する
+              <v-btn class="button-in-jumbo" x-large color="primary" rounded @click="postHelpDialog = !postHelpDialog">
+                悩みがある人へ
+              </v-btn>
+              <v-btn class="button-in-jumbo" x-large color="primary" rounded @click="answerHelpDialog = !answerHelpDialog">
+                人を助けたい人へ
               </v-btn>
             </div>
           </v-flex>
@@ -172,6 +172,101 @@
         </div>
       </v-container>
       <v-container v-else />
+      <v-dialog
+        v-model="postHelpDialog"
+      >
+        <v-card>
+          <v-card-title>
+            悩みを言語化するには？
+          </v-card-title>
+          <v-card-text>
+            悩みはあるけどそれを言語化するのは難しかったりします。<br>
+            ここでは悩みを言語化してHelp!に投稿するまでの流れを紹介します。
+          </v-card-text>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>
+                1.悩みをカテゴリーに当てはめる
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                あなたの「悩み」は「人間関係？」「仕事の悩み？」「健康の悩み？」どれかに当てはめてみましょう。<br>
+                あなたの悩みはどのカテゴリーに当てはまりますか？<br>
+                どれにも当てはまらない場合は「その他」でも良いです。
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>
+                2. あなたの悩みに近い悩みを探してみます。
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                あなたの悩みのカテゴリーが決まったら似たような悩みをHelp!で探してみましょう。<br>
+                まずは当てはめたカテゴリーの悩みをみてみましょう。
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>
+                3. 「悩みを相談」を言語化する
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                似ている悩みがあればそれを参考にあなたの悩みを言語化してみましょう。<br>
+                似ている悩みがなくても相談の大枠は同じなので読みやすい悩みを参考に言語化します。
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>
+                4. 悩みを投稿する
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                最後に悩みを投稿します。<br>
+                トップページの「悩みを相談」をクリックして項目を入力します。<br>
+                もし批判的なコメントがきたら怖い。<br>
+                安心してください批判的なコメントは公開されるまでに運営の方で削除します。<br>
+                あなたが安心して悩みを相談できるサービスを私たちは目指しています。
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+        v-model="answerHelpDialog"
+      >
+        <v-card>
+          <v-card-title>
+            あなたの経験は誰かの大きな助けになります!
+          </v-card-title>
+          <v-card-text>
+            あなたの経験は経験したことない人からすれば大きな価値があります。<br>
+            あなたが人の役にたった結果は何らかの形で残るようにしてあなたに還元するようにします。
+          </v-card-text>
+          <v-list-item>
+            <v-list-item-content>
+              1. トップページから気になる悩みをクリック
+              <v-list-item-subtitle>
+                ※悩みは「仕事」、「人間関係」、「健康」、「その他」のカテゴリーに分けられています。気になるカテゴリーでお悩みを探してみましょう。
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              2. 悩みの詳細を確認したらフォームにあなたの経験、知恵を元にアドバイスを入力
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              3. 回答するをクリックすると回答が投稿されます
+              <v-list-item-subtitle>
+                ※回答期限までは他の人のコメントをみることができません。回答期限を過ぎるとコメントが公開されます。
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-dialog>
     </div>
   </v-layout>
 </template>
@@ -188,7 +283,9 @@ export default {
   data () {
     return {
       mode: 'all',
-      lastIdx: 4
+      lastIdx: 4,
+      answerHelpDialog: false,
+      postHelpDialog: false
     }
   },
   mounted () {

@@ -11,7 +11,7 @@
             </v-card-title>
             <p v-if="editableId != item.id" class="text-content">
               {{ item.content }}
-              <v-btn v-if="owner === getUser().id" @click="clickEditButton(item.id, item.content)" text block color="green">
+              <v-btn v-if="owner === getUser().id" @click="clickEditButton(item.id, item.content)" text block color="primary">
                 編集する
                 <v-icon>
                   mdi-pencil
@@ -31,7 +31,7 @@
           <h2>コメント</h2>
           <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
             <v-card-text>
-              <p v-if="isExpired()">{{ comment.content }}</p>
+              <p v-if="isExpired() | comment.user_id == getUser().id">{{ comment.content }}</p>
               <v-img v-else :src="comment.image_url"></v-img>
             </v-card-text>
             <v-btn
@@ -47,7 +47,7 @@
               </v-icon>
             </v-btn>
           </v-card>
-          <v-card elevation="0">
+          <v-card elevation="0" v-if="!isExpired()">
             <v-card-text>
               <v-form>
                 <v-textarea v-model="commentContent" label="コメント" outlined />
