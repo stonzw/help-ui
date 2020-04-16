@@ -5,7 +5,7 @@
       app
     >
       <v-toolbar-title>
-        <span id="logo">HELP!</span>
+        <span id="logo">Help!</span>
       </v-toolbar-title>
       <v-spacer />
       <v-btn

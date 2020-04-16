@@ -31,10 +31,11 @@
           <h2>コメント</h2>
           <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
             <v-card-text>
-              <p>{{ comment.content }}</p>
+              <p v-if="isExpired()">{{ comment.content }}</p>
+              <v-img v-else :src="comment.image_url"></v-img>
             </v-card-text>
             <v-btn
-              v-if="owner === getUser().id"
+              v-if="owner === getUser().id && isExpired()"
               @click="clickSendButton(comment.user_id)"
               text
               color="green"
@@ -145,7 +146,8 @@ export default {
         { label: '会って相談に乗って欲しいです。', value: '会って相談に乗って欲しいです。' },
         { label: '会って感謝の気持ちを伝えたいです。', value: '会って感謝の気持ちを伝えたいです。' }
       ],
-      message: ''
+      message: '',
+      i: 0
     }
   },
   mounted () {
@@ -180,7 +182,11 @@ export default {
         )
         axios.get(`${process.env.API_URL}/comments?problem_id=${helpId}`).then(
           (comments) => {
-            this.comments = comments.data.map((x) => { return x })
+            this.comments = comments.data.map((x) => {
+              x.image_url = `https://storage.googleapis.com/help-api/help/static/preopen-comment${1 + this.i % 3}.jpg`
+              this.i += 1
+              return x
+            })
           }
         )
         axios.get(
@@ -217,10 +223,17 @@ export default {
           const helpId = this.$nuxt.$route.params.id
           axios.get(`${process.env.API_URL}/comments?problem_id=${helpId}`).then(
             (comments) => {
-              this.comments = comments.data.map((x) => { return x })
+              this.comments = comments.data.map((x) => {
+                x.image_url = `https://storage.googleapis.com/help-api/help/static/preopen-comment${1 + this.i % 3}.jpg`
+                this.i += 1
+                return x
+              })
             }
           )
         })
+    },
+    isExpired () {
+      return this.deadline < Date.now() / 1000
     },
     getShortTitle (title) {
       const MAXLEN = 9
