@@ -1,7 +1,7 @@
 <template>
   <v-layout>
-    <v-container v-if="this.department">
-      <v-card-title>{{ this.department.name }}</v-card-title>
+    <v-container v-if="department">
+      <v-card-title>{{ department.name }}</v-card-title>
       <v-col v-for="item in departmentSurvey" :key="`user-${item.user.id}`">
         <v-card>
           <v-icon v-if="item.alert">mdi-alert</v-icon>
