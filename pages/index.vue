@@ -11,10 +11,10 @@
               <h3 class="what">
                 助け合いのプラットフォームHELP!
               </h3>
-              <v-btn class="button-in-jumbo" x-large color="primary" rounded @click="postHelpDialog = !postHelpDialog">
+              <v-btn @click="postHelpDialog = !postHelpDialog" class="button-in-jumbo" x-large color="primary" rounded>
                 悩みがある人へ
               </v-btn>
-              <v-btn class="button-in-jumbo" x-large color="primary" rounded @click="answerHelpDialog = !answerHelpDialog">
+              <v-btn @click="answerHelpDialog = !answerHelpDialog" class="button-in-jumbo" x-large color="primary" rounded>
                 人を助けたい人へ
               </v-btn>
             </div>
@@ -177,11 +177,11 @@
       >
         <v-card>
           <v-card-title>
-            悩みを言語化するには？
+            悩みを文章にするには？
           </v-card-title>
           <v-card-text>
-            悩みはあるけどそれを言語化するのは難しかったりします。<br>
-            ここでは悩みを言語化してHelp!に投稿するまでの流れを紹介します。
+            悩みはあるけどそれを文章にするのは難しかったりします。<br>
+            ここでは悩みを文章にしてみてHelp!に投稿するまでの流れを紹介します。
           </v-card-text>
           <v-list-item>
             <v-list-item-content>
@@ -231,6 +231,9 @@
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item>
+            あなたの悩みを公開し、残しておくことは、今後、同じ悩みを持った仲間の役にたちます！
+          </v-list-item>
         </v-card>
       </v-dialog>
       <v-dialog
@@ -241,8 +244,7 @@
             あなたの経験は誰かの大きな助けになります!
           </v-card-title>
           <v-card-text>
-            あなたの経験は経験したことない人からすれば大きな価値があります。<br>
-            あなたが人の役にたった結果は何らかの形で残るようにしてあなたに還元するようにします。
+            あなたの経験は経験したことない人からすれば大きな価値があります。
           </v-card-text>
           <v-list-item>
             <v-list-item-content>
