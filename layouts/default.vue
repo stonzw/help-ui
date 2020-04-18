@@ -249,7 +249,8 @@ export default {
 #logo {
   color:#000000;
   font-size: 2rem;
-  font-family: serif;
+  font-family: "Montserrat","游ゴシック",YuGothic,"ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN","メイリオ",Meiryo,sans-serif;
+  font-weight: 700;
 }
 img {
   width: 100%;
