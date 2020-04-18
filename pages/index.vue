@@ -209,11 +209,11 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>
-                3. 「悩みを相談」を言語化する
+                3. 「悩みを相談」を文章にする
               </v-list-item-title>
               <v-list-item-subtitle>
-                似ている悩みがあればそれを参考にあなたの悩みを言語化してみましょう。<br>
-                似ている悩みがなくても相談の大枠は同じなので読みやすい悩みを参考に言語化します。
+                似ている悩みがあればそれを参考にあなたの悩みを文章にしてみましょう。<br>
+                似ている悩みがなくても相談の大枠は同じなので読みやすい悩みを参考にしてみましょう。
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
