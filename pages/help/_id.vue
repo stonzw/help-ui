@@ -2,9 +2,11 @@
   <v-layout>
     <v-container>
       <v-row class="main-wrapper">
-        <div class="main-content col-8 col-xs-12">
+        <div class="main-content col-12">
           <span>{{ deadlineStr() }}締切</span>
-          <img :src="imageURL">
+          <div class="image-wrapper">
+            <img :src="imageURL" />
+          </div>
           <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
             <v-card-title>
               <h2 class="content-title">{{ headlines[item.id - 1] }}</h2>
@@ -28,7 +30,7 @@
               </v-btn>
             </v-card-text>
           </v-card>
-          <h2>コメント</h2>
+          <h2>回答</h2>
           <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
             <v-card-text>
               <p v-if="isExpired() | comment.user_id == getUser().id">{{ comment.content }}</p>
@@ -58,33 +60,29 @@
                   dark
                   color="primary"
                 >
-                  コメントする
+                  回答する
                 </v-btn>
               </v-form>
             </v-card-text>
           </v-card>
         </div>
-        <div class="side-content col-4 col-xs-12">
+        <div class="col-12">
           <h2>関連するお悩み</h2>
-          <v-col v-for="item in relatedProblems" :key="`related-problem-${item.id}`">
-            <v-card :href="item.url" elevation="0">
-              <div class="d-flex flex-no-wrap">
-                <v-avatar
-                  size="60"
-                  tile
-                  boarder
-                >
-                  <v-img :src="item.image_url" />
-                </v-avatar>
-                <div class="detail-card">
-                  <div class="help-title">
-                    {{ item.title }}
-                  </div>
-                  <div>{{ unix2daystr(item.deadline) }}</div>
-                </div>
-              </div>
-            </v-card>
-          </v-col>
+          <v-row>
+            <v-col v-for="item in relatedProblems" :key="`related-problem-${item.id}`" class="col-6 d-flex flex-no-wrap">
+              <v-card :href="item.url">
+                <v-img
+                  :src="item.image_url"
+                ></v-img>
+                <v-card-title>
+                  {{ item.title }}
+                </v-card-title>
+                <v-card-subtitle>
+                  {{ unix2daystr(item.deadline) }}
+                </v-card-subtitle>
+              </v-card>
+            </v-col>
+          </v-row>
         </div>
       </v-row>
       <v-dialog
@@ -199,7 +197,7 @@ export default {
                 id: p.id,
                 image_url: p.image_url,
                 url: '/help/' + p.id,
-                title: this.getShortTitle(p.title),
+                title: p.title,
                 deadline: p.deadline
               }
             }
@@ -315,5 +313,9 @@ export default {
 .content-title {
   font-weight: 700;
   font-size: 24px;
+}
+.image-wrapper {
+  max-width: 600px;
+  margin:auto;
 }
 </style>
