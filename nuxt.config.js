@@ -98,6 +98,7 @@ export default {
   },
   env: {
     'API_URL': 'http://localhost:3000',
+    'BUCKET_URL': 'https://storage.googleapis.com/help-storage',
     'THEMA_COLOR': '#E3BBCC',
     'SECOND_COLOR': '#E38687'
   }

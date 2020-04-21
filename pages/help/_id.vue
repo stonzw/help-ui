@@ -181,7 +181,7 @@ export default {
         axios.get(`${process.env.API_URL}/comments?problem_id=${helpId}`).then(
           (comments) => {
             this.comments = comments.data.map((x) => {
-              x.image_url = `https://storage.googleapis.com/help-api/help/static/preopen-comment${1 + this.i % 3}.jpg`
+              x.image_url = `${process.env.BUCKET_URL}/help/static/preopen-comment${1 + this.i % 3}.jpg`
               this.i += 1
               return x
             })
