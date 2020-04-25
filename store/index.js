@@ -172,7 +172,7 @@ export const actions = {
     ).then((res) => {
       const problem = res.data.map((p) => {
         const ret = p
-        ret.url = `/help/${p.id}`
+        ret.url = `/help/?helpId=${p.id}`
         return ret
       })
       commit('setWorkProblem', problem)
@@ -186,7 +186,7 @@ export const actions = {
     ).then((res) => {
       const problem = res.data.map((p) => {
         const ret = p
-        ret.url = `/help/${p.id}`
+        ret.url = `/help/?helpId=${p.id}`
         return ret
       })
       commit('setHumanProblem', problem)
@@ -198,7 +198,7 @@ export const actions = {
     ).then((res) => {
       const problem = res.data.map((p) => {
         const ret = p
-        ret.url = `/help/${p.id}`
+        ret.url = `/help/?helpId=${p.id}`
         return ret
       })
       commit('setHelthProblem', problem)
@@ -211,7 +211,7 @@ export const actions = {
     ).then((res) => {
       const problem = res.data.map((p) => {
         const ret = p
-        ret.url = `/help/${p.id}`
+        ret.url = `/help/?helpId=${p.id}`
         return ret
       })
       commit('setOtherProblem', problem)

@@ -150,7 +150,7 @@ export default {
                     axios.post(`${process.env.API_URL}/answers`, data3, { headers: this.getCred() })
                       .then((res4) => {
                         this.processing = false
-                        this.$nuxt.$router.push({ path: '/help/' + res.data.id })
+                        this.$nuxt.$router.push({ path: '/help/?helpId=' + res.data.id })
                         this.finishLoad()
                       })
                       .catch(() => { this.finishLoad() })

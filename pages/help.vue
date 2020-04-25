@@ -150,7 +150,7 @@ export default {
   },
   mounted () {
     this.fetchUser()
-    const helpId = this.$nuxt.$route.params.id
+    const { helpId } = this.$nuxt.$route.query
     axios.get(`${process.env.API_URL}/problems/${helpId}`, { headers: this.getCred() })
       .then((res) => {
         const companyId = res.data.company_id
@@ -196,7 +196,7 @@ export default {
               return {
                 id: p.id,
                 image_url: p.image_url,
-                url: '/help/' + p.id,
+                url: '/help/?helpId=' + p.id,
                 title: p.title,
                 deadline: p.deadline
               }
@@ -209,7 +209,7 @@ export default {
     ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),
     click () {
-      const helpId = this.$nuxt.$route.params.id
+      const { helpId } = this.$nuxt.$route.query
       const data = {
         'user_id': this.getUser().id,
         'problem_id': helpId,
@@ -218,7 +218,7 @@ export default {
       axios.post(`${process.env.API_URL}/comments`, data, { headers: this.getCred() })
         .then((res) => {
           this.commentContent = ''
-          const helpId = this.$nuxt.$route.params.id
+          const { helpId } = this.$nuxt.$route.query
           axios.get(`${process.env.API_URL}/comments?problem_id=${helpId}`).then(
             (comments) => {
               this.comments = comments.data.map((x) => {
@@ -269,8 +269,8 @@ export default {
         receiver_id: this.receiver,
         content: this.message,
         checked: false,
-        company_id: 1,
-        department_id: 1,
+        company_id: this.getUserInfo().company_id,
+        department_id: this.getUserInfo().department_id,
         sender_name: this.getUserInfo().name,
         sender_email: this.getUser().email
       }
