@@ -8,7 +8,7 @@
             <v-card-text>
               <VueDoughnut :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
             </v-card-text>
-            <v-btn :to="`/admin/department/${item.id}`" color="primary" block>詳細を確認</v-btn>
+            <v-btn :to="`/admin/department/?departmentId=${item.id}`" color="primary" block>詳細を確認</v-btn>
           </v-card>
         </v-col>
       </v-row>
@@ -61,12 +61,12 @@ export default {
     fetchData () {
       const companyId = this.getUserInfo().company_id
       axios.get(
-        `http://localhost:3000/survey-summary`,
+        `${process.env.API_URL}/survey-summary`,
         { headers: this.getCred() }
       )
         .then((res1) => {
           axios.get(
-            `http://localhost:3000/departments?company_id=${companyId}`,
+            `${process.env.API_URL}/departments?company_id=${companyId}`,
             { headers: this.getCred() }
           )
             .then((res2) => {

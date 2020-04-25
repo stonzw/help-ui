@@ -64,7 +64,7 @@ export default {
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: [],
     theme: {
       themes: {
         light: {
@@ -97,8 +97,8 @@ export default {
     }
   },
   env: {
-    'API_URL': 'http://localhost:3000',
-    'BUCKET_URL': 'https://storage.googleapis.com/help-storage',
+    'API_URL': process.env.API_URL,
+    'BUCKET_URL': process.env.BUCKET_URL,
     'THEMA_COLOR': '#E3BBCC',
     'SECOND_COLOR': '#E38687'
   }

@@ -54,9 +54,9 @@ export default {
   },
   mounted () {
     this.fetchUser()
-    this.departmentId = this.$nuxt.$route.params.id
+    this.departmentId = this.$nuxt.$route.query.departmentId
     axios.get(
-      `http://localhost:3000/departments/${this.departmentId}`,
+      `${process.env.API_URL}/departments/${this.departmentId}`,
       { headers: this.getCred() }
     ).then((res) => {
       this.department = res.data
