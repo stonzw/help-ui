@@ -8,7 +8,7 @@ export const state = () => ({
   userInfo: {},
   workProblem: [],
   humanProblem: [],
-  helthProblem: [],
+  healthProblem: [],
   otherProblem: []
 })
 
@@ -40,8 +40,8 @@ export const getters = {
   getHumanProblem (state) {
     return state.humanProblem
   },
-  getHelthProblem (state) {
-    return state.helthProblem
+  getHealthProblem (state) {
+    return state.healthProblem
   },
   getOtherProblem (state) {
     return state.otherProblem
@@ -70,8 +70,8 @@ export const mutations = {
   setHumanProblem (state, problem) {
     state.humanProblem = problem
   },
-  setHelthProblem (state, problem) {
-    state.helthProblem = problem
+  setHealthProblem (state, problem) {
+    state.healthProblem = problem
   },
   setOtherProblem (state, problem) {
     state.otherProblem = problem
@@ -164,10 +164,9 @@ export const actions = {
   },
   fetchProblem ({ commit }) {
     commit('startLoad')
-    const companyId = 1
     const workId = 2
     axios.get(
-      `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${workId}`,
+      `${process.env.API_URL}/search-problem?genre_id=${workId}`,
       { headers: this.state.cred }
     ).then((res) => {
       const problem = res.data.map((p) => {
@@ -181,7 +180,7 @@ export const actions = {
     })
     const humanId = 1
     axios.get(
-      `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${humanId}`,
+      `${process.env.API_URL}/search-problem?genre_id=${humanId}`,
       { headers: this.state.cred }
     ).then((res) => {
       const problem = res.data.map((p) => {
@@ -191,9 +190,9 @@ export const actions = {
       })
       commit('setHumanProblem', problem)
     })
-    const helthId = 3
+    const healthId = 3
     axios.get(
-      `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${helthId}`,
+      `${process.env.API_URL}/search-problem?genre_id=${healthId}`,
       { headers: this.state.cred }
     ).then((res) => {
       const problem = res.data.map((p) => {
@@ -201,12 +200,12 @@ export const actions = {
         ret.url = `/help/?helpId=${p.id}`
         return ret
       })
-      commit('setHelthProblem', problem)
+      commit('setHealthProblem', problem)
       commit('finishLoad')
     })
     const otherId = 4
     axios.get(
-      `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${otherId}`,
+      `${process.env.API_URL}/search-problem?genre_id=${otherId}`,
       { headers: this.state.cred }
     ).then((res) => {
       const problem = res.data.map((p) => {

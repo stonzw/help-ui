@@ -103,7 +103,7 @@
             align="center"
             justify="center"
           >
-            <v-col v-for="item in getHelthProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+            <v-col v-for="item in getHealthProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
               <v-card :href="item.url" elevation="0">
                 <div class="d-flex flex-no-wrap">
                   <v-avatar
@@ -298,7 +298,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchUser', 'login', 'logout', 'fetchProblem']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHelthProblem', 'getHumanProblem', 'getOtherProblem']),
+    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHealthProblem', 'getHumanProblem', 'getOtherProblem']),
     unix2daystr (unix) {
       return moment.unix(unix).format('YYYY年MM月DD日 締切')
     },
@@ -312,7 +312,7 @@ export default {
     },
     clickHealthButton () {
       this.mode = 'health'
-      this.lastIdx = this.getHelthProblem().length
+      this.lastIdx = this.getHealthProblem().length
     },
     clickOtherButton () {
       this.mode = 'other'
