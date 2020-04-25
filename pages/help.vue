@@ -66,6 +66,9 @@
             </v-card-text>
           </v-card>
         </div>
+        <v-btn :to="'/'" color="primary" block>
+          <v-icon>mdi-chevron-left</v-icon>TOPに戻る
+        </v-btn>
         <div class="col-12">
           <h2>関連するお悩み</h2>
           <v-row>
@@ -84,6 +87,9 @@
             </v-col>
           </v-row>
         </div>
+        <v-btn :to="'/'" color="primary" block>
+          <v-icon>mdi-chevron-left</v-icon>TOPに戻る
+        </v-btn>
       </v-row>
       <v-dialog
         v-if="isAuthenticated()"
