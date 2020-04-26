@@ -144,12 +144,6 @@ export default {
       deadline: 0,
       editableId: -1,
       messageDialog: false,
-      messages: [
-        { label: 'ありがとうございました。', value: 'ありがとうございました。' },
-        { label: '悩みが解消されました。', value: '悩みが解消されました。' },
-        { label: '会って相談に乗って欲しいです。', value: '会って相談に乗って欲しいです。' },
-        { label: '会って感謝の気持ちを伝えたいです。', value: '会って感謝の気持ちを伝えたいです。' }
-      ],
       message: '',
       i: 0
     }
