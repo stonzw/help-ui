@@ -6,7 +6,7 @@
           <v-card>
             <v-card-title>{{ item.name }}</v-card-title>
             <v-card-text>
-              <VueDoughnut :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
+              <VueHorizontalBar :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
             </v-card-text>
             <v-btn :to="`/admin/department/?departmentId=${item.id}`" color="primary" block>詳細を確認</v-btn>
           </v-card>
@@ -28,13 +28,31 @@ export default {
     return {
       enqueteOptions: {
         legend: {
-          display: true,
-          labels: {
-            usePointStyle: true
-          }
+          display: false
         },
-        rotation: 1 * Math.PI,
-        circumference: 1 * Math.PI
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                display: false
+              },
+              ticks: {
+                beginAtZero: true,
+                display: false
+              }
+            }
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                display: false
+              },
+              ticks: {
+                display: true
+              }
+            }
+          ]
+        }
       },
       surveyData: {},
       departments: []
