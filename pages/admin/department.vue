@@ -62,7 +62,9 @@ export default {
                 display: false
               },
               ticks: {
-                display: false
+                display: true,
+                beginAtZero: true,
+                stepSize: 1
               }
             }
           ]
@@ -114,6 +116,11 @@ export default {
       })
     },
     enqueteData (enquetes) {
+      const labels = enquetes.date.map(
+        (d) => {
+          return moment(d).format('YYYY-MM-DD')
+        }
+      )
       return {
         datasets: [
           {
@@ -121,6 +128,7 @@ export default {
             data: enquetes.work,
             borderColor: '#A4A1FB',
             lineTension: false,
+            spanGaps: true,
             fill: false
           },
           {
@@ -128,6 +136,7 @@ export default {
             data: enquetes.human,
             borderColor: '#FC8373',
             lineTension: false,
+            spanGaps: true,
             fill: false
           },
           {
@@ -135,10 +144,11 @@ export default {
             data: enquetes.health,
             borderColor: '#85E388',
             lineTension: false,
+            spanGaps: true,
             fill: false
           }
         ],
-        labels: enquetes.date
+        labels
       }
     }
   }
