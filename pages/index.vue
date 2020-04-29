@@ -29,7 +29,7 @@
             align="center"
             justify="center"
           >
-            <v-col v-for="item in getHumanProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+            <v-col v-for="item in getHumanProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <v-card :href="item.url" elevation="0">
                 <div class="d-flex flex-no-wrap">
                   <v-avatar
@@ -66,7 +66,7 @@
             align="center"
             justify="center"
           >
-            <v-col v-for="item in getWorkProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+            <v-col v-for="item in getWorkProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <v-card :href="item.url" elevation="0">
                 <div class="d-flex flex-no-wrap">
                   <v-avatar
@@ -103,7 +103,7 @@
             align="center"
             justify="center"
           >
-            <v-col v-for="item in getHealthProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+            <v-col v-for="item in getHealthProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <v-card :href="item.url" elevation="0">
                 <div class="d-flex flex-no-wrap">
                   <v-avatar
@@ -140,7 +140,7 @@
             align="center"
             justify="center"
           >
-            <v-col v-for="item in getOtherProblem().slice(0, lastIdx)" :key="item.id" class="col-6">
+            <v-col v-for="item in getOtherProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <v-card :href="item.url" elevation="0">
                 <div class="d-flex flex-no-wrap">
                   <v-avatar
