@@ -170,103 +170,100 @@
             </v-btn>
           </v-row>
         </div>
-      </v-container>
+        </v-container>
       <v-container v-else />
       <v-dialog
+        max-width="694px"
         v-model="postHelpDialog"
       >
-        <v-card>
-          <v-card-title>
-            悩みを文章にするには？
-          </v-card-title>
-          <v-card-text>
-            悩みはあるけどそれを文章にするのは難しかったりします。<br>
-            ここでは悩みを文章にしてみてHelp!に投稿するまでの流れを紹介します。
-          </v-card-text>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>
-                1.悩みをカテゴリーに当てはめる
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                あなたの「悩み」は「人間関係？」「仕事の悩み？」「健康の悩み？」どれかに当てはめてみましょう。<br>
-                あなたの悩みはどのカテゴリーに当てはまりますか？<br>
-                どれにも当てはまらない場合は「その他」でも良いです。
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>
-                2. あなたの悩みに近い悩みを探してみます。
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                あなたの悩みのカテゴリーが決まったら似たような悩みをHelp!で探してみましょう。<br>
-                まずは当てはめたカテゴリーの悩みをみてみましょう。
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>
-                3. 「悩みを相談」を文章にする
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                似ている悩みがあればそれを参考にあなたの悩みを文章にしてみましょう。<br>
-                似ている悩みがなくても相談の大枠は同じなので読みやすい悩みを参考にしてみましょう。
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>
-                4. 悩みを投稿する
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                最後に悩みを投稿します。<br>
-                トップページの「悩みを相談」をクリックして項目を入力します。<br>
-                もし批判的なコメントがきたら怖い。<br>
-                安心してください批判的なコメントは公開されるまでに運営の方で削除します。<br>
-                あなたが安心して悩みを相談できるサービスを私たちは目指しています。
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            あなたの悩みを公開し、残しておくことは、今後、同じ悩みを持った仲間の役にたちます！
-          </v-list-item>
+        <v-card class="introduction">
+          <h2>悩みを投稿してみよう！3つのステップで流れを紹介！</h2>
+          <h3>あなたの悩みはどのカテゴリー？カテゴリーを探してみよう！</h3>
+          <div class="intro-content">
+            <p>
+              あなたの悩みがどのカテゴリーに当てはまるかを確認しましょう！
+            </p>
+            <p>
+            <ul>
+              <li>人間関係？</li>
+              <li>仕事の悩み？</li>
+              <li>健康の悩み？</li>
+            </ul>
+            </p>
+            <p>
+              どれにも当てはまらない場合は「その他」でもOKです!
+            </p>
+          </div>
+          <h3>カテゴリーからあなたの悩みに近いものを探してみましょう！</h3>
+          <div class="intro-content">
+            <p>
+              表現方法、書き方などを参考にするために、あなたの悩みと同じカテゴリページから<br>
+              あなたの悩みに近いものを探してみましょう！
+            </p>
+            <p>
+              悩んでいるときは言語化もしにくいもの、<br>
+              そんな時は遠慮なく色々な方の悩みを参考にして、気持ちをすっきりさせましょう!
+            </p>
+          </div>
+          <h3>悩みを投稿しよう！</h3>
+          <div class="intro-content-noline">
+            <p>
+              悩みの言語化・具体化ができたら、ぜひ悩みをしてください!
+            </p>
+            <p>
+              「もし批判的なコメントがきたら怖い…」<br>
+            </p>
+            <p>
+              安心してください!<br>
+              批判的なコメントは公開されるまでに運営の方で削除します。
+            </p>
+            <p>
+              あなたが安心して悩みを相談できる<br>
+              サービスを私たちは目指しています。
+            </p>
+          </div>
+          <div class="intro-last-content">
+            あなたの悩みを公開し、残しておくことは、<br>
+            今後、同じ悩みを持った仲間の役にたちます！
+          </div>
+          <v-btn
+            v-if="isAuthenticated()"
+            @click="redirect()"
+            class="top-help-btn"
+            to="/create"
+            color="primary"
+            dark
+            large
+            rounded
+          >
+            悩みを相談
+          </v-btn>
         </v-card>
       </v-dialog>
       <v-dialog
+        max-width="694px"
         v-model="answerHelpDialog"
       >
-        <v-card>
-          <v-card-title>
-            あなたの経験は誰かの大きな助けになります!
-          </v-card-title>
-          <v-card-text>
-            あなたの経験は経験したことない人からすれば大きな価値があります。
-          </v-card-text>
-          <v-list-item>
-            <v-list-item-content>
-              1. トップページから気になる悩みをクリック
-              <v-list-item-subtitle>
-                ※悩みは「仕事」、「人間関係」、「健康」、「その他」のカテゴリーに分けられています。気になるカテゴリーでお悩みを探してみましょう。
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              2. 悩みの詳細を確認したらフォームにあなたの経験、知恵を元にアドバイスを入力
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              3. 回答するをクリックすると回答が投稿されます
-              <v-list-item-subtitle>
-                ※回答期限までは他の人のコメントをみることができません。回答期限を過ぎるとコメントが公開されます。
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+        <v-card
+          class="introduction"
+        >
+          <h2>あなたの経験は経験したことない人からすれば大きな価値があります。<br>経験を共有してみましょう！</h2>
+          <h3>トップページから気になる悩みをクリック</h3>
+          <div class="intro-content">
+            <p>悩みは「仕事」、「人間関係」、「健康」、「その他」のカテゴリーに分けられています。<br>
+            気になるカテゴリーでお悩みを探してみましょう。</p>
+          </div>
+          <h3>回答フォームからアドバイスを入力</h3>
+          <div class="intro-content">
+            <p>悩みの詳細を確認したらページ下部にある回答フォームから<br>
+            あなたの経験、知恵を元にアドバイスを入力。</p>
+          </div>
+          <h3>回答を投稿する</h3>
+          <div class="intro-content-noline">
+            <p>「回答を投稿する」をクリックすると回答が投稿されます。</p>
+            <p>回答期限までは他の人のコメントをみることができません。<br>
+            回答期限を過ぎるとコメントが公開されます。</p>
+          </div>
         </v-card>
       </v-dialog>
     </div>
@@ -405,5 +402,43 @@ export default {
   font-weight: 700;
   font-size: 1rem;
 
+}
+.modal-wrapper {
+  max-width: 694px;
+  margin: auto;
+}
+.introduction {
+  padding: 2rem;
+  counter-reset: count;
+}
+.introduction h2 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.introduction h3 {
+  color: #E38687;
+}
+.introduction h3::before {
+  counter-increment: count;
+  color: #E38687;
+  content: 'Step' counter(count) '. ';
+}
+.intro-content {
+  padding: 1rem;
+  line-height: 1.8rem;
+  border-left: solid 10px #fff2f7;
+}
+.intro-content-noline {
+  padding: 1rem;
+  line-height: 1.8rem;
+  border-left: none 10px #fff2f7;
+}
+.introduction p {
+  color: #383838;
+}
+.intro-last-content {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-left: 2rem;
 }
 </style>
