@@ -3,7 +3,7 @@
     <v-container v-if="department">
       <v-card-title>{{ department.name }}のアンケート結果の推移</v-card-title>
       <v-col v-for="item in departmentSurvey" :key="`user-${item.user.id}`">
-        <v-card>
+        <v-card :to='item.url'>
           <v-icon v-if="item.alert">mdi-alert</v-icon>
           <v-card-title>{{ item.user.name }}</v-card-title>
           <v-card-text>
@@ -14,22 +14,6 @@
       <v-btn :to="'/admin/dashboard'" color="primary" block>
         <v-icon>mdi-chevron-left</v-icon>戻る
       </v-btn>
-      <v-card-title>{{ department.name }}のhelp</v-card-title>
-      <v-row>
-        <v-col v-for="item in relatedProblems" :key="`related-problem-${item.id}`" class="col-6 d-flex flex-no-wrap">
-          <v-card :href="item.url">
-            <v-img
-              :src="item.image_url"
-            ></v-img>
-            <v-card-title>
-              {{ item.title }}
-            </v-card-title>
-            <v-card-subtitle>
-              {{ unix2daystr(item.deadline) }}
-            </v-card-subtitle>
-          </v-card>
-        </v-col>
-      </v-row>
     </v-container>
   </v-layout>
 </template>
@@ -93,23 +77,15 @@ export default {
       axios.get(
         `${process.env.API_URL}/department-summary?department_id=${this.departmentId}`,
         { headers: this.getCred() }
-      )
-        .then((res) => {
-          this.departmentSurvey = res.data
-        })
-
-      axios.get(
-        `${process.env.API_URL}/search-department-problem?department_id=${this.departmentId}`,
-        { headers: this.getCred() }
       ).then((res) => {
-        this.relatedProblems = res.data.map(
-          (p) => {
-            return {
-              id: p.id,
-              image_url: p.image_url,
-              url: '/help/?helpId=' + p.id,
-              title: p.title,
-              deadline: p.deadline
+        this.departmentSurvey = res.data.map(
+          (val, idx) => {
+            if (idx === 0) {
+              val.url = `/admin/detail/?departmentId=${val.user.user_id}`
+              return val
+            } else {
+              val.url = `/admin/detail/?userId=${val.user.user_id}`
+              return val
             }
           }
         )
