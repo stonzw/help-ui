@@ -30,8 +30,8 @@
                   item-value="value"
                   label="いつまでに答えて欲しいですか？"
                 />
-                <v-text-field v-model="helpTitle" label="25文字以内でどんな悩みか教えてください。 (例: 人間関係で悩んでいます)" counter="25" outlined />
-                <v-textarea v-model="helpUserInfo" label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目のエンジニア職で...)" counter="200" outlined />
+                <v-text-field v-model="helpTitle" label="25文字以内でどんな悩みか教えてください。 (例: チームメンバーと口論をして気まずくなっています…)" counter="25" outlined />
+                <v-textarea v-model="helpUserInfo" label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目で営業部にいて...)" counter="200" outlined />
                 <v-textarea v-model="helpContent" label="悩みについてもっと詳しく教えてください。 " counter="200" outlined />
                 <v-file-input
                   :rules="rules"
