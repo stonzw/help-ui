@@ -30,7 +30,7 @@
               </v-btn>
             </v-card-text>
           </v-card>
-          <h2>回答</h2>
+          <h2 v-if="comments.length !== 0">回答</h2>
           <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
             <v-card-text>
               <p v-if="isExpired() | comment.user_id == getUser().id">{{ comment.content }}</p>
@@ -49,10 +49,10 @@
               </v-icon>
             </v-btn>
           </v-card>
-          <v-card elevation="0" v-if="!isExpired()">
+          <v-card elevation="0" v-if="!isExpired() & !owner">
             <v-card-text>
               <v-form>
-                <v-textarea v-model="commentContent" label="コメント" outlined />
+                <v-textarea v-model="commentContent" label="回答する" outlined />
                 <v-btn
                   @click="click"
                   block
