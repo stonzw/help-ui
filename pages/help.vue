@@ -49,7 +49,7 @@
               </v-icon>
             </v-btn>
           </v-card>
-          <v-card elevation="0" v-if="!isExpired() & !owner">
+          <v-card elevation="0" v-if="!isExpired() & owner !== getUser()">
             <v-card-text>
               <v-form>
                 <v-textarea v-model="commentContent" label="回答する" outlined />
