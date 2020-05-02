@@ -5,12 +5,12 @@
         <v-card-title>アンケートの回答が完了しました。</v-card-title>
         <v-card-text>
           <v-col>
-            <v-btn block :to="'/create'" color="primary">
+            <v-btn :to="'/create'" block color="primary">
               悩みを相談する
             </v-btn>
           </v-col>
           <v-col>
-            <v-btn block :to="'/'">
+            <v-btn :to="'/'" block>
               トップに戻る
             </v-btn>
           </v-col>

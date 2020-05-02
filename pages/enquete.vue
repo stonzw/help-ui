@@ -1,33 +1,38 @@
 <template>
   <v-layout>
     <v-container>
-        <v-card>
-          <v-progress-linear :value="progressValue">
-          </v-progress-linear>
-          <v-card-subtitle>
-            <span class="progress-color">
-              {{ Math.min(idx + 1, 3) }} / {{ questions.length }}
-            </span>
-          </v-card-subtitle>
-          <v-card-title :class="'d-flex justify-space-around'">{{ nowTitle }}</v-card-title>
-          <v-card-text :class="'d-flex justify-space-around'">
-            <v-btn
-              :disabled="processing"
-              @click="clickAnswerNGButton"
-              dark
-              rounded
-              large
-              color="#86abe3"
-            ><v-icon>mdi-emoticon-sad</v-icon>悩んでいます</v-btn>
-            <v-btn
-              :disabled="processing"
-              @click="clickAnswerOKButton"
-              rounded
-              large
-              color="primary"
-            ><v-icon>mdi-emoticon-happy</v-icon>大丈夫です</v-btn>
-          </v-card-text>
-        </v-card>
+      <v-card>
+        <v-progress-linear :value="progressValue" />
+        <v-card-subtitle>
+          <span class="progress-color">
+            {{ Math.min(idx + 1, 3) }} / {{ questions.length }}
+          </span>
+        </v-card-subtitle>
+        <v-card-title :class="'d-flex justify-space-around'">
+          {{ nowTitle }}
+        </v-card-title>
+        <v-card-text :class="'d-flex justify-space-around'">
+          <v-btn
+            :disabled="processing"
+            @click="clickAnswerNGButton"
+            dark
+            rounded
+            large
+            color="#86abe3"
+          >
+            <v-icon>mdi-emoticon-sad</v-icon>悩んでいます
+          </v-btn>
+          <v-btn
+            :disabled="processing"
+            @click="clickAnswerOKButton"
+            rounded
+            large
+            color="primary"
+          >
+            <v-icon>mdi-emoticon-happy</v-icon>大丈夫です
+          </v-btn>
+        </v-card-text>
+      </v-card>
     </v-container>
   </v-layout>
 </template>

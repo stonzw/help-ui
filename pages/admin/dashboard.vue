@@ -2,13 +2,15 @@
   <v-layout>
     <v-container>
       <v-row>
-        <v-col cols="4" v-for="item in departments" :key="`department-${item.id}`">
+        <v-col v-for="item in departments" :key="`department-${item.id}`" cols="4">
           <v-card>
             <v-card-title>{{ item.name }}</v-card-title>
             <v-card-text>
               <VueHorizontalBar :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
             </v-card-text>
-            <v-btn :to="`/admin/department/?departmentId=${item.id}`" color="primary" block>詳細を確認</v-btn>
+            <v-btn :to="`/admin/department/?departmentId=${item.id}`" color="primary" block>
+              詳細を確認
+            </v-btn>
           </v-card>
         </v-col>
       </v-row>

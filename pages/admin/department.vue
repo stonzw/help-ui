@@ -3,11 +3,13 @@
     <v-container v-if="department">
       <v-card-title>{{ department.name }}のアンケート結果の推移</v-card-title>
       <v-col v-for="item in departmentSurvey" :key="`user-${item.user.id}`">
-        <v-card :to='item.url'>
-          <v-icon v-if="item.alert">mdi-alert</v-icon>
+        <v-card :to="item.url">
+          <v-icon v-if="item.alert">
+            mdi-alert
+          </v-icon>
           <v-card-title>{{ item.user.name }}</v-card-title>
           <v-card-text>
-            <VueLine :chart-data="enqueteData(item.survey)" :options="enqueteOptions" :width="2000"></VueLine>
+            <VueLine :chart-data="enqueteData(item.survey)" :options="enqueteOptions" :width="2000" />
           </v-card-text>
         </v-card>
       </v-col>

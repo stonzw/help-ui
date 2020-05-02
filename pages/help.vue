@@ -5,11 +5,13 @@
         <div class="main-content col-12">
           <span>{{ deadlineStr() }}締切</span>
           <div class="image-wrapper">
-            <img :src="imageURL" />
+            <img :src="imageURL">
           </div>
           <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
             <v-card-title>
-              <h2 class="content-title">{{ headlines[item.id - 1] }}</h2>
+              <h2 class="content-title">
+                {{ headlines[item.id - 1] }}
+              </h2>
             </v-card-title>
             <p v-if="editableId != item.id" class="text-content">
               {{ item.content }}
@@ -30,11 +32,15 @@
               </v-btn>
             </v-card-text>
           </v-card>
-          <h2 v-if="comments.length !== 0">回答</h2>
+          <h2 v-if="comments.length !== 0">
+            回答
+          </h2>
           <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
             <v-card-text>
-              <p v-if="isExpired() | comment.user_id == getUser().id">{{ comment.content }}</p>
-              <v-img v-else :src="comment.image_url"></v-img>
+              <p v-if="isExpired() | comment.user_id == getUser().id">
+                {{ comment.content }}
+              </p>
+              <v-img v-else :src="comment.image_url" />
             </v-card-text>
             <v-btn
               v-if="owner === getUser().id && isExpired()"
@@ -49,7 +55,7 @@
               </v-icon>
             </v-btn>
           </v-card>
-          <v-card elevation="0" v-if="!isExpired() & owner !== getUser()">
+          <v-card v-if="!isExpired() & owner !== getUser()" elevation="0">
             <v-card-text>
               <v-form>
                 <v-textarea v-model="commentContent" label="回答する" outlined />
@@ -76,7 +82,7 @@
               <v-card :href="item.url">
                 <v-img
                   :src="item.image_url"
-                ></v-img>
+                />
                 <v-card-title>
                   {{ item.title }}
                 </v-card-title>
@@ -163,14 +169,15 @@ export default {
         const url = `${process.env.API_URL}/search-answer${query}`
         axios.get(url, { headers: this.getCred() }).then(
           (answers) => {
-            this.contents = answers.data.map(
-              (x) => {
-                if (x.question_id === 1) {
-                  this.title = x.content
+            this.contents = answers.data
+              .map(
+                (x) => {
+                  if (x.question_id === 1) {
+                    this.title = x.content
+                  }
+                  return { 'id': x.question_id, 'content': x.content }
                 }
-                return { 'id': x.question_id, 'content': x.content }
-              }
-            )
+              ).sort((a, b) => { a.question_id - b.question_id })
           }
         )
         axios.get(`${process.env.API_URL}/questions`).then(

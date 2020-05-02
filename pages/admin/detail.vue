@@ -1,8 +1,12 @@
 <template>
   <v-layout v-if="!loading">
     <v-container>
-      <h2 v-if="department">{{ department.name }}のHelp</h2>
-      <h2 v-if="user_info">{{ user_info.name }}さんのHelp</h2>
+      <h2 v-if="department">
+        {{ department.name }}のHelp
+      </h2>
+      <h2 v-if="user_info">
+        {{ user_info.name }}さんのHelp
+      </h2>
       <v-row
         align="center"
         justify="center"
@@ -12,7 +16,7 @@
           <v-card :href="item.url" class="align-self-stretch">
             <v-img
               :src="item.image_url"
-            ></v-img>
+            />
             <v-card-title>
               {{ item.title }}
             </v-card-title>

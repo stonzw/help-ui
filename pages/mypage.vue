@@ -17,10 +17,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 export default {
-  mounted () {
-    this.fetchUser()
-    this.fetchCommentData()
-  },
   data () {
     return {
       enqueteOptions: {
@@ -33,6 +29,10 @@ export default {
       },
       commentData: []
     }
+  },
+  mounted () {
+    this.fetchUser()
+    this.fetchCommentData()
   },
   methods: {
     ...mapActions(['fetchUser']),
