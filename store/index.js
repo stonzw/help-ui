@@ -1,4 +1,12 @@
-import axios from 'axios'
+import api from '~/plugins/api'
+
+function parseProblem (res) {
+  return res.data.map((p) => {
+    const item = p
+    item.url = `/help/?helpId=${p.id}`
+    return item
+  })
+}
 
 export const state = () => ({
   user: null,
@@ -52,29 +60,65 @@ export const getters = {
 }
 
 export const mutations = {
-  setUser (state, user) {
+  setUserFromRes (state, res) {
+    const user = res.data.data
+    this.$cookies.set('user', user, {
+      path: '/',
+      maxAge: 60 * 60 * 24
+    })
     state.user = user
   },
-  setUserInfo (state, userInfo) {
-    state.userInfo = userInfo
+  setUserInfoFromRes (state, res) {
+    this.$cookies.set('user_info', res.data, {
+      path: '/',
+      maxAge: 60 * 60 * 24
+    })
+    state.userInfo = res.data
   },
-  setCred (state, cred) {
+  setCredFromRes (state, res) {
+    const cred = {
+      'access-token': res.headers['access-token'],
+      'expiry': res.headers.expiry,
+      'token-type': res.headers['token-type'],
+      'uid': res.headers.uid,
+      'client': res.headers.client
+    }
+    this.$cookies.set('cred', cred, {
+      path: '/',
+      maxAge: 60 * 60 * 24
+    })
     state.cred = cred
+  },
+  loadUserFromCookie (state) {
+    const user = this.$cookies.get('user')
+    const cred = this.$cookies.get('cred')
+    const userInfo = this.$cookies.get('user_info')
+    if (user) {
+      if (Date.now() / 1000 < cred.expiry) {
+        state.user = user
+        state.userInfo = userInfo
+        state.cred = cred
+      } else {
+        state.user = null
+        state.userInfo = null
+        state.cred = null
+      }
+    }
   },
   setMessage (state, msg) {
     state.message = msg
   },
-  setWorkProblem (state, problem) {
-    state.workProblem = problem
+  setWorkProblem (state, res) {
+    state.workProblem = parseProblem(res)
   },
-  setHumanProblem (state, problem) {
-    state.humanProblem = problem
+  setHumanProblem (state, res) {
+    state.humanProblem = parseProblem(res)
   },
-  setHealthProblem (state, problem) {
-    state.healthProblem = problem
+  setHealthProblem (state, res) {
+    state.healthProblem = parseProblem(res)
   },
-  setOtherProblem (state, problem) {
-    state.otherProblem = problem
+  setOtherProblem (state, res) {
+    state.otherProblem = parseProblem(res)
   },
   startLoad (state) {
     state.loading = true
@@ -85,76 +129,47 @@ export const mutations = {
 }
 
 export const actions = {
-  fetchUser ({ commit }) {
-    const user = this.$cookies.get('user')
-    const userInfo = this.$cookies.get('user_info')
-    const cred = this.$cookies.get('cred')
-    if (user) {
-      if (Date.now() / 1000 < cred.expiry) {
-        commit('setUser', user)
-        commit('setUserInfo', userInfo)
-        commit('setCred', cred)
-      } else {
-        commit('setUser', null)
-        commit('setUserInfo', null)
-        commit('setCred', null)
-      }
-    }
+  async fetchUser ({ commit }) {
+    await commit('loadUserFromCookie')
+    return state.userInfo
   },
-  login ({ commit }, { email, password }) {
+  async login ({ commit }, { email, password }) {
     const data = {
       email,
       password
     }
     commit('startLoad')
-    axios.post(`${process.env.API_URL}/auth/sign_in`, data)
-      .then(
-        (res) => {
-          const cred = {
-            'access-token': res.headers['access-token'],
-            'expiry': res.headers.expiry,
-            'token-type': res.headers['token-type'],
-            'uid': res.headers.uid,
-            'client': res.headers.client
-          }
-          const user = res.data.data
-          commit('setCred', cred)
-          commit('setUser', user)
-          commit('setMessage', {
-            'message': 'ログインに成功しました。',
-            'level': 'success'
-          })
-          this.$cookies.set('user', user, {
-            path: '/',
-            maxAge: 60 * 60 * 24
-          })
-          this.$cookies.set('cred', cred, {
-            path: '/',
-            maxAge: 60 * 60 * 24
-          })
-          axios.get(
-            `${process.env.API_URL}/user_infos/${user.id}`,
-            { headers: cred }
-          ).then((res2) => {
-            commit('setUserInfo', res2.data)
-            this.$cookies.set('user_info', res2.data, {
-              path: '/',
-              maxAge: 60 * 60 * 24
-            })
-            document.location.reload()
-          })
-          commit('finishLoad')
-        }
-      )
-      .catch(
-        (res) => {
-          commit('setMessage', {
-            'message': 'ログインに失敗しました。メールアドレスとパスワードをご確認ください。',
-            'level': 'error'
-          })
-          commit('finishLoad')
-        }
-      )
+    try {
+      const res = await api.post('/auth/sign_in', data)
+      commit('setCredFromRes', res)
+      commit('setUserFromRes', res)
+      commit('setMessage', {
+        'message': 'ログインに成功しました。',
+        'level': 'success'
+      })
+      try {
+        const res2 = await api.get(
+          `/user_infos/${this.state.user.id}`,
+          { headers: this.state.cred }
+        )
+        commit('setUserInfo', res2)
+        document.location.reload()
+        commit('finishLoad')
+        return this.state.userInfo
+      } catch (error) {
+        commit('setMessage', {
+          'message': 'ログインに失敗しました。メールアドレスとパスワードをご確認ください。',
+          'level': 'error'
+        })
+        commit('finishLoad')
+      }
+    } catch (error) {
+      commit('setMessage', {
+        'message': 'ログインに失敗しました。メールアドレスとパスワードをご確認ください。',
+        'level': 'error'
+      })
+      commit('finishLoad')
+    }
   },
   logout ({ commit }) {
     this.$cookies.removeAll()
@@ -162,59 +177,44 @@ export const actions = {
     commit('setUserInfo', null)
     commit('setCred', null)
   },
-  fetchProblem ({ commit }) {
+  async fetchProblem ({ commit }) {
     commit('startLoad')
-    const workId = 2
-    axios.get(
-      `${process.env.API_URL}/search-problem?genre_id=${workId}`,
-      { headers: this.state.cred }
-    ).then((res) => {
-      const problem = res.data.map((p) => {
-        const ret = p
-        ret.url = `/help/?helpId=${p.id}`
-        return ret
-      })
-      commit('setWorkProblem', problem)
-    }).catch(() => {
+    try {
+      const workRes = await api.get(
+        `/search-problem?genre_id=${process.env.WORK_ID}`,
+        { headers: this.state.cred }
+      )
+      commit('setWorkProblem', workRes)
+    } catch (error) {
       commit('finishLoad')
-    })
-    const humanId = 1
-    axios.get(
-      `${process.env.API_URL}/search-problem?genre_id=${humanId}`,
-      { headers: this.state.cred }
-    ).then((res) => {
-      const problem = res.data.map((p) => {
-        const ret = p
-        ret.url = `/help/?helpId=${p.id}`
-        return ret
-      })
-      commit('setHumanProblem', problem)
-    })
-    const healthId = 3
-    axios.get(
-      `${process.env.API_URL}/search-problem?genre_id=${healthId}`,
-      { headers: this.state.cred }
-    ).then((res) => {
-      const problem = res.data.map((p) => {
-        const ret = p
-        ret.url = `/help/?helpId=${p.id}`
-        return ret
-      })
-      commit('setHealthProblem', problem)
+    }
+    try {
+      const humanRes = await api.get(
+        `/search-problem?genre_id=${process.env.HUMAN_ID}`,
+        { headers: this.state.cred }
+      )
+      commit('setHumanProblem', humanRes)
+    } catch (error) {
       commit('finishLoad')
-    })
-    const otherId = 4
-    axios.get(
-      `${process.env.API_URL}/search-problem?genre_id=${otherId}`,
-      { headers: this.state.cred }
-    ).then((res) => {
-      const problem = res.data.map((p) => {
-        const ret = p
-        ret.url = `/help/?helpId=${p.id}`
-        return ret
-      })
-      commit('setOtherProblem', problem)
+    }
+    try {
+      const healthRes = await api.get(
+        `/search-problem?genre_id=${process.env.HEALTH_ID}`,
+        { headers: this.state.cred }
+      )
+      commit('setHealthProblem', healthRes)
+    } catch (error) {
       commit('finishLoad')
-    })
+    }
+    try {
+      const otherRes = await api.get(
+        `/search-problem?genre_id=${process.env.OTHER_ID}`,
+        { headers: this.state.cred }
+      )
+      commit('setOtherProblem', otherRes)
+      commit('finishLoad')
+    } catch (error) {
+      commit('finishLoad')
+    }
   }
 }
