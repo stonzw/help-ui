@@ -55,12 +55,12 @@
               </v-icon>
             </v-btn>
           </v-card>
-          <v-card v-if="!isExpired() & owner !== getUser()" elevation="0">
+          <v-card v-if="!isExpired() & !isOwner()" elevation="0">
             <v-card-text>
               <v-form>
                 <v-textarea v-model="commentContent" label="回答する" outlined />
                 <v-btn
-                  @click="click"
+                  @click="clickCommentButton()"
                   block
                   rounded
                   dark
@@ -177,7 +177,7 @@ export default {
                   }
                   return { 'id': x.question_id, 'content': x.content }
                 }
-              ).sort((a, b) => { a.question_id - b.question_id })
+              ).sort((a, b) => { return a.question_id - b.question_id })
           }
         )
         axios.get(`${process.env.API_URL}/questions`).then(
@@ -215,7 +215,7 @@ export default {
   methods: {
     ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),
-    click () {
+    clickCommentButton () {
       const { helpId } = this.$nuxt.$route.query
       const data = {
         'user_id': this.getUser().id,
@@ -236,6 +236,13 @@ export default {
             }
           )
         })
+    },
+    isOwner () {
+      const user = this.getUser()
+      if (user) {
+        return this.owner !== user.id
+      }
+      return false
     },
     isExpired () {
       return this.deadline < Date.now() / 1000
