@@ -233,8 +233,8 @@
             to="/create"
             color="primary"
             dark
-            large
             rounded
+            block
           >
             悩みを相談
           </v-btn>
