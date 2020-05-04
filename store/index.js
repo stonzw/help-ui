@@ -17,7 +17,8 @@ export const state = () => ({
   workProblem: [],
   humanProblem: [],
   healthProblem: [],
-  otherProblem: []
+  otherProblem: [],
+  departments: []
 })
 
 export const getters = {
@@ -56,6 +57,9 @@ export const getters = {
   },
   isLoading (state) {
     return state.loading
+  },
+  getDepartments (state) {
+    return state.departments
   }
 }
 
@@ -125,6 +129,17 @@ export const mutations = {
   },
   finishLoad (state) {
     state.loading = false
+  },
+  setDepartmentsFromRes (state, res) {
+    state.departments = {}
+    res.data.map((item) => {
+      state.departments[item.id] = item
+    })
+  },
+  setUserNull (state) {
+    state.user = null
+    state.userInfo = null
+    state.cred = null
   }
 }
 
@@ -152,11 +167,13 @@ export const actions = {
           `/user_infos/${this.state.user.id}`,
           { headers: this.state.cred }
         )
-        commit('setUserInfo', res2)
+
+        commit('setUserInfoFromRes', res2)
         document.location.reload()
         commit('finishLoad')
         return this.state.userInfo
       } catch (error) {
+        console.log(error)
         commit('setMessage', {
           'message': 'ログインに失敗しました。メールアドレスとパスワードをご確認ください。',
           'level': 'error'
@@ -173,9 +190,14 @@ export const actions = {
   },
   logout ({ commit }) {
     this.$cookies.removeAll()
-    commit('setUser', null)
-    commit('setUserInfo', null)
-    commit('setCred', null)
+    commit('setUserNull')
+  },
+  async fetchDepartments ({ commit }) {
+    const departmentsRes = await api.get(
+      `/departments?company_id=${this.state.userInfo.company_id}`,
+      { headers: this.state.cred }
+    )
+    commit('setDepartmentsFromRes', departmentsRes)
   },
   async fetchProblem ({ commit }) {
     commit('startLoad')

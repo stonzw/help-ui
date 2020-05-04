@@ -42,6 +42,10 @@
               </p>
               <v-img v-else :src="comment.image_url" />
             </v-card-text>
+            <v-card-subtitle v-if="isExpired() | comment.user_id == getUserInfo().id" >
+              {{ getDepartments()[`${comment.user.id}`].name }}
+              {{ comment.user.name }}さんの回答
+            </v-card-subtitle>
             <v-btn
               v-if="owner === getUser().id && isExpired()"
               @click="clickSendButton(comment.user_id)"
@@ -155,7 +159,9 @@ export default {
     }
   },
   mounted () {
-    this.fetchUser()
+    this.fetchUser().then(() => {
+      this.fetchDepartments()
+    })
     const { helpId } = this.$nuxt.$route.query
     axios.get(`${process.env.API_URL}/problems/${helpId}`, { headers: this.getCred() })
       .then((res) => {
@@ -213,8 +219,8 @@ export default {
       })
   },
   methods: {
-    ...mapActions(['fetchUser']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),
+    ...mapActions(['fetchUser', 'fetchDepartments']),
+    ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred', 'getDepartments']),
     clickCommentButton () {
       const { helpId } = this.$nuxt.$route.query
       const data = {
