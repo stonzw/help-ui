@@ -73,7 +73,7 @@ export default {
     this.userId = this.$nuxt.$route.query.userId
     if (this.departmentId) {
       api.get(
-        `$/departments/${this.departmentId}`,
+        `departments/${this.departmentId}`,
         { headers: this.getCred() }
       ).then((res) => {
         this.department = res.data
