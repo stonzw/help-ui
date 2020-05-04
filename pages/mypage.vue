@@ -39,7 +39,7 @@ export default {
     ...mapGetters(['isAuthenticated', 'getUserInfo', 'getCred']),
     fetchCommentData () {
       axios.get(
-        `${process.env.API_URL}/search-comment`,
+        `${process.env.API_URL}/survey-my-comment`,
         { headers: this.getCred() }
       )
         .then((res) => {
