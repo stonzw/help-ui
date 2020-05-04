@@ -7,7 +7,13 @@
           <v-icon v-if="item.alert">
             mdi-alert
           </v-icon>
-          <v-card-title>{{ item.user.name }}</v-card-title>
+          <v-card-title>
+            {{ item.user.name }}
+            <v-spacer/>
+            <span class="body-2"><v-icon>mdi-human-handsup</v-icon>お悩み数 <span class="title">{{ item.help }}</span></span>
+            <span>&nbsp;&nbsp;</span>
+            <span class="body-2"><v-icon>mdi-comment</v-icon>コメント数 <span class="title">{{ item.comment }}</span></span>
+          </v-card-title>
           <v-card-text>
             <VueBar :chart-data="enqueteData(item.survey)" :options="enqueteOptions" :width="2000" />
           </v-card-text>
