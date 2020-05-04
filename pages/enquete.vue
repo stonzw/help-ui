@@ -8,29 +8,22 @@
             {{ Math.min(idx + 1, 3) }} / {{ questions.length }}
           </span>
         </v-card-subtitle>
-        <v-card-title :class="'d-flex justify-space-around'">
+        <v-card-title class="d-flex justify-space-around">
           {{ nowTitle }}
         </v-card-title>
-        <v-card-text :class="'d-flex justify-space-around'">
-          <v-btn
-            :disabled="processing"
-            @click="clickAnswerNGButton"
-            dark
-            rounded
-            large
-            color="#86abe3"
-          >
-            <v-icon>mdi-emoticon-sad</v-icon>悩んでいます
-          </v-btn>
-          <v-btn
-            :disabled="processing"
-            @click="clickAnswerOKButton"
-            rounded
-            large
-            color="primary"
-          >
-            <v-icon>mdi-emoticon-happy</v-icon>大丈夫です
-          </v-btn>
+        <v-card-text>
+          <v-col v-for="i in 5" :key="`button-${i}`" class="d-flex justify-space-around">
+            <v-btn
+              :disabled="processing"
+              @click="clickAnswerButton(i)"
+              dark
+              rounded
+              large
+              :color="btnColors[i]"
+            >
+              <v-icon>{{ btnIcons[i] }}</v-icon>{{ val2label[i]}}
+            </v-btn>
+          </v-col>
         </v-card-text>
       </v-card>
     </v-container>
@@ -53,7 +46,28 @@ export default {
       enqueteId: undefined,
       nowTitle: '',
       idx: 0,
-      progressValue: 0
+      progressValue: 0,
+      val2label: {
+        1: '気にならない',
+        2: '月に1~2日ストレスに感じることがある',
+        3: '週に1~2日ストレスを感じることがある',
+        4: '週に3~4日ストレスを感じることがある',
+        5: '常にストレスを感じている'
+      },
+      btnColors: {
+        1: '#E38687',
+        2: '#e386cb',
+        3: '#8786e3',
+        4: '#869ee3',
+        5: '#86abe3'
+      },
+      btnIcons: {
+        1: 'mdi-emoticon-happy',
+        2: 'mdi-emoticon-neutral',
+        3: 'mdi-emoticon-neutral',
+        4: 'mdi-emoticon-sad',
+        5: 'mdi-emoticon-dead'
+      }
     }
   },
   mounted () {
@@ -94,26 +108,12 @@ export default {
         this.progressValue = 100 * (this.idx / this.questions.length)
       })
     },
-    clickAnswerOKButton () {
+    clickAnswerButton (val) {
       this.startLoad()
       this.process = true
       const item = this.questions[this.idx]
       const data = {
-        'content': '0',
-        'department_id': this.getUserInfo().department_id,
-        'company_id': this.getUserInfo().company_id,
-        'user_id': this.getUserInfo().id,
-        'question_id': item.id,
-        'enquete_id': this.enqueteId
-      }
-      this.sendSuvey(data)
-    },
-    clickAnswerNGButton () {
-      this.startLoad()
-      this.process = true
-      const item = this.questions[this.idx]
-      const data = {
-        'content': '1',
+        'content': `${val}`,
         'department_id': this.getUserInfo().department_id,
         'company_id': this.getUserInfo().company_id,
         'user_id': this.getUserInfo().id,
