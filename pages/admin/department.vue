@@ -9,7 +9,7 @@
           </v-icon>
           <v-card-title>{{ item.user.name }}</v-card-title>
           <v-card-text>
-            <VueLine :chart-data="enqueteData(item.survey)" :options="enqueteOptions" :width="2000" />
+            <VueBar :chart-data="enqueteData(item.survey)" :options="enqueteOptions" :width="2000" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -104,26 +104,28 @@ export default {
           {
             label: 'Work',
             data: enquetes.work,
-            borderColor: '#A4A1FB',
-            lineTension: false,
+            backgroundColor: 'rgba(164, 161, 251)',
             spanGaps: true,
-            fill: false
+            fill: false,
+            barPercentage: 0.4
           },
           {
             label: 'Human',
             data: enquetes.human,
-            borderColor: '#FC8373',
+            backgroundColor: 'rgba(252, 131, 115)',
             lineTension: false,
             spanGaps: true,
-            fill: false
+            fill: false,
+            barPercentage: 0.4
           },
           {
             label: 'Health',
             data: enquetes.health,
-            borderColor: '#85E388',
+            backgroundColor: 'rgba(133, 227, 136)',
             lineTension: false,
             spanGaps: true,
-            fill: false
+            fill: false,
+            barPercentage: 0.4
           }
         ],
         labels

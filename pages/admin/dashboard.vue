@@ -6,6 +6,11 @@
           <v-card>
             <v-card-title>{{ item.name }}</v-card-title>
             <v-card-text>
+              <div class='d-flex space-around'>
+                <span>Human <span class="title">{{ item.vals[0] }}</span> </span><v-spacer />
+                <span>Work <span class="title">{{ item.vals[1] }}</span></span><v-spacer />
+                <span>Health <span class="title">{{ item.vals[2] }}</span></span>
+              </div>
               <VueHorizontalBar :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />
             </v-card-text>
             <v-btn :to="`/admin/department/?departmentId=${item.id}`" color="primary" block>
@@ -46,6 +51,7 @@ export default {
           ],
           yAxes: [
             {
+              barPercentage: 0.7,
               gridLines: {
                 display: false
               },
