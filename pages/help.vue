@@ -59,7 +59,7 @@
               </v-icon>
             </v-btn>
           </v-card>
-          <v-card v-if="!isExpired() & !isOwner()" elevation="0">
+          <v-card v-if="!isExpired() & !isOwner" elevation="0">
             <v-card-text>
               <v-form>
                 <v-textarea v-model="commentContent" label="回答する" outlined />
@@ -155,7 +155,8 @@ export default {
       editableId: -1,
       messageDialog: false,
       message: '',
-      i: 0
+      i: 0,
+      isOwner: false
     }
   },
   mounted () {
@@ -171,6 +172,7 @@ export default {
         this.imageURL = res.data.image_url
         this.deadline = res.data.deadline
         this.owner = res.data.user_id
+        this.isOwner = this.getUserInfo().id === this.owner
         const query = `?company_id=${companyId}&problem_id=${problemId}`
         const url = `${process.env.API_URL}/search-answer${query}`
         axios.get(url, { headers: this.getCred() }).then(
@@ -242,13 +244,6 @@ export default {
             }
           )
         })
-    },
-    isOwner () {
-      const user = this.getUser()
-      if (user) {
-        return this.owner !== user.id
-      }
-      return false
     },
     isExpired () {
       return this.deadline < Date.now() / 1000
