@@ -7,74 +7,84 @@
           <div class="image-wrapper">
             <img :src="imageURL">
           </div>
-          <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
-            <v-card-title>
-              <h2 class="content-title">
-                {{ headlines[item.question_id - 1] }}
-              </h2>
-            </v-card-title>
-            <p v-if="editableId != item.id" class="text-content">
-              {{ item.content }}
-              <v-btn v-if="owner === getUser().id" @click="clickEditButton(item.id, item.content)" text block color="primary">
-                編集する
+          <div id="help-content">
+            <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
+              <v-card-title>
+                <h2 class="content-title">
+                  {{ headlines[item.question_id - 1] }}
+                </h2>
+              </v-card-title>
+              <p v-if="editableId != item.id" class="text-content">
+                {{ item.content }}
+                <v-btn v-if="owner === getUser().id" @click="clickEditButton(item.id, item.content)" text block color="primary">
+                  編集する
+                  <v-icon>
+                    mdi-pencil
+                  </v-icon>
+                </v-btn>
+              </p>
+              <v-card-text v-else>
+                <v-textarea v-model="textEditInput" outlined />
+                <v-btn @click="clickEditSaveButton(item)" color="primary" class="margin-bottom" block>
+                  保存
+                </v-btn>
+                <v-btn @click="editableId=-1" color="red" dark block>
+                  キャンセル
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </div>
+          <h2 v-if="comments.length !== 0">
+            回答
+          </h2>
+          <div id="help-answer">
+            <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
+              <v-card-text>
+                <p v-if="isExpired() | isOwner | comment.user_id == getUser().id">
+                  {{ comment.content }}
+                </p>
+                <v-img v-else :src="comment.image_url" />
+              </v-card-text>
+              <v-card-subtitle v-if="isExpired() | isOwner | comment.user_id == getUserInfo().id" >
+                {{ getDepartments()[`${comment.user.id}`].name }}
+                {{ comment.user.name }}さんの回答
+              </v-card-subtitle>
+              <v-btn
+                v-if="owner === getUser().id && isExpired()"
+                @click="clickSendButton(comment.user_id)"
+                text
+                color="green"
+                block
+              >
+                メッセージを送る
                 <v-icon>
                   mdi-pencil
                 </v-icon>
               </v-btn>
-            </p>
-            <v-card-text v-else>
-              <v-textarea v-model="textEditInput" outlined />
-              <v-btn @click="clickEditSaveButton(item)" color="primary" class="margin-bottom" block>
-                保存
-              </v-btn>
-              <v-btn @click="editableId=-1" color="red" dark block>
-                キャンセル
-              </v-btn>
-            </v-card-text>
-          </v-card>
-          <h2 v-if="comments.length !== 0">
-            回答
-          </h2>
-          <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
-            <v-card-text>
-              <p v-if="isExpired() | comment.user_id == getUser().id">
-                {{ comment.content }}
-              </p>
-              <v-img v-else :src="comment.image_url" />
-            </v-card-text>
-            <v-card-subtitle v-if="isExpired() | comment.user_id == getUserInfo().id" >
-              {{ getDepartments()[`${comment.user.id}`].name }}
-              {{ comment.user.name }}さんの回答
-            </v-card-subtitle>
-            <v-btn
-              v-if="owner === getUser().id && isExpired()"
-              @click="clickSendButton(comment.user_id)"
-              text
-              color="green"
-              block
-            >
-              メッセージを送る
-              <v-icon>
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </v-card>
-          <v-card v-if="!isExpired() & !isOwner" elevation="0">
-            <v-card-text>
-              <v-form>
-                <v-textarea v-model="commentContent" label="回答する" outlined />
-                <v-btn
-                  @click="clickCommentButton()"
-                  block
-                  rounded
-                  dark
-                  color="primary"
-                >
-                  回答する
-                </v-btn>
-              </v-form>
-            </v-card-text>
-          </v-card>
+            </v-card>
+            <v-card v-if="!isExpired() & !isOwner" elevation="0">
+              <v-card-text>
+                <v-form id="answer-form">
+                  <v-textarea
+                    id="answer-text-area"
+                    v-model="commentContent"
+                    label="回答する"
+                    outlined
+                  />
+                  <v-btn
+                    @click="clickCommentButton()"
+                    id="answer-btn"
+                    block
+                    rounded
+                    dark
+                    color="primary"
+                  >
+                    回答する
+                  </v-btn>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </div>
         </div>
         <v-btn :to="'/'" color="primary" block>
           <v-icon>mdi-chevron-left</v-icon>TOPに戻る

@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <div class="wrapper">
-      <div class="d-flex flex-column jumbotron">
+      <div id="jumbotron" class="d-flex flex-column jumbotron">
         <v-container>
           <v-flex class="center">
             <h2 class="copy-write">
@@ -22,14 +22,14 @@
         </v-container>
       </div>
       <v-container v-if="isAuthenticated()" class="d-flex flex-column">
-        <div v-if="mode == 'all' | mode == 'human'" class="human-area">
+        <div v-if="mode == 'all' | mode == 'human'" id="human-area">
           <h2>人間関係の悩み</h2>
           <v-row
             v-if="isAuthenticated()"
             align="center"
             justify="center"
           >
-            <v-col v-for="item in getHumanProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <v-col v-for="item in getHumanProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <v-card :href="item.url" elevation="0">
                 <div class="d-flex flex-no-wrap">
                   <v-avatar
@@ -59,7 +59,7 @@
             </v-btn>
           </v-row>
         </div>
-        <div v-if="mode == 'all' | mode == 'work'" class="work-area">
+        <div v-if="mode == 'all' | mode == 'work'" id="work-area">
           <h2>仕事の悩み</h2>
           <v-row
             v-if="isAuthenticated() & (mode == 'all' | mode == 'work')"
@@ -96,7 +96,7 @@
             </v-btn>
           </v-row>
         </div>
-        <div v-if="(mode == 'all' | mode == 'health')" class="health-area">
+        <div v-if="(mode == 'all' | mode == 'health')" id="health-area">
           <h2>健康の悩み</h2>
           <v-row
             v-if="isAuthenticated() & (mode == 'all' | mode == 'health')"
@@ -133,7 +133,7 @@
             </v-btn>
           </v-row>
         </div>
-        <div v-if="(mode == 'all' | mode == 'other')" class="other-area">
+        <div v-if="(mode == 'all' | mode == 'other')" id="other-area">
           <h2>その他の悩み</h2>
           <v-row
             v-if="isAuthenticated() & (mode == 'all' | mode == 'other')"
@@ -229,6 +229,7 @@
           <v-btn
             v-if="isAuthenticated()"
             @click="redirect()"
+            id="modal-help-button"
             class="top-help-btn"
             to="/create"
             color="primary"
@@ -346,7 +347,7 @@ export default {
 .help-list {
   margin-top: 1rem;
 }
-.work-area {
+#work-area {
   background-color: white;
   margin-bottom: 2rem;
   padding: 2rem;
@@ -355,7 +356,7 @@ export default {
   max-width: 800px;
   min-width: 90%;
 }
-.human-area {
+#human-area {
   background-color: white;
   margin-bottom: 2rem;
   padding: 2rem;
@@ -364,7 +365,7 @@ export default {
   max-width: 800px;
   min-width: 90%;
 }
-.health-area {
+#health-area {
   background-color: white;
   margin-bottom: 2rem;
   padding: 2rem;
@@ -373,7 +374,7 @@ export default {
   max-width: 800px;
   min-width: 90%;
 }
-.other-area {
+#other-area {
   background-color: white;
   margin-bottom: 2rem;
   padding: 2rem;

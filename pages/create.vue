@@ -17,6 +17,7 @@
             <v-card-text>
               <v-form id="create-help-form">
                 <v-select
+                  id="help-genre"
                   v-model="selectedGenre"
                   :items="genres"
                   item-text="label"
@@ -24,16 +25,36 @@
                   label="どんな悩みですか?"
                 />
                 <v-select
+                  id="help-expiry"
                   v-model="selectedTime"
                   :items="howlong"
                   item-text="label"
                   item-value="value"
                   label="いつまでに答えて欲しいですか？"
                 />
-                <v-text-field v-model="helpTitle" label="25文字以内でどんな悩みか教えてください。 (例: チームメンバーと口論をして気まずくなっています…)" counter="25" outlined />
-                <v-textarea v-model="helpUserInfo" label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目で営業部にいて...)" counter="200" outlined />
-                <v-textarea v-model="helpContent" label="悩みについてもっと詳しく教えてください。 " counter="200" outlined />
+                <v-text-field
+                  id="help-title"
+                  v-model="helpTitle"
+                  label="25文字以内でどんな悩みか教えてください。 (例: チームメンバーと口論をして気まずくなっています…)"
+                  counter="25"
+                  outlined
+                />
+                <v-textarea
+                  id="who-help"
+                  v-model="helpUserInfo"
+                  label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目で営業部にいて...)"
+                  counter="200"
+                  outlined
+                />
+                <v-textarea
+                  id="help-detail"
+                  v-model="helpContent"
+                  label="悩みについてもっと詳しく教えてください。 "
+                  counter="200"
+                  outlined
+                />
                 <v-file-input
+                  id="help-image"
                   :rules="rules"
                   @change="onImageChange"
                   accept="image/png, image/jpeg, image/bmp"
@@ -41,6 +62,7 @@
                   prepend-icon="mdi-camera"
                 />
                 <v-btn
+                  id="create-help-btn"
                   :disabled="!processing"
                   @click="clickHelpButton"
                   block
