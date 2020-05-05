@@ -121,7 +121,7 @@ export default {
   methods: {
     ...mapMutations(['startLoad', 'finishLoad']),
     ...mapActions(['fetchUser']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
+    ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),
     putHelp () {
       const data = {
         title: this.helpTitle,
@@ -136,14 +136,16 @@ export default {
       if (this.imageBase64) {
         data.base64_image = this.imageBase64
       }
+      const companyId = this.getUserInfo().company_id
+      const departmentId = this.getUserInfo().department_id
       this.startLoad()
       axios.post(`${process.env.API_URL}/problems`, data, { headers: this.getCred() })
         .then(
           (res) => {
             const data1 = {
               content: this.helpTitle,
-              department_id: 1,
-              company_id: 1,
+              department_id: departmentId,
+              company_id: companyId,
               user_id: this.getUser().id,
               question_id: 1,
               problem_id: res.data.id
@@ -153,8 +155,8 @@ export default {
               .then((res2) => {
                 const data2 = {
                   content: this.helpUserInfo,
-                  department_id: 1,
-                  company_id: 1,
+                  department_id: departmentId,
+                  company_id: companyId,
                   user_id: this.getUser().id,
                   question_id: 2,
                   problem_id: res.data.id
@@ -163,8 +165,8 @@ export default {
                   .then((res3) => {
                     const data3 = {
                       content: this.helpContent,
-                      department_id: 1,
-                      company_id: 1,
+                      department_id: departmentId,
+                      company_id: companyId,
                       user_id: this.getUser().id,
                       question_id: 3,
                       problem_id: res.data.id
