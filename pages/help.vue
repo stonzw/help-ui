@@ -3,7 +3,64 @@
     <v-container>
       <v-row class="main-wrapper">
         <div class="main-content col-12">
-          <span>{{ deadlineStr() }}締切</span>
+          <v-col class="d-flex justify-space-between">
+            <span>{{ deadlineStr() }}締切</span>
+            <v-btn
+              :v-if="isOwner"
+              @click="helpEditModal = !helpEditModal"
+              color="primary"
+            >
+              編集する
+            </v-btn>
+            <v-dialog
+              v-model="helpEditModal"
+              max-width="694px"
+            >
+              <v-card>
+                <v-card-title>
+                  相談内容を編集する
+                </v-card-title>
+                <v-card-text>
+                  <v-form id="create-help-form">
+                    <v-select
+                      id="help-genre"
+                      v-model="selectedGenre"
+                      :items="genres"
+                      item-text="label"
+                      item-value="value"
+                      label="悩みのカテゴリー"
+                    />
+                    <v-select
+                      id="help-expiry"
+                      v-model="selectedTime"
+                      :items="howlong"
+                      item-text="label"
+                      item-value="value"
+                      label="延長する"
+                    />
+                    <v-text-field
+                      id="help-title"
+                      v-model="helpTitle"
+                      label="タイトル"
+                      counter="25"
+                      outlined
+                    />
+                    <v-btn
+                      id="create-help-btn"
+                      :disabled="processing"
+                      @click="clickHelpEditButton"
+                      block
+                      rounded
+                      dark
+                      color="primary"
+                    >
+                      編集する
+                    </v-btn>
+                  </v-form>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+          </v-col>
           <div class="image-wrapper">
             <img :src="imageURL">
           </div>
@@ -142,10 +199,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
+import api from '~/plugins/api'
 export default {
   head () {
     return {
-      title: this.title
+      title: this.helpTitle
     }
   },
   data () {
@@ -154,7 +212,7 @@ export default {
       owner: null,
       imageURL: '',
       sender: null,
-      title: '',
+      helpTitle: '',
       textEditInput: '',
       receiver: null,
       headlines: {},
@@ -166,7 +224,27 @@ export default {
       messageDialog: false,
       message: '',
       i: 0,
-      isOwner: false
+      isOwner: false,
+      helpEditModal: false,
+      selectedGenre: { label: '', value: null },
+      selectedTime: { label: '延長しない', value: 0 },
+      genreId: null,
+      genreId2Name: { 1: '人間関係', 2: '仕事', 3: '健康', 4: 'その他' },
+      genres: [
+        { label: '人間関係', value: 1 },
+        { label: '仕事', value: 2 },
+        { label: '健康', value: 3 },
+        { label: 'その他', value: 4 }
+      ],
+      howlong: [
+        { label: '延長しない', value: 0 },
+        { label: '3日', value: 60 * 60 * 24 * 3 },
+        { label: '1週間', value: 60 * 60 * 24 * 7 },
+        { label: '2週間', value: 60 * 60 * 24 * 14 },
+        { label: '1ヶ月', value: 60 * 60 * 24 * 30 }
+      ],
+      processing: false,
+      helpId: null
     }
   },
   mounted () {
@@ -174,15 +252,18 @@ export default {
       this.fetchDepartments()
     })
     const { helpId } = this.$nuxt.$route.query
+    this.helpId = helpId
     axios.get(`${process.env.API_URL}/problems/${helpId}`, { headers: this.getCred() })
       .then((res) => {
         const companyId = res.data.company_id
         const problemId = res.data.id
-        const genreId = res.data.genre_id
+        this.genreId = res.data.genre_id
+        this.selectedGenre = { label: this.genreId2Name[this.genreId], value: this.genreId }
         this.imageURL = res.data.image_url
         this.deadline = res.data.deadline
         this.owner = res.data.user_id
         this.isOwner = this.getUserInfo().id === this.owner
+        this.helpTitle = res.data.title
         const query = `?company_id=${companyId}&problem_id=${problemId}`
         const url = `${process.env.API_URL}/search-answer${query}`
         axios.get(url, { headers: this.getCred() }).then(
@@ -190,9 +271,6 @@ export default {
             this.contents = answers.data
               .map(
                 (x) => {
-                  if (x.question_id === 1) {
-                    this.title = x.content
-                  }
                   return { 'id': x.id, 'question_id': x.question_id, 'content': x.content }
                 }
               ).sort((a, b) => { return a.question_id - b.question_id })
@@ -214,7 +292,7 @@ export default {
           }
         )
         axios.get(
-          `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${genreId}`,
+          `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${this.genreId}`,
           { headers: this.getCred() }
         ).then((res) => {
           this.relatedProblems = res.data.map(
@@ -267,6 +345,26 @@ export default {
       this.sender = this.getUser().id
       this.receiver = userId
       this.messageDialog = true
+    },
+    clickHelpEditButton () {
+      const data = {
+        title: this.helpTitle,
+        genre_id: this.selectedGenre,
+        deadline: this.deadline + this.selectedTime
+      }
+      const headers = this.getCred()
+      api.put(
+        `/problems/${this.helpId}`,
+        data,
+        { headers }
+      )
+        .then((res) => {
+          this.processing = false
+          this.helpEditModal = false
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     },
     clickEditButton (editId, comment) {
       this.editableId = editId
