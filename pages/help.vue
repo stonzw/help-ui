@@ -46,7 +46,7 @@
                 <v-img v-else :src="comment.image_url" />
               </v-card-text>
               <v-card-subtitle v-if="isExpired() | isOwner | comment.user_id == getUserInfo().id" >
-                {{ getDepartments()[`${comment.user.id}`].name }}
+                {{ getDepartments()[`${comment.user.department_id}`].name }}
                 {{ comment.user.name }}さんの回答
               </v-card-subtitle>
               <v-btn
@@ -210,6 +210,7 @@ export default {
               this.i += 1
               return x
             })
+            console.log(this.comments)
           }
         )
         axios.get(
