@@ -1,17 +1,52 @@
 <template>
   <v-layout>
     <v-container>
-      <v-row class="main-wrapper">
+      <v-row v-if="visible" class="main-wrapper">
         <div class="main-content col-12">
           <v-col class="d-flex justify-space-between">
             <span>{{ deadlineStr() }}締切</span>
-            <v-btn
-              :v-if="isOwner"
-              @click="helpEditModal = !helpEditModal"
-              color="primary"
+            <span>
+              <v-btn
+                :v-if="isOwner"
+                @click="helpEditModal = !helpEditModal"
+                color="primary"
+              >
+                編集する
+              </v-btn>
+              <v-btn
+                :v-if="isOwner"
+                @click="helpDeleteModal = !helpDeleteModal"
+                color="primary"
+              >
+                削除する
+              </v-btn>
+            </span>
+            <v-dialog
+              v-model="helpDeleteModal"
+              max-width="694px"
             >
-              編集する
-            </v-btn>
+              <v-card>
+                <v-card-title>
+                  相談内容を編集する
+                </v-card-title>
+                <v-card-text>
+                  <v-btn
+                    id="delete-help-btn"
+                    :disabled="processing"
+                    @click="clickDeleteHelpButton"
+                    dark
+                    color="primary"
+                  >
+                    削除する
+                  </v-btn>
+                  <v-btn
+                    @click="helpDeleteModal = false"
+                  >
+                    キャンセル
+                  </v-btn>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
             <v-dialog
               v-model="helpEditModal"
               max-width="694px"
@@ -46,7 +81,7 @@
                       outlined
                     />
                     <v-btn
-                      id="create-help-btn"
+                      id="edit-help-btn"
                       :disabled="processing"
                       @click="clickHelpEditButton"
                       block
@@ -168,6 +203,9 @@
           <v-icon>mdi-chevron-left</v-icon>TOPに戻る
         </v-btn>
       </v-row>
+      <v-row v-else>
+        このページは削除されました。
+      </v-row>
       <v-dialog
         v-if="isAuthenticated()"
         v-model="messageDialog"
@@ -226,6 +264,7 @@ export default {
       i: 0,
       isOwner: false,
       helpEditModal: false,
+      helpDeleteModal: false,
       selectedGenre: { label: '', value: null },
       selectedTime: { label: '延長しない', value: 0 },
       genreId: null,
@@ -244,7 +283,8 @@ export default {
         { label: '1ヶ月', value: 60 * 60 * 24 * 30 }
       ],
       processing: false,
-      helpId: null
+      helpId: null,
+      visible: true
     }
   },
   mounted () {
@@ -264,6 +304,7 @@ export default {
         this.owner = res.data.user_id
         this.isOwner = this.getUserInfo().id === this.owner
         this.helpTitle = res.data.title
+        this.visible = res.data.visible
         const query = `?company_id=${companyId}&problem_id=${problemId}`
         const url = `${process.env.API_URL}/search-answer${query}`
         axios.get(url, { headers: this.getCred() }).then(
@@ -345,6 +386,25 @@ export default {
       this.sender = this.getUser().id
       this.receiver = userId
       this.messageDialog = true
+    },
+    clickDeleteHelpButton () {
+      const data = {
+        visible: false
+      }
+      const headers = this.getCred()
+      api.put(
+        `/problems/${this.helpId}`,
+        data,
+        { headers }
+      )
+        .then((res) => {
+          this.processing = false
+          this.helpDeleteModal = false
+          document.location.reload()
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     },
     clickHelpEditButton () {
       const data = {
