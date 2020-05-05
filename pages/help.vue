@@ -10,7 +10,7 @@
           <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
             <v-card-title>
               <h2 class="content-title">
-                {{ headlines[item.id - 1] }}
+                {{ headlines[item.question_id - 1] }}
               </h2>
             </v-card-title>
             <p v-if="editableId != item.id" class="text-content">
@@ -181,7 +181,7 @@ export default {
                   if (x.question_id === 1) {
                     this.title = x.content
                   }
-                  return { 'id': x.question_id, 'content': x.content }
+                  return { 'id': x.id, 'question_id': x.question_id, 'content': x.content }
                 }
               ).sort((a, b) => { return a.question_id - b.question_id })
           }
@@ -275,6 +275,9 @@ export default {
         .then((res) => {
           this.editableId = -1
           answer.content = this.textEditInput
+        })
+        .catch((error) => {
+          console.error(error)
         })
     },
     unix2daystr (unix) {
