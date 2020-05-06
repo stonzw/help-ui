@@ -56,7 +56,7 @@
         <v-list-item-group>
           <v-list-item :to="'/'" router link>
             <v-list-item-action>
-              <v-icon>mdi-desktop-mac</v-icon>
+              <v-icon>mdi-arrow-up</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>トップページ</v-list-item-title>
@@ -74,7 +74,7 @@
 
           <v-list-item :to="'/mypage'" router link>
             <v-list-item-action>
-              <v-icon>mdi-desktop-mac</v-icon>
+              <v-icon>mdi-account</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>マイページ</v-list-item-title>
