@@ -9,14 +9,16 @@
               <v-btn
                 :v-if="isOwner"
                 @click="helpEditModal = !helpEditModal"
-                color="primary"
+                border
+                outlined
               >
                 編集する
               </v-btn>
               <v-btn
                 :v-if="isOwner"
                 @click="helpDeleteModal = !helpDeleteModal"
-                color="primary"
+                border
+                outlined
               >
                 削除する
               </v-btn>
@@ -26,10 +28,10 @@
               max-width="694px"
             >
               <v-card>
-                <v-card-title>
-                  相談内容を編集する
+                <v-card-title class="d-flex justify-space-around">
+                  相談内容を削除する
                 </v-card-title>
-                <v-card-text>
+                <v-card-text class="d-flex justify-space-around">
                   <v-btn
                     id="delete-help-btn"
                     :disabled="processing"
@@ -142,7 +144,7 @@
                 {{ comment.user.name }}さんの回答
               </v-card-subtitle>
               <v-btn
-                v-if="owner === getUser().id && isExpired()"
+                v-if="isOwner"
                 @click="clickSendButton(comment.user_id)"
                 text
                 color="green"
@@ -458,7 +460,7 @@ export default {
         checked: false,
         company_id: this.getUserInfo().company_id,
         department_id: this.getUserInfo().department_id,
-        sender_name: this.getUserInfo().name,
+        sender_name: `「${this.helpTitle}」からのメッセージ。` + this.getUserInfo().name,
         sender_email: this.getUser().email
       }
       if (this.owner === this.getUser().id) {

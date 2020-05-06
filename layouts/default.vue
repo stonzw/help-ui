@@ -30,10 +30,18 @@
       >
         ログイン
       </v-btn>
-      <v-app-bar-nav-icon
-        v-if="isAuthenticated()"
-        @click.stop="rightDrawer = !rightDrawer"
-      />
+
+      <v-badge
+        :content="notificationCount"
+        :value="0<notificationCount"
+        bottom
+        overlap
+      >
+        <v-app-bar-nav-icon
+          v-if="isAuthenticated()"
+          @click.stop="rightDrawer = !rightDrawer"
+        />
+      </v-badge>
     </v-app-bar>
     <v-navigation-drawer
       v-model="rightDrawer"
@@ -111,12 +119,12 @@
           </v-card-title>
           <v-col>
             <v-card v-for="m in messages" :key="m.id" outlined>
-              <v-card-title>
+              <v-card-text>
                 <v-icon v-if="!m.checked">
                   mdi-new-box
                 </v-icon>
                 {{ m.content }}
-              </v-card-title>
+              </v-card-text>
               <v-card-subtitle>
                 From: {{ m.department_name }} {{ m.sender_name }} さん({{ m.sender_email }})
               </v-card-subtitle>
