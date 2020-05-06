@@ -72,6 +72,15 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item :to="'/mypage'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-desktop-mac</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>マイページ</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-list-item @click="clickNotification">
             <v-list-item-action>
               <v-badge
