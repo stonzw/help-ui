@@ -15,7 +15,12 @@
               相談してみましょう
             </v-card-title>
             <v-card-text>
-              <v-form id="create-help-form">
+              <v-form
+                id="create-help-form"
+                ref="form"
+                v-model="valid"
+                lazy-validation
+              >
                 <v-select
                   id="help-genre"
                   v-model="selectedGenre"
@@ -23,6 +28,7 @@
                   item-text="label"
                   item-value="value"
                   label="どんな悩みですか?"
+                  :rules="[rules.required]"
                 />
                 <v-select
                   id="help-expiry"
@@ -31,11 +37,13 @@
                   item-text="label"
                   item-value="value"
                   label="いつまでに答えて欲しいですか？"
+                  :rules="[rules.required]"
                 />
                 <v-text-field
                   id="help-title"
                   v-model="helpTitle"
                   label="25文字以内でどんな悩みか教えてください。 (例: チームメンバーと口論をして気まずくなっています…)"
+                  :rules="[rules.max25, rules.required]"
                   counter="25"
                   outlined
                 />
@@ -43,6 +51,7 @@
                   id="who-help"
                   v-model="helpUserInfo"
                   label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目で営業部にいて...)"
+                  :rules="[rules.max200, rules.required]"
                   counter="200"
                   outlined
                 />
@@ -50,12 +59,12 @@
                   id="help-detail"
                   v-model="helpContent"
                   label="悩みについてもっと詳しく教えてください。 "
+                  :rules="[rules.max200, rules.required]"
                   counter="200"
                   outlined
                 />
                 <v-file-input
                   id="help-image"
-                  :rules="rules"
                   @change="onImageChange"
                   accept="image/png, image/jpeg, image/bmp"
                   placeholder="見出し画像(任意)"
@@ -109,9 +118,12 @@ export default {
         { label: '2週間', value: 60 * 60 * 24 * 14 },
         { label: '1ヶ月', value: 60 * 60 * 24 * 30 }
       ],
-      rules: [
-        value => !value || value.size < 2000000 || '画像のサイズの上限は 2 MB　です。'
-      ],
+      rules: {
+        required: value => !!value || 'Required.',
+        max25: value => value.length <= 25 || '25文字以内で入力してください',
+        max200: value => value.length <= 200 || '200文字以内で入力してください'
+      },
+      valid: true,
       imageBase64: ''
     }
   },
@@ -122,7 +134,14 @@ export default {
     ...mapMutations(['startLoad', 'finishLoad']),
     ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),
+    validate () {
+      this.$refs.form.validate()
+    },
     putHelp () {
+      this.validate()
+      if (!this.valid) {
+        return
+      }
       const data = {
         title: this.helpTitle,
         describe: this.helpContent,
