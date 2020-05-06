@@ -460,7 +460,7 @@ export default {
         checked: false,
         company_id: this.getUserInfo().company_id,
         department_id: this.getUserInfo().department_id,
-        sender_name: `「${this.helpTitle}」からのメッセージ。` + this.getUserInfo().name,
+        sender_name: this.getUserInfo().name + ` (相談内容: ${this.helpTitle}」)`,
         sender_email: this.getUser().email
       }
       if (this.owner === this.getUser().id) {
