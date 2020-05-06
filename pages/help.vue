@@ -5,7 +5,7 @@
         <div class="main-content col-12">
           <v-col class="d-flex justify-space-between">
             <span>{{ deadlineStr() }}締切</span>
-            <span>
+            <span v-if="isOwner" id="owner-header">
               <v-btn
                 :v-if="isOwner"
                 @click="helpEditModal = !helpEditModal"
