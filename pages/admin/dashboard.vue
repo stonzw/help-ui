@@ -6,9 +6,10 @@
           <v-card>
             <v-card-title>{{ item.name }}</v-card-title>
             <v-card-text>
-              <div class='d-flex space-around'>
-                <span>Human <span class="title">{{ item.vals[0] }}</span> </span><v-spacer />
-                <span>Work <span class="title">{{ item.vals[1] }}</span></span><v-spacer />
+              <span>ストレス度</span>
+              <div class='d-flex justify-space-around'>
+                <span>Human <span class="title">{{ item.vals[0] }}</span> </span>
+                <span>Work <span class="title">{{ item.vals[1] }}</span></span>
                 <span>Health <span class="title">{{ item.vals[2] }}</span></span>
               </div>
               <VueHorizontalBar :chart-data="enqueteData(item.vals)" :options="enqueteOptions" />

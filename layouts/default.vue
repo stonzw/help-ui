@@ -97,7 +97,7 @@
 
           <v-list-item to="/settings">
             <v-list-item-action>
-              <v-icon>mdi-account</v-icon>
+              <v-icon>mdi-account-key</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>パスワードを変更</v-list-item-title>

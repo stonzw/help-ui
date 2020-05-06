@@ -17,6 +17,11 @@
           <v-card-text>
             <VueBar :chart-data="enqueteData(item.survey)" :options="enqueteOptions" :width="2000" />
           </v-card-text>
+          <v-card-subtitle class="d-flex justify-space-between">
+            <span v-for="i in 5" :key="`legend-${i}`">
+              {{ `${i}: ${enqueteValue2Text[i]}` }}
+            </span>
+          </v-card-subtitle>
         </v-card>
       </v-col>
       <v-btn :to="'/admin/dashboard'" color="primary" block>
@@ -29,6 +34,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
+import enqueteValue2Icon from '~/assets/enquete_value2icon.json'
+import enqueteValue2Text from '~/assets/enquete_value2text.json'
 export default {
   data () {
     return {
@@ -51,17 +58,22 @@ export default {
           yAxes: [
             {
               gridLines: {
-                display: false
+                display: true
               },
               ticks: {
                 display: true,
                 beginAtZero: true,
-                stepSize: 1
+                min: 0,
+                max: 5,
+                stepSize: 1,
+                fontSize: 17
               }
             }
           ]
         }
-      }
+      },
+      enqueteValue2Icon,
+      enqueteValue2Text
     }
   },
   mounted () {

@@ -32,6 +32,9 @@
 <script>
 import axios from 'axios'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+import enqueteValue2Icon from '~/assets/enquete_value2icon.json'
+import enqueteValue2Color from '~/assets/enquete_value2color.json'
+import enqueteValue2Text from '~/assets/enquete_value2text.json'
 export default {
   head () {
     return {
@@ -47,27 +50,9 @@ export default {
       nowTitle: '',
       idx: 0,
       progressValue: 0,
-      val2label: {
-        1: '気にならない',
-        2: '月に1~2日ストレスに感じることがある',
-        3: '週に1~2日ストレスを感じることがある',
-        4: '週に3~4日ストレスを感じることがある',
-        5: '常にストレスを感じている'
-      },
-      btnColors: {
-        1: '#E38687',
-        2: '#e386cb',
-        3: '#8786e3',
-        4: '#869ee3',
-        5: '#86abe3'
-      },
-      btnIcons: {
-        1: 'mdi-emoticon-happy',
-        2: 'mdi-emoticon-neutral',
-        3: 'mdi-emoticon-neutral',
-        4: 'mdi-emoticon-sad',
-        5: 'mdi-emoticon-dead'
-      }
+      val2label: enqueteValue2Text,
+      btnColors: enqueteValue2Color,
+      btnIcons: enqueteValue2Icon
     }
   },
   mounted () {
