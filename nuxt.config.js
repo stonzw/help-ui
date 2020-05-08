@@ -39,10 +39,13 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/google-analytics'
   ],
+  googleAnalytics: {
+    id: process.env.GOOGLE_ANALYTICS_ID
+  },
   /*
   ** Nuxt.js modules
   */
