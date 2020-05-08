@@ -12,17 +12,19 @@
           {{ nowTitle }}
         </v-card-title>
         <v-card-text>
-          <v-col v-for="i in 5" :key="`button-${i}`" class="d-flex justify-space-around">
-            <v-btn
-              :disabled="processing"
-              @click="clickAnswerButton(i)"
-              dark
-              rounded
-              large
-              :color="btnColors[i]"
-            >
-              <v-icon>{{ btnIcons[i] }}</v-icon>{{ val2label[i]}}
-            </v-btn>
+          <v-col v-for="i in 5" :key="`button-${i}`">
+            <div class="d-flex justify-space-around">
+              <v-btn
+                :disabled="processing"
+                @click="clickAnswerButton(i)"
+                dark
+                large
+                :color="btnColors[i]"
+                width="50%"
+              >
+                {{ i }}.{{ ' '+ val2label[i]}}
+              </v-btn>
+            </div>
           </v-col>
         </v-card-text>
       </v-card>
@@ -89,7 +91,7 @@ export default {
         }
         this.process = false
         this.idx += 1
-        this.nowTitle = this.questions[this.idx].answer_headline
+        this.nowTitle = this.questions[this.idx].enquete_headline
         this.progressValue = 100 * (this.idx / this.questions.length)
       })
     },

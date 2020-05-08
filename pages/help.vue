@@ -279,10 +279,10 @@ export default {
       ],
       howlong: [
         { label: '延長しない', value: 0 },
-        { label: '3日', value: 60 * 60 * 24 * 3 },
-        { label: '1週間', value: 60 * 60 * 24 * 7 },
-        { label: '2週間', value: 60 * 60 * 24 * 14 },
-        { label: '1ヶ月', value: 60 * 60 * 24 * 30 }
+        { label: 'あと3日延長', value: 60 * 60 * 24 * 3 },
+        { label: 'あと1週間延長', value: 60 * 60 * 24 * 7 },
+        { label: 'あと2週間延長', value: 60 * 60 * 24 * 14 },
+        { label: 'あと1ヶ月延長', value: 60 * 60 * 24 * 30 }
       ],
       processing: false,
       helpId: null,
