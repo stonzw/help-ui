@@ -95,6 +95,15 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item v-if="isAdminUser()" :to="'/admin/dashboard'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-chart-line</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>管理者ダッシュボード</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-list-item to="/settings">
             <v-list-item-action>
               <v-icon>mdi-account-key</v-icon>
@@ -222,7 +231,7 @@ export default {
   },
   methods: {
     ...mapActions(['login', 'logout']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getMessage', 'isLoading']),
+    ...mapGetters(['isAuthenticated', 'isAdminUser', 'getUser', 'getCred', 'getMessage', 'isLoading']),
     clickLoginButton () {
       this.login(
         {
