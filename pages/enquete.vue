@@ -4,7 +4,7 @@
       <v-card>
         <v-progress-linear :value="progressValue" />
         <v-card-subtitle>
-          <span class="progress-color">
+          <span class="progress-color display-1">
             {{ Math.min(idx + 1, 3) }} / {{ questions.length }}
           </span>
         </v-card-subtitle>

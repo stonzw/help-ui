@@ -3,9 +3,10 @@
     <v-container>
       <v-row v-if="visible" class="main-wrapper">
         <div class="main-content col-12">
-          <v-col class="d-flex justify-space-between">
-            <span>{{ deadlineStr() }}締切</span>
-            <span v-if="isOwner" id="owner-header">
+          <div><v-btn outlined >仕事の悩み</v-btn></div>
+          <v-col class="d-xl-flex d-md-flex d-sm-flex justify-space-between">
+            <div>{{ deadlineStr() }}締切</div>
+            <div v-if="isOwner" id="owner-header">
               <v-btn
                 :v-if="isOwner"
                 @click="helpEditModal = !helpEditModal"
@@ -22,82 +23,82 @@
               >
                 削除する
               </v-btn>
-            </span>
-            <v-dialog
-              v-model="helpDeleteModal"
-              max-width="694px"
-            >
-              <v-card>
-                <v-card-title class="d-flex justify-space-around">
-                  相談内容を削除する
-                </v-card-title>
-                <v-card-text class="d-flex justify-space-around">
+            </div>
+          </v-col>
+          <v-dialog
+            v-model="helpDeleteModal"
+            max-width="694px"
+          >
+            <v-card>
+              <v-card-title class="d-flex justify-space-around">
+                相談内容を削除する
+              </v-card-title>
+              <v-card-text class="d-flex justify-space-around">
+                <v-btn
+                  id="delete-help-btn"
+                  :disabled="processing"
+                  @click="clickDeleteHelpButton"
+                  dark
+                  color="primary"
+                >
+                  削除する
+                </v-btn>
+                <v-btn
+                  @click="helpDeleteModal = false"
+                >
+                  キャンセル
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+          <v-dialog
+            v-model="helpEditModal"
+            max-width="694px"
+          >
+            <v-card>
+              <v-card-title>
+                相談内容を編集する
+              </v-card-title>
+              <v-card-text>
+                <v-form id="create-help-form">
+                  <v-select
+                    id="help-genre"
+                    v-model="selectedGenre"
+                    :items="genres"
+                    item-text="label"
+                    item-value="value"
+                    label="悩みのカテゴリー"
+                  />
+                  <v-select
+                    id="help-expiry"
+                    v-model="selectedTime"
+                    :items="howlong"
+                    item-text="label"
+                    item-value="value"
+                    label="延長する"
+                  />
+                  <v-text-field
+                    id="help-title"
+                    v-model="helpTitle"
+                    label="タイトル"
+                    counter="25"
+                    outlined
+                  />
                   <v-btn
-                    id="delete-help-btn"
+                    id="edit-help-btn"
                     :disabled="processing"
-                    @click="clickDeleteHelpButton"
+                    @click="clickHelpEditButton"
+                    block
+                    rounded
                     dark
                     color="primary"
                   >
-                    削除する
+                    編集する
                   </v-btn>
-                  <v-btn
-                    @click="helpDeleteModal = false"
-                  >
-                    キャンセル
-                  </v-btn>
-                </v-card-text>
-              </v-card>
-            </v-dialog>
-            <v-dialog
-              v-model="helpEditModal"
-              max-width="694px"
-            >
-              <v-card>
-                <v-card-title>
-                  相談内容を編集する
-                </v-card-title>
-                <v-card-text>
-                  <v-form id="create-help-form">
-                    <v-select
-                      id="help-genre"
-                      v-model="selectedGenre"
-                      :items="genres"
-                      item-text="label"
-                      item-value="value"
-                      label="悩みのカテゴリー"
-                    />
-                    <v-select
-                      id="help-expiry"
-                      v-model="selectedTime"
-                      :items="howlong"
-                      item-text="label"
-                      item-value="value"
-                      label="延長する"
-                    />
-                    <v-text-field
-                      id="help-title"
-                      v-model="helpTitle"
-                      label="タイトル"
-                      counter="25"
-                      outlined
-                    />
-                    <v-btn
-                      id="edit-help-btn"
-                      :disabled="processing"
-                      @click="clickHelpEditButton"
-                      block
-                      rounded
-                      dark
-                      color="primary"
-                    >
-                      編集する
-                    </v-btn>
-                  </v-form>
-                </v-card-text>
-              </v-card>
-            </v-dialog>
-          </v-col>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
           <div class="image-wrapper">
             <img :src="imageURL">
           </div>
@@ -128,21 +129,21 @@
               </v-card-text>
             </v-card>
           </div>
-          <h2 v-if="comments.length !== 0">
+          <h2 class="answer-title" v-if="comments.length !== 0">
             回答
           </h2>
           <div id="help-answer">
             <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
               <v-card-text>
-                <p v-if="isExpired() | isOwner | comment.user_id == getUser().id">
+                <p class="text-content" v-if="isExpired() | isOwner | comment.user_id == getUser().id">
                   {{ comment.content }}
                 </p>
+                <div class="comment-author" style="text-align: end;" v-if="isExpired() | isOwner | comment.user_id == getUserInfo().id" >
+                  {{ getDepartments()[`${comment.user.department_id}`].name }}
+                  {{ comment.user.name }}さんの回答
+                </div>
                 <v-img v-else :src="comment.image_url" />
               </v-card-text>
-              <v-card-subtitle v-if="isExpired() | isOwner | comment.user_id == getUserInfo().id" >
-                {{ getDepartments()[`${comment.user.department_id}`].name }}
-                {{ comment.user.name }}さんの回答
-              </v-card-subtitle>
               <v-btn
                 v-if="isOwner"
                 @click="clickSendButton(comment.user_id)"
@@ -170,7 +171,7 @@
                     id="answer-btn"
                     block
                     rounded
-                    dark
+                    outlined
                     color="primary"
                   >
                     回答する
@@ -506,5 +507,12 @@ export default {
 .image-wrapper {
   max-width: 600px;
   margin:auto;
+}
+.comment-author{
+  color: #6f6f6f;
+  margin-top: -26px;
+}
+.answer-title {
+  padding: 16px;
 }
 </style>
