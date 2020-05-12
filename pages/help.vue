@@ -3,7 +3,7 @@
     <v-container>
       <v-row v-if="visible" class="main-wrapper">
         <div class="main-content col-12">
-          <div><v-btn outlined >仕事の悩み</v-btn></div>
+          <div><v-btn outlined >{{ genreId2Name[genreId] }}</v-btn></div>
           <v-col class="d-xl-flex d-md-flex d-sm-flex justify-space-between">
             <div>{{ deadlineStr() }}締切</div>
             <div v-if="isOwner" id="owner-header">
