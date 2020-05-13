@@ -142,14 +142,16 @@ export default {
       if (!this.valid) {
         return
       }
+      companyId = this.getUserInfo().company_id
+      departmentId = this.getUserInfo().department_id
       const data = {
         title: this.helpTitle,
         describe: this.helpContent,
         visible: true,
         user_id: this.getUser().id,
         genre_id: this.selectedGenre,
-        company_id: 1,
-        department_id: 1,
+        company_id: companyId,
+        department_id: departmentId,
         deadline: Math.floor(Date.now() / 1000) + this.selectedTime
       }
       if (this.imageBase64) {
