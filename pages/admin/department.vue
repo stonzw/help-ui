@@ -9,7 +9,7 @@
           </v-icon>
           <v-card-title>
             {{ item.user.name }}
-            <v-spacer/>
+            <v-spacer />
             <span class="body-2"><v-icon>mdi-human-handsup</v-icon>お悩み数 <span class="title">{{ item.help }}</span></span>
             <span>&nbsp;&nbsp;</span>
             <span class="body-2"><v-icon>mdi-comment</v-icon>コメント数 <span class="title">{{ item.comment }}</span></span>

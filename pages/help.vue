@@ -3,10 +3,14 @@
     <v-container>
       <v-row v-if="visible" class="main-wrapper">
         <div class="main-content col-12">
-          <div><v-btn outlined >{{ genreId2Name[genreId] }}</v-btn></div>
+          <div>
+            <v-btn outlined>
+              {{ genreId2Name[genreId] }}
+            </v-btn>
+          </div>
           <v-col class="d-xl-flex d-md-flex d-sm-flex justify-space-between">
             <div>{{ deadlineStr() }}締切</div>
-            <div v-if="isOwner" id="owner-header">
+            <div id="owner-header" v-if="isOwner">
               <v-btn
                 :v-if="isOwner"
                 @click="helpEditModal = !helpEditModal"
@@ -129,16 +133,16 @@
               </v-card-text>
             </v-card>
           </div>
-          <h2 class="answer-title" v-if="comments.length !== 0">
+          <h2 v-if="comments.length !== 0" class="answer-title">
             回答
           </h2>
           <div id="help-answer">
             <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
               <v-card-text>
-                <p class="text-content" v-if="isExpired() | isOwner | comment.user_id == getUser().id">
+                <p v-if="isExpired() | isOwner | comment.user_id == getUser().id" class="text-content">
                   {{ comment.content }}
                 </p>
-                <div class="comment-author" style="text-align: end;" v-if="isExpired() | isOwner | comment.user_id == getUserInfo().id" >
+                <div v-if="isExpired() | isOwner | comment.user_id == getUserInfo().id" class="comment-author" style="text-align: end;">
                   {{ getDepartments()[`${comment.user.department_id}`].name }}
                   {{ comment.user.name }}さんの回答
                 </div>
@@ -167,8 +171,8 @@
                     outlined
                   />
                   <v-btn
-                    @click="clickCommentButton()"
                     id="answer-btn"
+                    @click="clickCommentButton()"
                     block
                     rounded
                     outlined

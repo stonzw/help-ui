@@ -25,41 +25,41 @@
                   id="help-genre"
                   v-model="selectedGenre"
                   :items="genres"
+                  :rules="[rules.required]"
                   item-text="label"
                   item-value="value"
                   label="どんな悩みですか?"
-                  :rules="[rules.required]"
                 />
                 <v-select
                   id="help-expiry"
                   v-model="selectedTime"
                   :items="howlong"
+                  :rules="[rules.required]"
                   item-text="label"
                   item-value="value"
                   label="いつまでに答えて欲しいですか？"
-                  :rules="[rules.required]"
                 />
                 <v-text-field
                   id="help-title"
                   v-model="helpTitle"
-                  label="25文字以内でどんな悩みか教えてください。 (例: チームメンバーと口論をして気まずくなっています…)"
                   :rules="[rules.max25, rules.required]"
+                  label="25文字以内でどんな悩みか教えてください。 (例: チームメンバーと口論をして気まずくなっています…)"
                   counter="25"
                   outlined
                 />
                 <v-textarea
                   id="who-help"
                   v-model="helpUserInfo"
-                  label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目で営業部にいて...)"
                   :rules="[rules.max200, rules.required]"
+                  label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目で営業部にいて...)"
                   counter="200"
                   outlined
                 />
                 <v-textarea
                   id="help-detail"
                   v-model="helpContent"
-                  label="悩みについてもっと詳しく教えてください。 "
                   :rules="[rules.max200, rules.required]"
+                  label="悩みについてもっと詳しく教えてください。 "
                   counter="200"
                   outlined
                 />
@@ -142,8 +142,8 @@ export default {
       if (!this.valid) {
         return
       }
-      companyId = this.getUserInfo().company_id
-      departmentId = this.getUserInfo().department_id
+      const companyId = this.getUserInfo().company_id
+      const departmentId = this.getUserInfo().department_id
       const data = {
         title: this.helpTitle,
         describe: this.helpContent,
@@ -157,8 +157,6 @@ export default {
       if (this.imageBase64) {
         data.base64_image = this.imageBase64
       }
-      const companyId = this.getUserInfo().company_id
-      const departmentId = this.getUserInfo().department_id
       this.startLoad()
       axios.post(`${process.env.API_URL}/problems`, data, { headers: this.getCred() })
         .then(

@@ -37,7 +37,7 @@
         <v-col v-for="item in comments" :key="`user-comment-${item.id}`" class="col-12">
           <v-card :href="item.url">
             <v-card-content>
-              <v-card-text>{{ item.content}}</v-card-text>
+              <v-card-text>{{ item.content }}</v-card-text>
               <v-card-subtitle>
                 「{{ item.problem.title }}」へのコメント
               </v-card-subtitle>

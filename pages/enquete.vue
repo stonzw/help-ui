@@ -17,12 +17,12 @@
               <v-btn
                 :disabled="processing"
                 @click="clickAnswerButton(i)"
+                :color="btnColors[i]"
                 dark
                 large
-                :color="btnColors[i]"
                 width="50%"
               >
-                {{ i }}.{{ ' '+ val2label[i]}}
+                {{ i }}.{{ ' '+ val2label[i] }}
               </v-btn>
             </div>
           </v-col>

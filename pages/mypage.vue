@@ -54,7 +54,7 @@
       <h2>{{ getUserInfo().name }}さんの投稿したコメント</h2>
       <div id="help-answer">
         <v-col v-for="comment in commentData" :key="`comment-${comment.id}`">
-          <v-card elevation="0" :to="comment.problem.url">
+          <v-card :to="comment.problem.url" elevation="0">
             <v-card-title>
               {{ comment.content }}
             </v-card-title>

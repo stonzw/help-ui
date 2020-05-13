@@ -9,9 +9,9 @@
       </v-toolbar-title>
       <v-spacer />
       <v-btn
+        id="header-help-btn"
         v-if="isAuthenticated()"
         @click="redirect()"
-        id="header-help-btn"
         class="top-help-btn"
         to="/create"
         color="primary"
@@ -164,8 +164,8 @@
               {{ getMessage().message }}
             </v-alert>
             <v-form id="login-form">
-              <v-text-field v-model="email" id="email" label="メールアドレス" outlined />
-              <v-text-field v-model="password" id="password" label="パスワード" type="password" outlined />
+              <v-text-field id="email" v-model="email" label="メールアドレス" outlined />
+              <v-text-field id="password" v-model="password" label="パスワード" type="password" outlined />
               <v-btn
                 @click="clickLoginButton"
                 class="top-help-btn"

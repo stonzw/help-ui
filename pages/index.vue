@@ -22,7 +22,7 @@
         </v-container>
       </div>
       <v-container v-if="isAuthenticated()" class="d-flex flex-column">
-        <div v-if="mode == 'all' | mode == 'human'" id="human-area">
+        <div id="human-area" v-if="mode == 'all' | mode == 'human'">
           <h2>人間関係の悩み</h2>
           <v-row
             v-if="isAuthenticated()"
@@ -59,7 +59,7 @@
             </v-btn>
           </v-row>
         </div>
-        <div v-if="mode == 'all' | mode == 'work'" id="work-area">
+        <div id="work-area" v-if="mode == 'all' | mode == 'work'">
           <h2>仕事の悩み</h2>
           <v-row
             v-if="isAuthenticated() & (mode == 'all' | mode == 'work')"
@@ -96,7 +96,7 @@
             </v-btn>
           </v-row>
         </div>
-        <div v-if="(mode == 'all' | mode == 'health')" id="health-area">
+        <div id="health-area" v-if="(mode == 'all' | mode == 'health')">
           <h2>健康の悩み</h2>
           <v-row
             v-if="isAuthenticated() & (mode == 'all' | mode == 'health')"
@@ -133,7 +133,7 @@
             </v-btn>
           </v-row>
         </div>
-        <div v-if="(mode == 'all' | mode == 'other')" id="other-area">
+        <div id="other-area" v-if="(mode == 'all' | mode == 'other')">
           <h2>その他の悩み</h2>
           <v-row
             v-if="isAuthenticated() & (mode == 'all' | mode == 'other')"
@@ -227,9 +227,9 @@
             今後、同じ悩みを持った仲間の役にたちます！
           </div>
           <v-btn
+            id="modal-help-button"
             v-if="isAuthenticated()"
             @click="redirect()"
-            id="modal-help-button"
             class="top-help-btn"
             to="/create"
             color="primary"
