@@ -19,6 +19,16 @@
         </v-card-text>
       </v-card>
     </v-container>
+    <v-dialog
+      v-model="completeDialog"
+      max-width="694px"
+    >
+      <v-card class="pa-2">
+        <v-card-title>
+          パスワード変更が完了しました。
+        </v-card-title>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 <script>
@@ -33,7 +43,8 @@ export default {
   data () {
     return {
       password1: '',
-      password2: ''
+      password2: '',
+      completeDialog: false
     }
   },
   computed () {
@@ -53,6 +64,9 @@ export default {
         password_confirmation: this.password2
       }
       axios.put(url, data, { headers: this.getCred() })
+        .then(() => {
+          this.completeDialog = true
+        })
     }
   }
 }
