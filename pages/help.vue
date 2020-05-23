@@ -139,9 +139,7 @@
           <div id="help-answer">
             <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
               <v-card-text>
-                <p v-if="isExpired() | isOwner | comment.user_id == getUser().id" class="text-content">
-                  {{ comment.content }}
-                </p>
+                <p v-if="isExpired() | isOwner | comment.user_id == getUser().id" v-html="comment.content" class="text-content" />
                 <div v-if="isExpired() | isOwner | comment.user_id == getUserInfo().id" class="comment-author" style="text-align: end;">
                   {{ getDepartments()[`${comment.user.department_id}`].name }}
                   {{ comment.user.name }}さんの回答
@@ -245,6 +243,19 @@ import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
 import api from '~/plugins/api'
+function replaceLink (text) {
+  const matchLink = text.match(/(http(s)?:\/\/[a-zA-Z0-9-.!'()*;/?:@&=+$,%#_]+)/gi)
+  matchLink.forEach((url) => {
+    if (text.includes('youtube')) {
+      const videoId = url.match(/\?v=[a-zA-Z0-9_]+/gi)[0].slice(3)
+      const iframe = `<iframe id="ytplayer" type="text/html" width="640" height="360" src='https://www.youtube.com/embed/${videoId}' frameborder="0"></iframe>`
+      text = text.replace(url, iframe)
+    } else {
+      text = text.replace(url, `<a href='${url}' target='_blank'>${url}</a>`)
+    }
+  })
+  return text
+}
 export default {
   head () {
     return {
@@ -334,9 +345,9 @@ export default {
             this.comments = comments.data.map((x) => {
               x.image_url = `${process.env.BUCKET_URL}/help/static/preopen-comment${1 + this.i % 3}.jpg`
               this.i += 1
+              x.content = replaceLink(x.content)
               return x
             })
-            console.log(this.comments)
           }
         )
         axios.get(
