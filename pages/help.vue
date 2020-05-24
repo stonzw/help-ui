@@ -387,6 +387,7 @@ export default {
               this.comments = comments.data.map((x) => {
                 x.image_url = `https://storage.googleapis.com/help-api/help/static/preopen-comment${1 + this.i % 3}.jpg`
                 this.i += 1
+                x.content = replaceLink(x.content)
                 return x
               })
             }
