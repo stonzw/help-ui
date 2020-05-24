@@ -247,7 +247,7 @@ function replaceLink (text) {
   const matchLink = text.match(/(http(s)?:\/\/[a-zA-Z0-9-.!'()*;/?:@&=+$,%#_]+)/gi)
   matchLink.forEach((url) => {
     if (text.includes('youtube')) {
-      const videoId = url.match(/\?v=[a-zA-Z0-9_]+/gi)[0].slice(3)
+      const videoId = url.match(/\?v=[a-zA-Z0-9_\-]+/gi)[0].slice(3)
       const iframe = `<iframe id="ytplayer" type="text/html" width="640" height="360" src='https://www.youtube.com/embed/${videoId}' frameborder="0"></iframe>`
       text = text.replace(url, iframe)
     } else {
