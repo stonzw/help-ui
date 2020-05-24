@@ -35,7 +35,6 @@ import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
 import enqueteValue2Icon from '~/assets/enquete_value2icon.json'
-import enqueteValue2Text from '~/assets/enquete_value2text.json'
 export default {
   data () {
     return {
@@ -72,8 +71,14 @@ export default {
           ]
         }
       },
-      enqueteValue2Icon,
-      enqueteValue2Text
+      enqueteValue2Text: {
+        1: '理想的な状況',
+        2: '理想的な状況',
+        3: '普通',
+        4: '不満を抱えている',
+        5: 'かなり不満を抱えている'
+      },
+      enqueteValue2Icon
     }
   },
   mounted () {
