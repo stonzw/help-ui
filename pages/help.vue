@@ -245,6 +245,9 @@ import moment from 'moment'
 import api from '~/plugins/api'
 function replaceLink (text) {
   const matchLink = text.match(/(http(s)?:\/\/[a-zA-Z0-9-.!'()*;/?:@&=+$,%#_]+)/gi)
+  if (matchLink === null) {
+    return text
+  }
   matchLink.forEach((url) => {
     if (text.includes('youtube')) {
       const videoId = url.match(/\?v=[a-zA-Z0-9_-]+/gi)[0].slice(3)
