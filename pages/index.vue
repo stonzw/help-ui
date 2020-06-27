@@ -9,7 +9,7 @@
             </h2>
             <div>
               <h3 class="what">
-                助け合いのプラットフォームHELP!
+                助け合いのプラットフォームHelp-Knowlege
               </h3>
               <v-btn @click="postHelpDialog = !postHelpDialog" class="button-in-jumbo" x-large color="primary" rounded>
                 悩みがある人へ
