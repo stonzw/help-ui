@@ -11,7 +11,7 @@
         <v-card-title class="d-flex justify-space-around">
           {{ nowTitle }}
         </v-card-title>
-        <v-card-text>
+        <v-card-text v-if="idx=4">
           <v-col v-for="i in 5" :key="`button-${i}`">
             <div class="d-flex justify-space-around">
               <v-btn
@@ -26,6 +26,9 @@
               </v-btn>
             </div>
           </v-col>
+        </v-card-text>
+        <v-card-text v-else>
+          <v-textarea :v-model="textInput" ></v-textarea>
         </v-card-text>
       </v-card>
     </v-container>

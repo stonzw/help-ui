@@ -18,7 +18,8 @@ export const state = () => ({
   humanProblem: [],
   healthProblem: [],
   otherProblem: [],
-  departments: []
+  departments: [],
+  colleagues: []
 })
 
 export const getters = {
@@ -60,10 +61,20 @@ export const getters = {
   },
   getDepartments (state) {
     return state.departments
+  },
+  getColleagues (state) {
+    return state.colleagues
   }
 }
 
 export const mutations = {
+  setUserInfo (state, data) {
+    this.$cookies.set('user_info', data, {
+      path: '/',
+      maxAge: 60 * 60 * 24
+    })
+    state.userInfo = data
+  },
   setUserFromRes (state, res) {
     const user = res.data.data
     this.$cookies.set('user', user, {
@@ -140,6 +151,9 @@ export const mutations = {
     state.user = null
     state.userInfo = null
     state.cred = null
+  },
+  setColleagues (state, data) {
+    state.colleagues = data
   }
 }
 
@@ -147,6 +161,16 @@ export const actions = {
   async fetchUser ({ commit }) {
     await commit('loadUserFromCookie')
     return state.userInfo
+  },
+  async setUserInfo ({ commit }, { data }) {
+    await commit('setUserInfo', data)
+  },
+  async fetchColleagues ({ commit }, { companyId }) {
+    const res = await api.get(
+      `/search-user-info?company_id=${companyId}`,
+      { headers: this.state.cred }
+    )
+    await commit('setColleagues', res.data)
   },
   async login ({ commit }, { email, password }) {
     const data = {

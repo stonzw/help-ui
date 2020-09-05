@@ -1,7 +1,51 @@
 <template>
   <v-layout>
     <v-container v-if="isAuthenticated()">
-      <h2>{{ getUserInfo().name }}さんのマイページ</h2>
+      <h2>マイページ</h2>
+      <div v-if="imageUploading" class="text-center">
+        <v-progress-circular
+          :size="50"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div v-elif="profileImageUrl">
+        <v-img :src="profileImageUrl" :max-width="200" />
+      </div>
+      <v-file-input
+        id="help-image"
+        @change="onImageChange"
+        accept="image/png, image/jpeg, image/bmp"
+        placeholder="見出し画像(任意)"
+        prepend-icon="mdi-camera"
+      />
+      <v-btn
+        block
+        @click="clickProfileImageSendButton"
+        color="primary"
+      >
+        確定する
+      </v-btn>
+      <v-card>
+        <v-card-title>
+          紹介文
+        </v-card-title>
+        <v-card-text>
+          <v-textarea
+            id="help-detail"
+            v-model="profileDescription"
+            counter="200"
+            outlined
+          />
+        </v-card-text>
+        <v-btn
+          block
+          @click="clickProfileSendButton"
+          color="primary"
+        >
+          送信する
+        </v-btn>
+      </v-card>
       <v-row>
         <v-col cols="6">
           <v-card class="comment-genre">
@@ -24,6 +68,32 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-card>
+        <v-card-title>
+          コインを送る
+        </v-card-title>
+        <v-card-subtitle>
+          所持コイン：{{ userInfo.coin }}枚
+        </v-card-subtitle>
+        <v-card-text>
+          <v-select
+            v-model="selectedUser"
+            :items="colleagues"
+            item-text="name"
+            item-value="id"
+            label="送信先"
+            dense
+          ></v-select>
+          <v-text-field
+            v-model="coinAmount"
+          ></v-text-field>
+        </v-card-text>
+        <v-btn
+          block
+          @click="clickCoinButton"
+          color="primary"
+        >送信する</v-btn>
+      </v-card>
       <h2>{{ getUserInfo().name }}さんの投稿したお悩み</h2>
       <v-row
         v-if="isAuthenticated()"
@@ -68,7 +138,7 @@
   </v-layout>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import moment from 'moment'
 import api from '~/plugins/api'
 function parseProblem (problems) {
@@ -90,16 +160,33 @@ export default {
         }
       },
       problemSummary: [],
-      commentSummary: []
+      commentSummary: [],
+      coinAmount: 0,
+      selectedUser: null,
+      problemData: null,
+      commentData: null,
+      profileDescription: '',
+      profileImageUrl: '',
+      imageUploading: false
     }
   },
+  computed: {
+    ...mapState(['userInfo', 'colleagues'])
+  },
   mounted () {
-    this.fetchUser()
+    this
+      .fetchUser()
+      .then(() => {
+        this.fetchColleagues({ companyId: this.userInfo.company_id })
+        this.profileDescription = this.userInfo.description
+        console.log(this.userInfo)
+        this.profileImageUrl = this.userInfo.image
+      })
     this.fetchProblemData()
     this.fetchCommentData()
   },
   methods: {
-    ...mapActions(['fetchUser']),
+    ...mapActions(['fetchUser', 'fetchColleagues', 'setUserInfo']),
     ...mapGetters(['isAuthenticated', 'getUserInfo', 'getCred']),
     unix2daystr (unix) {
       return moment.unix(unix).format('MM月DD日(締切)')
@@ -140,6 +227,57 @@ export default {
           ]
         }
       }
+    },
+    clickProfileSendButton () {
+      const data = { 'description': this.profileDescription }
+      api.put(`user_infos/${this.userInfo.id}`, data, { headers: this.getCred() })
+        .then((x) => {
+          this.setUserInfo({ data: x.data })
+        })
+    },
+    clickProfileImageSendButton () {
+      const data = { 'image': this.profileImageUrl }
+      api.put(`user_infos/${this.userInfo.id}`, data, { headers: this.getCred() })
+        .then((x) => {
+          this.setUserInfo({ data: x.data })
+        })
+    },
+    clickCoinButton () {
+      api.post(
+        'send-coin',
+        {
+          'sender_id': this.userInfo.id,
+          'receiver_id': this.selectedUser,
+          'coin': parseInt(this.coinAmount)
+        },
+        { headers: this.getCred() }
+      ).then((x) => {
+        this.setUserInfo({ data: x.data })
+      })
+    },
+    convertImageBase64 (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error)
+      })
+    },
+    onImageChange (e) {
+      this.convertImageBase64(e)
+        .then((image) => {
+          this.imageBase64 = image
+          this.imageUploading = true
+          api.post(
+            'upload-image',
+            { 'base64_image': image },
+            { headers: this.getCred() }
+          ).then((x) => {
+            this.profileImageUrl = x.data.image_url
+            this.imageUploading = false
+          })
+        })
+        .catch((error) => { this.setError(error, '画像のアップロードに失敗しました。') })
     }
   }
 }

@@ -72,6 +72,15 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item :to="'/profile'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-account-multiple</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>プロフィール画面</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-list-item :to="'/mypage'" router link>
             <v-list-item-action>
               <v-icon>mdi-account</v-icon>
