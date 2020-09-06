@@ -1,9 +1,9 @@
 <template>
   <v-layout>
     <div class="wrapper">
-      <div id="jumbotron" class="d-flex flex-column jumbotron">
+      <v-card id="jumbotron" class="d-flex flex-column jumbotron" color="secondary" elevation="0" rounded="false">
         <v-container>
-          <v-flex class="center">
+          <v-flex class="center" >
             <h2 class="copy-write">
               誰かを助けたり誰かに助けられたり
             </h2>
@@ -20,7 +20,7 @@
             </div>
           </v-flex>
         </v-container>
-      </div>
+      </v-card>
       <v-container v-if="isAuthenticated()" class="d-flex flex-column">
         <div id="human-area" v-if="mode == 'all' | mode == 'human'">
           <h2>人間関係の悩み</h2>
@@ -397,7 +397,6 @@ export default {
   width: 100%;
 }
 .jumbotron {
-  background-color: #E3BBCC;
   text-align: center;
   color: white;
 }

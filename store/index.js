@@ -19,7 +19,8 @@ export const state = () => ({
   healthProblem: [],
   otherProblem: [],
   departments: [],
-  colleagues: []
+  colleagues: [],
+  title: 'Help-Knowledge-Community'
 })
 
 export const getters = {

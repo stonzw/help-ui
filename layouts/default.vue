@@ -5,7 +5,7 @@
       app
     >
       <v-toolbar-title>
-        <span id="logo">Help-Knowledge</span>
+        <span id="logo">{{ title }}</span>
       </v-toolbar-title>
       <v-spacer />
       <v-btn
@@ -101,6 +101,15 @@
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>メッセージを確認</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item v-if="isAdminUser()" :to="'/admin/sendmail'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-send</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>参加メールの送信</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -205,7 +214,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 export default {
   data () {
@@ -220,6 +229,7 @@ export default {
       loadingColor: `${process.env.THEMA_COLOR}`
     }
   },
+  computed: mapState(['title']),
   mounted () {
     if (this.isAuthenticated()) {
       const receiverId = this.getUser().id

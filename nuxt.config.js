@@ -71,8 +71,8 @@ export default {
     theme: {
       themes: {
         light: {
-          primary: 'E38687',
-          secondary: 'E3BBCC'
+          primary: '86b9e4',
+          secondary: 'bbcbe3'
         }
       }
     }
@@ -102,7 +102,7 @@ export default {
   env: {
     'API_URL': process.env.API_URL,
     'BUCKET_URL': process.env.BUCKET_URL,
-    'THEMA_COLOR': '#E3BBCC',
+    'THEMA_COLOR': '#86b9e4',
     'SECOND_COLOR': '#E38687'
   }
 }
