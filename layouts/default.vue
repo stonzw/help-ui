@@ -90,6 +90,15 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item :to="'/enter'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-reload</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>サロン切り替え</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-list-item @click="clickNotification">
             <v-list-item-action>
               <v-badge
@@ -106,10 +115,10 @@
 
           <v-list-item v-if="isAdminUser()" :to="'/admin/sendmail'" router link>
             <v-list-item-action>
-              <v-icon>mdi-send</v-icon>
+              <v-icon>mdi-account-plus</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>参加メールの送信</v-list-item-title>
+              <v-list-item-title>招待メールの送信</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
