@@ -31,7 +31,7 @@
   </v-layout>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
 import enqueteValue2Icon from '~/assets/enquete_value2icon.json'
@@ -82,16 +82,18 @@ export default {
     }
   },
   mounted () {
-    this.fetchUser()
-    this.departmentId = this.$nuxt.$route.query.departmentId
-    axios.get(
-      `${process.env.API_URL}/departments/${this.departmentId}`,
-      { headers: this.getCred() }
-    ).then((res) => {
-      this.department = res.data
-      this.fetchDepartmentSurvey()
+    this.fetchUser().then(() => {
+      this.departmentId = this.$nuxt.$route.query.departmentId
+      axios.get(
+        `${process.env.API_URL}/departments/${this.departmentId}`,
+        { headers: this.getCred() }
+      ).then((res) => {
+        this.department = res.data
+        this.fetchDepartmentSurvey()
+      })
     })
   },
+  computed: mapState(['userInfo']),
   methods: {
     ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),

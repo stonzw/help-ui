@@ -88,7 +88,7 @@ export default {
     fetchData () {
       const companyId = this.getUserInfo().company_id
       axios.get(
-        `${process.env.API_URL}/survey-summary`,
+        `${process.env.API_URL}/survey-summary?company_id=${companyId}`,
         { headers: this.getCred() }
       )
         .then((res1) => {

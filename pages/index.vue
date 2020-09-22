@@ -3,21 +3,10 @@
     <div class="wrapper">
       <v-card id="jumbotron" class="d-flex flex-column jumbotron" color="secondary" elevation="0" rounded="false">
         <v-container>
-          <v-flex class="center" >
+          <v-flex class="center" v-if="userInfo.company">
             <h2 class="copy-write">
-              誰かを助けたり誰かに助けられたり
+              {{ userInfo.company.name }}
             </h2>
-            <div>
-              <h3 class="what">
-                助け合いのプラットフォームHelp-Knowlege
-              </h3>
-              <v-btn @click="postHelpDialog = !postHelpDialog" class="button-in-jumbo" x-large color="primary" rounded>
-                悩みがある人へ
-              </v-btn>
-              <v-btn @click="answerHelpDialog = !answerHelpDialog" class="button-in-jumbo" x-large color="primary" rounded>
-                人を助けたい人へ
-              </v-btn>
-            </div>
           </v-flex>
         </v-container>
       </v-card>
@@ -277,7 +266,7 @@
   </v-layout>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
@@ -300,6 +289,7 @@ export default {
       this.fetchProblem()
     }
   },
+  computed: mapState(['title', 'userInfo']),
   methods: {
     ...mapActions(['fetchUser', 'login', 'logout', 'fetchProblem']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getCred', 'getWorkProblem', 'getHealthProblem', 'getHumanProblem', 'getOtherProblem']),
