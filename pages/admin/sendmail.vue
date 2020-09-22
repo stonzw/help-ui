@@ -37,7 +37,6 @@ export default {
       userPassword: '',
       userId: null,
       profileDescription: '',
-      communityName: 'Help!',
       loginUrl: 'http://www.help-knowledge.com/'
     }
   },
@@ -64,7 +63,7 @@ export default {
           api.post(
             'send-email',
             {
-              community: this.communityName,
+              community: this.userInfo.company.name,
               login_url: this.loginUrl,
               email: this.email,
               name: this.userName,
