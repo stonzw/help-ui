@@ -131,6 +131,15 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item v-if="isAdminUser()" :to="'/admin/edit'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-account-multiple-outline</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>サロン情報の編集</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-list-item to="/settings">
             <v-list-item-action>
               <v-icon>mdi-account-key</v-icon>
