@@ -95,13 +95,6 @@ export default {
             this.sendEmail()
           })
         })
-    },
-    clickProfileImageSendButton () {
-      const data = { 'image': this.profileImageUrl }
-      api.put(`user_infos/${this.userInfo.id}`, data, { headers: this.getCred() })
-        .then((x) => {
-          this.setUserInfo({ data: x.data })
-        })
     }
   }
 }
