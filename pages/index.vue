@@ -2,11 +2,14 @@
   <v-layout>
     <div class="wrapper">
       <v-card id="jumbotron" class="d-flex flex-column jumbotron" color="secondary" elevation="0" rounded="false">
-        <v-container>
+        <v-container v-if="userInfo">
           <v-flex class="center" v-if="userInfo.company">
             <h2 class="copy-write">
-              {{ userInfo.company.name }}
+              {{ userInfo.company.message }}
             </h2>
+            <h3>
+              {{ userInfo.company.detail }}
+            </h3>
           </v-flex>
         </v-container>
       </v-card>
