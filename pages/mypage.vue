@@ -9,7 +9,7 @@
           indeterminate
         ></v-progress-circular>
       </div>
-      <div v-elif="profileImageUrl">
+      <div v-else-if="profileImageUrl">
         <v-img :src="profileImageUrl" :max-width="200" />
       </div>
       <v-file-input
