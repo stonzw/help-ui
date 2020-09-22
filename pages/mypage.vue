@@ -179,7 +179,6 @@ export default {
       .then(() => {
         this.fetchColleagues({ companyId: this.userInfo.company_id })
         this.profileDescription = this.userInfo.description
-        console.log(this.userInfo)
         this.profileImageUrl = this.userInfo.image
       })
     this.fetchProblemData()
