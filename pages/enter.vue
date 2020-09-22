@@ -54,10 +54,11 @@ export default {
         })
     },
     changeCommunity () {
-      const newUserInfo = {}
-      Object.assign(newUserInfo, this.userInfo)
-      newUserInfo.company_id = this.selectedCommunity
-      this.setUserInfo({ data: newUserInfo })
+      this.userInfoList.map((x) => {
+        if (x.company.id === this.selectedCommunity) {
+          this.setUserInfo({ data: x })
+        }
+      })
     }
   }
 }

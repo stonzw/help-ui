@@ -20,7 +20,7 @@ export const state = () => ({
   otherProblem: [],
   departments: [],
   colleagues: [],
-  title: 'Help-Knowledge-Community'
+  title: ''
 })
 
 export const getters = {
@@ -75,6 +75,7 @@ export const mutations = {
       maxAge: 60 * 60 * 24
     })
     state.userInfo = data
+    state.title = data.company.name
   },
   setUserFromRes (state, res) {
     const user = res.data.data
@@ -114,6 +115,7 @@ export const mutations = {
         state.user = user
         state.userInfo = userInfo
         state.cred = cred
+        state.title = userInfo.company.name
       } else {
         state.user = null
         state.userInfo = null
