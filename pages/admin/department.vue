@@ -100,7 +100,7 @@ export default {
     },
     fetchDepartmentSurvey () {
       axios.get(
-        `${process.env.API_URL}/department-summary?department_id=${this.departmentId}`,
+        `${process.env.API_URL}/department-summary?department_id=${this.departmentId}&company_id=${this.userInfo.company_id}`,
         { headers: this.getCred() }
       ).then((res) => {
         this.departmentSurvey = res.data.map(

@@ -198,7 +198,6 @@ export const actions = {
         commit('finishLoad')
         return this.state.userInfo
       } catch (error) {
-        console.log(error)
         commit('setMessage', {
           'message': 'ログインに失敗しました。メールアドレスとパスワードをご確認ください。',
           'level': 'error'
@@ -228,7 +227,7 @@ export const actions = {
     commit('startLoad')
     try {
       const workRes = await api.get(
-        `/search-problem?genre_id=${process.env.WORK_ID}`,
+        `/search-problem?genre_id=${process.env.WORK_ID}&company_id=${this.state.userInfo.company_id}`,
         { headers: this.state.cred }
       )
       commit('setWorkProblem', workRes)
@@ -237,7 +236,7 @@ export const actions = {
     }
     try {
       const humanRes = await api.get(
-        `/search-problem?genre_id=${process.env.HUMAN_ID}`,
+        `/search-problem?genre_id=${process.env.HUMAN_ID}&company_id=${this.state.userInfo.company_id}`,
         { headers: this.state.cred }
       )
       commit('setHumanProblem', humanRes)
@@ -246,7 +245,7 @@ export const actions = {
     }
     try {
       const healthRes = await api.get(
-        `/search-problem?genre_id=${process.env.HEALTH_ID}`,
+        `/search-problem?genre_id=${process.env.HEALTH_ID}&company_id=${this.state.userInfo.company_id}`,
         { headers: this.state.cred }
       )
       commit('setHealthProblem', healthRes)
@@ -255,7 +254,7 @@ export const actions = {
     }
     try {
       const otherRes = await api.get(
-        `/search-problem?genre_id=${process.env.OTHER_ID}`,
+        `/search-problem?genre_id=${process.env.OTHER_ID}&company_id=${this.state.userInfo.company_id}`,
         { headers: this.state.cred }
       )
       commit('setOtherProblem', otherRes)
