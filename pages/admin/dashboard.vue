@@ -25,7 +25,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
+import api from '~/plugins/api'
 export default {
   head () {
     return {
@@ -87,13 +87,13 @@ export default {
     },
     fetchData () {
       const companyId = this.getUserInfo().company_id
-      axios.get(
-        `${process.env.API_URL}/survey-summary?company_id=${companyId}`,
+      api.get(
+        `/survey-summary?company_id=${companyId}`,
         { headers: this.getCred() }
       )
         .then((res1) => {
-          axios.get(
-            `${process.env.API_URL}/departments?company_id=${companyId}`,
+          api.get(
+            `/departments?company_id=${companyId}`,
             { headers: this.getCred() }
           )
             .then((res2) => {

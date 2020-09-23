@@ -91,7 +91,7 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-import axios from 'axios'
+import api from '~/plugins/api'
 export default {
   head () {
     return {
@@ -158,7 +158,7 @@ export default {
         data.base64_image = this.imageBase64
       }
       this.startLoad()
-      axios.post(`${process.env.API_URL}/problems`, data, { headers: this.getCred() })
+      api.post(`/problems`, data, { headers: this.getCred() })
         .then(
           (res) => {
             const data1 = {
@@ -170,7 +170,7 @@ export default {
               problem_id: res.data.id
             }
 
-            axios.post(`${process.env.API_URL}/answers`, data1, { headers: this.getCred() })
+            api.post('/answers', data1, { headers: this.getCred() })
               .then((res2) => {
                 const data2 = {
                   content: this.helpUserInfo,
@@ -180,7 +180,7 @@ export default {
                   question_id: 2,
                   problem_id: res.data.id
                 }
-                axios.post(`${process.env.API_URL}/answers`, data2, { headers: this.getCred() })
+                api.post('/answers', data2, { headers: this.getCred() })
                   .then((res3) => {
                     const data3 = {
                       content: this.helpContent,
@@ -190,7 +190,7 @@ export default {
                       question_id: 3,
                       problem_id: res.data.id
                     }
-                    axios.post(`${process.env.API_URL}/answers`, data3, { headers: this.getCred() })
+                    api.post('/answers', data3, { headers: this.getCred() })
                       .then((res4) => {
                         this.processing = false
                         this.$nuxt.$router.push({ path: '/help/?helpId=' + res.data.id })

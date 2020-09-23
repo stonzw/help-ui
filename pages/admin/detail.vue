@@ -53,7 +53,6 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
 import moment from 'moment'
 import api from '~/plugins/api'
 export default {
@@ -111,16 +110,16 @@ export default {
       })
     },
     fetchUserHelp () {
-      axios.get(
-        `${process.env.API_URL}/user_infos/${this.userId}`,
+      api.get(
+        `/user_infos/${this.userId}`,
         { headers: this.getCred() }
       ).then((res) => {
         this.user_info = res.data
         this.departmentId = this.user_info.department_id
         this.loading = false
       })
-      axios.get(
-        `${process.env.API_URL}/search-user-problem?user_id=${this.userId}`,
+      api.get(
+        `/search-user-problem?user_id=${this.userId}`,
         { headers: this.getCred() }
       ).then((res) => {
         this.relatedProblems = res.data.map(

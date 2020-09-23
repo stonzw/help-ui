@@ -240,7 +240,6 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
 import moment from 'moment'
 import api from '~/plugins/api'
 function replaceLink (text) {
@@ -314,7 +313,7 @@ export default {
     })
     const { helpId } = this.$nuxt.$route.query
     this.helpId = helpId
-    axios.get(`${process.env.API_URL}/problems/${helpId}`, { headers: this.getCred() })
+    api.get(`/problems/${helpId}`, { headers: this.getCred() })
       .then((res) => {
         const companyId = res.data.company_id
         const problemId = res.data.id
@@ -327,8 +326,7 @@ export default {
         this.helpTitle = res.data.title
         this.visible = res.data.visible
         const query = `?company_id=${companyId}&problem_id=${problemId}`
-        const url = `${process.env.API_URL}/search-answer${query}`
-        axios.get(url, { headers: this.getCred() }).then(
+        api.get(`/search-answer${query}`, { headers: this.getCred() }).then(
           (answers) => {
             this.contents = answers.data
               .map(
@@ -338,12 +336,12 @@ export default {
               ).sort((a, b) => { return a.question_id - b.question_id })
           }
         )
-        axios.get(`${process.env.API_URL}/questions`).then(
+        api.get('questions').then(
           (questions) => {
             this.headlines = questions.data.map((x) => { return x.answer_headline })
           }
         )
-        axios.get(`${process.env.API_URL}/comments?problem_id=${helpId}`).then(
+        api.get(`/comments?problem_id=${helpId}`).then(
           (comments) => {
             this.comments = comments.data.map((x) => {
               x.image_url = `${process.env.BUCKET_URL}/help/static/preopen-comment${1 + this.i % 3}.jpg`
@@ -353,8 +351,8 @@ export default {
             })
           }
         )
-        axios.get(
-          `${process.env.API_URL}/search-problem?company_id=${companyId}&genre_id=${this.genreId}`,
+        api.get(
+          `/search-problem?company_id=${companyId}&genre_id=${this.genreId}`,
           { headers: this.getCred() }
         ).then((res) => {
           this.relatedProblems = res.data.map(
@@ -381,14 +379,14 @@ export default {
         'problem_id': helpId,
         'content': this.commentContent
       }
-      axios.post(`${process.env.API_URL}/comments`, data, { headers: this.getCred() })
+      api.post(`/comments`, data, { headers: this.getCred() })
         .then((res) => {
           this.commentContent = ''
           const { helpId } = this.$nuxt.$route.query
-          axios.get(`${process.env.API_URL}/comments?problem_id=${helpId}`).then(
+          api.get(`/comments?problem_id=${helpId}`).then(
             (comments) => {
               this.comments = comments.data.map((x) => {
-                x.image_url = `https://storage.googleapis.com/help-api/help/static/preopen-comment${1 + this.i % 3}.jpg`
+                x.image_url = `${process.env.BUCKET_URL}/help/static/preopen-comment${1 + this.i % 3}.jpg`
                 this.i += 1
                 x.content = replaceLink(x.content)
                 return x
@@ -457,7 +455,7 @@ export default {
         content: this.textEditInput
       }
       const headers = this.getCred()
-      axios.put(`${process.env.API_URL}/answers/${answer.id}`, body, { headers })
+      api.put(`/answers/${answer.id}`, body, { headers })
         .then((res) => {
           this.editableId = -1
           answer.content = this.textEditInput
@@ -484,8 +482,8 @@ export default {
         sender_email: this.getUser().email
       }
       if (this.owner === this.getUser().id) {
-        axios.post(
-          `${process.env.API_URL}/talks`,
+        api.post(
+          '/talks',
           data,
           { headers: this.getCred() }
         ).then((res) => {

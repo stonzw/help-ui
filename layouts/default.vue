@@ -233,7 +233,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import axios from 'axios'
+import api from '~/plugins/api'
 export default {
   data () {
     return {
@@ -252,7 +252,7 @@ export default {
     if (this.isAuthenticated()) {
       const receiverId = this.getUser().id
       if (!this.messages) {
-        axios.get(`${process.env.API_URL}/talks?receiver_id=${receiverId}`, { headers: this.getCred() })
+        api.get(`/talks?receiver_id=${receiverId}`, { headers: this.getCred() })
           .then((res) => {
             this.messages = res.data.reverse()
             res.data.forEach((data) => {
@@ -288,8 +288,8 @@ export default {
         (m) => {
           if (!m.checked) {
             const talkId = m.id
-            axios.put(
-              `${process.env.API_URL}/talks/${talkId}`,
+            api.put(
+              `/talks/${talkId}`,
               { checked: true },
               { headers: this.getCred() }
             ).then((res) => { this.notificationCount -= 1 })

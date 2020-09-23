@@ -39,7 +39,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
+import api from '~/plugins/api'
 export default {
   data () {
     return {
@@ -59,8 +59,8 @@ export default {
     ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred', 'isAdminUser']),
     fetchEmployeeInfos (userInfo) {
       const companyId = this.getUserInfo().company_id
-      axios.get(
-        `${process.env.API_URL}/departments?company_id=${companyId}`,
+      api.get(
+        `/departments?company_id=${companyId}`,
         { headers: this.getCred() }
       )
         .then((res) => {
@@ -70,8 +70,8 @@ export default {
             this.departmentId2Name[elem.id] = elem.name
             employeeInfos[elem.id] = []
           })
-          axios.get(
-            `${process.env.API_URL}/search-user-info?company_id=${companyId}`,
+          api.get(
+            `/search-user-info?company_id=${companyId}`,
             { headers: this.getCred() }
           )
             .then((res) => {
@@ -94,7 +94,7 @@ export default {
         department_id: this.selectedDepartment
       }
       const headers = this.getCred()
-      axios.put(`${process.env.API_URL}/user_infos/${userInfo.id}`, body, { headers })
+      api.put(`/user_infos/${userInfo.id}`, body, { headers })
         .then((res) => {
           userInfo.department_id = this.selectedDepartment
           this.editableId = -1

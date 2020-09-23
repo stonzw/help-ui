@@ -32,7 +32,7 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
+import api from '~/plugins/api'
 import moment from 'moment'
 import enqueteValue2Icon from '~/assets/enquete_value2icon.json'
 export default {
@@ -84,8 +84,8 @@ export default {
   mounted () {
     this.fetchUser().then(() => {
       this.departmentId = this.$nuxt.$route.query.departmentId
-      axios.get(
-        `${process.env.API_URL}/departments/${this.departmentId}`,
+      api.get(
+        `/departments/${this.departmentId}`,
         { headers: this.getCred() }
       ).then((res) => {
         this.department = res.data
@@ -101,8 +101,8 @@ export default {
       return moment.unix(unix).format('MM月DD日(締切)')
     },
     fetchDepartmentSurvey () {
-      axios.get(
-        `${process.env.API_URL}/department-summary?department_id=${this.departmentId}&company_id=${this.userInfo.company_id}`,
+      api.get(
+        `/department-summary?department_id=${this.departmentId}&company_id=${this.userInfo.company_id}`,
         { headers: this.getCred() }
       ).then((res) => {
         this.departmentSurvey = res.data.map(

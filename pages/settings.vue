@@ -33,7 +33,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
+import api from '~/plugins/api'
 export default {
   head () {
     return {
@@ -57,13 +57,12 @@ export default {
     ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getCred']),
     clickPasswordButton () {
-      const url = `${process.env.API_URL}/auth/password`
       const data = {
         email: this.getUser().email,
         password: this.password1,
         password_confirmation: this.password2
       }
-      axios.put(url, data, { headers: this.getCred() })
+      api.put('/auth/password', data, { headers: this.getCred() })
         .then(() => {
           this.completeDialog = true
         })

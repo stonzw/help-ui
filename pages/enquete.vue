@@ -35,7 +35,7 @@
   </v-layout>
 </template>
 <script>
-import axios from 'axios'
+import api from '~/plugins/api'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import enqueteValue2Icon from '~/assets/enquete_value2icon.json'
 import enqueteValue2Color from '~/assets/enquete_value2color.json'
@@ -63,9 +63,9 @@ export default {
   mounted () {
     const { enqueteId } = this.$nuxt.$route.query
     this.fetchUser()
-    axios
+    api
       .get(
-        `${process.env.API_URL}/search-enquete-questions?enquete_id=${enqueteId}`,
+        `/search-enquete-questions?enquete_id=${enqueteId}`,
         { headers: this.getCred() }
       )
       .then((res) => {
@@ -83,8 +83,8 @@ export default {
     ...mapActions(['fetchUser']),
     ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),
     sendSuvey (data) {
-      axios.post(
-        `${process.env.API_URL}/surveys`,
+      api.post(
+        '/surveys',
         data,
         { headers: this.getCred() }
       ).then(() => {
