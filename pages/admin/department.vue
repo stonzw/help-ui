@@ -32,8 +32,8 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import api from '~/plugins/api'
 import moment from 'moment'
+import api from '~/plugins/api'
 import enqueteValue2Icon from '~/assets/enquete_value2icon.json'
 export default {
   data () {

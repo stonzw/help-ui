@@ -35,8 +35,8 @@
   </v-layout>
 </template>
 <script>
-import api from '~/plugins/api'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+import api from '~/plugins/api'
 import enqueteValue2Icon from '~/assets/enquete_value2icon.json'
 import enqueteValue2Color from '~/assets/enquete_value2color.json'
 import enqueteValue2Text from '~/assets/enquete_value2text.json'
