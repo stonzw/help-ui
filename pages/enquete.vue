@@ -28,7 +28,7 @@
           </v-col>
         </v-card-text>
         <v-card-text v-else>
-          <v-textarea :v-model="textInput" ></v-textarea>
+          <v-textarea :v-model="textInput" />
         </v-card-text>
       </v-card>
     </v-container>

@@ -14,7 +14,9 @@
             label="サロン"
           />
         </v-card-text>
-        <v-btn @click='changeCommunity' block >確定する</v-btn>
+        <v-btn @click="changeCommunity" block>
+          確定する
+        </v-btn>
       </v-card>
     </v-container>
   </v-layout>

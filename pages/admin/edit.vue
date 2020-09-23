@@ -20,8 +20,8 @@
             outlined
           />
           <v-btn
-            block
             @click="clickRegisterButton"
+            block
             color="primary"
           >
             送信する

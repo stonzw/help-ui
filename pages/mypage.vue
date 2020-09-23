@@ -7,7 +7,7 @@
           :size="50"
           color="primary"
           indeterminate
-        ></v-progress-circular>
+        />
       </div>
       <div v-else-if="profileImageUrl">
         <v-img :src="profileImageUrl" :max-width="200" />
@@ -20,8 +20,8 @@
         prepend-icon="mdi-camera"
       />
       <v-btn
-        block
         @click="clickProfileImageSendButton"
+        block
         color="primary"
       >
         確定する
@@ -39,8 +39,8 @@
           />
         </v-card-text>
         <v-btn
-          block
           @click="clickProfileSendButton"
+          block
           color="primary"
         >
           送信する
@@ -83,16 +83,18 @@
             item-value="id"
             label="送信先"
             dense
-          ></v-select>
+          />
           <v-text-field
             v-model="coinAmount"
-          ></v-text-field>
+          />
         </v-card-text>
         <v-btn
-          block
           @click="clickCoinButton"
+          block
           color="primary"
-        >送信する</v-btn>
+        >
+          送信する
+        </v-btn>
       </v-card>
       <h2>{{ getUserInfo().name }}さんの投稿したお悩み</h2>
       <v-row
@@ -135,6 +137,16 @@
         </v-col>
       </div>
     </v-container>
+    <v-dialog
+      v-model="messageDialog"
+      max-width="694px"
+    >
+      <v-card>
+        <v-card-text>
+          {{ message.message }}
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 <script>
@@ -167,7 +179,9 @@ export default {
       commentData: null,
       profileDescription: '',
       profileImageUrl: '',
-      imageUploading: false
+      imageUploading: false,
+      messageDialog: false,
+      message: { message: '', level: 'none' }
     }
   },
   computed: {
@@ -232,6 +246,8 @@ export default {
       api.put(`user_infos/${this.userInfo.id}`, data, { headers: this.getCred() })
         .then((x) => {
           this.setUserInfo({ data: x.data })
+          this.message = { message: '更新が完了しました.', level: 'success' }
+          this.messageDialog = true
         })
     },
     clickProfileImageSendButton () {
@@ -239,6 +255,8 @@ export default {
       api.put(`user_infos/${this.userInfo.id}`, data, { headers: this.getCred() })
         .then((x) => {
           this.setUserInfo({ data: x.data })
+          this.message = { message: '更新が完了しました.', level: 'success' }
+          this.messageDialog = true
         })
     },
     clickCoinButton () {

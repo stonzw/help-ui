@@ -3,7 +3,7 @@
     <v-container v-if="isAuthenticated()">
       <h2>マイページ</h2>
       <v-card v-for="c in colleagues" :key="c.id" class="ma-3">
-        <v-img max-width="200" v-if="c.image" :src="c.image" />
+        <v-img v-if="c.image" :src="c.image" max-width="200" />
         <v-card-title>
           {{ c.name }}
         </v-card-title>
