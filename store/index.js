@@ -72,7 +72,7 @@ export const mutations = {
   setUserInfo (state, data) {
     this.$cookies.set('user_info', data, {
       path: '/',
-      maxAge: 60 * 60 * 24
+      maxAge: 60 * 60 * 24 * 30
     })
     state.userInfo = data
     state.title = data.company.name
@@ -115,13 +115,15 @@ export const mutations = {
         state.user = user
         state.userInfo = userInfo
         state.cred = cred
-        state.title = userInfo.company.name
       } else {
         state.user = null
         state.userInfo = null
         state.cred = null
       }
     }
+  },
+  setTitle (state, title) {
+    state.title = title
   },
   setMessage (state, msg) {
     state.message = msg
@@ -224,6 +226,10 @@ export const actions = {
       { headers: this.state.cred }
     )
     commit('setDepartmentsFromRes', departmentsRes)
+  },
+  async fetchTitle ({ commit }, { companyId }) {
+    const res = await api.get(`companies/${companyId}`)
+    commit('setTitle', res.data.name)
   },
   async fetchProblem ({ commit }) {
     commit('startLoad')

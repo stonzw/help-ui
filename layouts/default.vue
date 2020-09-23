@@ -247,27 +247,30 @@ export default {
       loadingColor: `${process.env.THEMA_COLOR}`
     }
   },
-  computed: mapState(['title']),
+  computed: mapState(['title', 'userInfo']),
   mounted () {
-    if (this.isAuthenticated()) {
-      const receiverId = this.getUser().id
-      if (!this.messages) {
-        api.get(`/talks?receiver_id=${receiverId}`, { headers: this.getCred() })
-          .then((res) => {
-            this.messages = res.data.reverse()
-            res.data.forEach((data) => {
-              if (!data.checked) {
-                this.notificationCount += 1
-              }
+    this.fetchUser().then(() => {
+      if (this.isAuthenticated()) {
+        const receiverId = this.getUser().id
+        this.fetchTitle({ companyId: this.userInfo.company_id })
+        if (!this.messages) {
+          api.get(`/talks?receiver_id=${receiverId}`, { headers: this.getCred() })
+            .then((res) => {
+              this.messages = res.data.reverse()
+              res.data.forEach((data) => {
+                if (!data.checked) {
+                  this.notificationCount += 1
+                }
+              })
             })
-          })
+        }
+      } else {
+        this.loginDialog = true
       }
-    } else {
-      this.loginDialog = true
-    }
+    })
   },
   methods: {
-    ...mapActions(['login', 'logout']),
+    ...mapActions(['login', 'logout', 'fetchTitle', 'fetchUser']),
     ...mapGetters(['isAuthenticated', 'isAdminUser', 'getUser', 'getCred', 'getMessage', 'isLoading']),
     clickLoginButton () {
       this.login(
