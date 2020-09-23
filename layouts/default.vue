@@ -136,7 +136,7 @@
               <v-icon>mdi-account-multiple-outline</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>サロン情報の編集</v-list-item-title>
+              <v-list-item-title>コミュニティ情報の編集</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
