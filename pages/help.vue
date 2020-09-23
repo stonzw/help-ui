@@ -136,6 +136,9 @@
           <h2 v-if="comments.length !== 0" class="answer-title">
             回答
           </h2>
+          <h2 v-else>
+            回答してみましょう！
+          </h2>
           <div id="help-answer">
             <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
               <v-card-text>
@@ -186,11 +189,11 @@
         <v-btn :to="'/'" color="primary" block>
           <v-icon>mdi-chevron-left</v-icon>TOPに戻る
         </v-btn>
-        <div class="col-12">
+        <div id="related-problem" class="col-12">
           <h2>関連するお悩み</h2>
           <v-row>
             <v-col v-for="item in relatedProblems" :key="`related-problem-${item.id}`" class="col-6 d-flex flex-no-wrap">
-              <v-card :href="item.url">
+              <v-card class="related-problem-card" :href="item.url">
                 <v-img
                   :src="item.image_url"
                 />
@@ -285,7 +288,7 @@ export default {
       isOwner: false,
       helpEditModal: false,
       helpDeleteModal: false,
-      selectedGenre: { label: '', value: null },
+      selectedGenre: { label: '', value: 0 },
       selectedTime: { label: '延長しない', value: 0 },
       genreId: null,
       genreId2Name: { 1: '人間関係', 2: '仕事', 3: '健康', 4: 'その他' },
