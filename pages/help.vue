@@ -9,7 +9,6 @@
             </v-btn>
           </div>
           <v-col class="d-xl-flex d-md-flex d-sm-flex justify-space-between">
-            <div>{{ deadlineStr() }}締切</div>
             <div id="owner-header" v-if="isOwner">
               <v-btn
                 :v-if="isOwner"
@@ -65,22 +64,6 @@
               </v-card-title>
               <v-card-text>
                 <v-form id="create-help-form">
-                  <v-select
-                    id="help-genre"
-                    v-model="selectedGenre"
-                    :items="genres"
-                    item-text="label"
-                    item-value="value"
-                    label="悩みのカテゴリー"
-                  />
-                  <v-select
-                    id="help-expiry"
-                    v-model="selectedTime"
-                    :items="howlong"
-                    item-text="label"
-                    item-value="value"
-                    label="延長する"
-                  />
                   <v-text-field
                     id="help-title"
                     v-model="helpTitle"
@@ -103,16 +86,12 @@
               </v-card-text>
             </v-card>
           </v-dialog>
+          <h2>{{ this.helpTitle }}</h2>
           <div class="image-wrapper">
             <img :src="imageURL">
           </div>
           <div id="help-content">
             <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
-              <v-card-title>
-                <h2 class="content-title">
-                  {{ headlines[item.question_id - 1] }}
-                </h2>
-              </v-card-title>
               <p v-if="editableId != item.id" class="text-content">
                 {{ item.content }}
                 <v-btn v-if="owner === getUser().id" @click="clickEditButton(item.id, item.content)" text block color="primary">
@@ -134,16 +113,16 @@
             </v-card>
           </div>
           <h2 v-if="comments.length !== 0" class="answer-title">
-            回答
+            コメント
           </h2>
           <h2 v-else>
-            回答してみましょう！
+            コメントする
           </h2>
           <div id="help-answer">
             <v-card v-for="comment in comments" :key="`comment-${comment.id}`" class="comment" elevation="0">
               <v-card-text>
-                <p v-if="isExpired() | isOwner | comment.user_id == getUser().id" v-html="comment.content" class="text-content" />
-                <div v-if="isExpired() | isOwner | comment.user_id == getUserInfo().id" class="comment-author" style="text-align: end;">
+                <p v-if="isOwner | comment.user_id == getUser().id" v-html="comment.content" class="text-content" />
+                <div v-if="isOwner | comment.user_id == getUserInfo().id" class="comment-author" style="text-align: end;">
                   {{ getDepartments()[`${comment.user.department_id}`].name }}
                   {{ comment.user.name }}さんの回答
                 </div>
@@ -162,7 +141,7 @@
                 </v-icon>
               </v-btn>
             </v-card>
-            <v-card v-if="!isExpired() & !isOwner" elevation="0">
+            <v-card v-if="!isOwner" elevation="0">
               <v-card-text>
                 <v-form id="answer-form">
                   <v-textarea
@@ -190,7 +169,7 @@
           <v-icon>mdi-chevron-left</v-icon>TOPに戻る
         </v-btn>
         <div id="related-problem" class="col-12">
-          <h2>関連するお悩み</h2>
+          <h2>関連する記事</h2>
           <v-row>
             <v-col v-for="item in relatedProblems" :key="`related-problem-${item.id}`" class="col-6 d-flex flex-no-wrap">
               <v-card class="related-problem-card" :href="item.url">
@@ -245,6 +224,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import api from '~/plugins/api'
+import genreid2name from '~/assets/genreid2name.json'
 function replaceLink (text) {
   const matchLink = text.match(/(http(s)?:\/\/[a-zA-Z0-9-.!'()*;/?:@&=+$,%#_]+)/gi)
   if (matchLink === null) {
@@ -291,12 +271,12 @@ export default {
       selectedGenre: { label: '', value: 0 },
       selectedTime: { label: '延長しない', value: 0 },
       genreId: null,
-      genreId2Name: { 1: '人間関係', 2: '仕事', 3: '健康', 4: 'その他' },
+      genreId2Name: genreid2name,
       genres: [
-        { label: '人間関係', value: 1 },
-        { label: '仕事', value: 2 },
-        { label: '健康', value: 3 },
-        { label: 'その他', value: 4 }
+        { label: '活動報告', value: 1 },
+        { label: 'ドキュメント', value: 2 },
+        { label: '問いかけ', value: 3 },
+        { label: '雑談', value: 4 }
       ],
       howlong: [
         { label: '延長しない', value: 0 },
@@ -336,7 +316,12 @@ export default {
                 (x) => {
                   return { 'id': x.id, 'question_id': x.question_id, 'content': x.content }
                 }
-              ).sort((a, b) => { return a.question_id - b.question_id })
+              ).filter(
+                (x) => {
+                  return x.question_id === 3
+                }
+              )
+              .sort((a, b) => { return a.question_id - b.question_id })
           }
         )
         api.get('questions').then(
@@ -397,9 +382,6 @@ export default {
             }
           )
         })
-    },
-    isExpired () {
-      return this.deadline < Date.now() / 1000
     },
     getShortTitle (title) {
       const MAXLEN = 9

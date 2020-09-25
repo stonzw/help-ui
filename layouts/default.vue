@@ -5,7 +5,7 @@
       app
     >
       <v-toolbar-title>
-        <span id="logo">{{ title }}</span>
+        <span id="logo">{{ getCompanyName() }}</span>
       </v-toolbar-title>
       <v-spacer />
       <v-btn
@@ -19,7 +19,7 @@
         large
         rounded
       >
-        悩みを相談
+        投稿する
       </v-btn>
       <v-btn
         v-else
@@ -68,7 +68,7 @@
               <v-icon>mdi-human-handsup</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>悩みを相談する</v-list-item-title>
+              <v-list-item-title>投稿する</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -77,7 +77,16 @@
               <v-icon>mdi-account-multiple</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>プロフィール画面</v-list-item-title>
+              <v-list-item-title>みんなのプロフィール</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item :to="'/profile-edit'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-account-multiple</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>プロフィールの編集</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -86,7 +95,7 @@
               <v-icon>mdi-account</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>マイページ</v-list-item-title>
+              <v-list-item-title>活動記録</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -140,12 +149,21 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item to="/settings">
+          <v-list-item to="/password-change">
             <v-list-item-action>
               <v-icon>mdi-account-key</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>パスワードを変更</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item to="/send-coin">
+            <v-list-item-action>
+              <v-icon>mdi-ray-start-arrow</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>コインを送る</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -247,12 +265,11 @@ export default {
       loadingColor: `${process.env.THEMA_COLOR}`
     }
   },
-  computed: mapState(['title', 'userInfo']),
+  computed: mapState(['userInfo']),
   mounted () {
     this.fetchUser().then(() => {
       if (this.isAuthenticated()) {
         const receiverId = this.getUser().id
-        this.fetchTitle({ companyId: this.userInfo.company_id })
         if (!this.messages) {
           api.get(`/talks?receiver_id=${receiverId}`, { headers: this.getCred() })
             .then((res) => {
@@ -271,7 +288,7 @@ export default {
   },
   methods: {
     ...mapActions(['login', 'logout', 'fetchTitle', 'fetchUser']),
-    ...mapGetters(['isAuthenticated', 'isAdminUser', 'getUser', 'getCred', 'getMessage', 'isLoading']),
+    ...mapGetters(['isAuthenticated', 'isAdminUser', 'getUser', 'getCred', 'getMessage', 'isLoading', 'getCompanyName']),
     clickLoginButton () {
       this.login(
         {

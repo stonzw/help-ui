@@ -6,7 +6,7 @@
         <v-card-text>
           <v-col>
             <v-btn :to="'/create'" block color="primary">
-              悩みを相談する
+              投稿してみる
             </v-btn>
           </v-col>
           <v-col>

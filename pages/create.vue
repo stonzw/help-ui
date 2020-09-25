@@ -28,39 +28,22 @@
                   :rules="[rules.required]"
                   item-text="label"
                   item-value="value"
-                  label="どんな悩みですか?"
-                />
-                <v-select
-                  id="help-expiry"
-                  v-model="selectedTime"
-                  :items="howlong"
-                  :rules="[rules.required]"
-                  item-text="label"
-                  item-value="value"
-                  label="いつまでに答えて欲しいですか？"
+                  label="投稿のカテゴリーを選択してください。"
                 />
                 <v-text-field
                   id="help-title"
                   v-model="helpTitle"
                   :rules="[rules.max25, rules.required]"
-                  label="25文字以内でどんな悩みか教えてください。 (例: チームメンバーと口論をして気まずくなっています…)"
+                  label="投稿のタイトルを入力してください。"
                   counter="25"
-                  outlined
-                />
-                <v-textarea
-                  id="who-help"
-                  v-model="helpUserInfo"
-                  :rules="[rules.max200, rules.required]"
-                  label="公開できる範囲であなたのことを教えてください。 (例: 入社3年目で営業部にいて...)"
-                  counter="200"
                   outlined
                 />
                 <v-textarea
                   id="help-detail"
                   v-model="helpContent"
-                  :rules="[rules.max200, rules.required]"
-                  label="悩みについてもっと詳しく教えてください。 "
-                  counter="200"
+                  :rules="[rules.max1000, rules.required]"
+                  label="投稿内容"
+                  counter="1000"
                   outlined
                 />
                 <v-file-input
@@ -79,7 +62,7 @@
                   dark
                   color="primary"
                 >
-                  相談してみる
+                  投稿する
                 </v-btn>
               </v-form>
             </v-card-text>
@@ -107,26 +90,21 @@ export default {
       selectedGenre: { label: '', value: null },
       selectedTime: { label: '', value: null },
       genres: [
-        { label: '人間関係', value: 1 },
-        { label: '仕事', value: 2 },
-        { label: '健康', value: 3 },
-        { label: 'その他', value: 4 }
-      ],
-      howlong: [
-        { label: '3日', value: 60 * 60 * 24 * 3 },
-        { label: '1週間', value: 60 * 60 * 24 * 7 },
-        { label: '2週間', value: 60 * 60 * 24 * 14 },
-        { label: '1ヶ月', value: 60 * 60 * 24 * 30 }
+        { label: '活動報告', value: 1 },
+        { label: 'ドキュメント', value: 2 },
+        { label: '問いかけ', value: 3 },
+        { label: '雑談', value: 4 }
       ],
       rules: {
         required: value => !!value || 'Required.',
         max25: value => value.length <= 25 || '25文字以内で入力してください',
-        max200: value => value.length <= 200 || '200文字以内で入力してください'
+        max1000: value => value.length <= 1000 || '1000文字以内で入力してください'
       },
       valid: true,
       imageBase64: ''
     }
   },
+  computed: ['userInfo'],
   mounted () {
     this.fetchUser()
   },
@@ -152,7 +130,7 @@ export default {
         genre_id: this.selectedGenre,
         company_id: companyId,
         department_id: departmentId,
-        deadline: Math.floor(Date.now() / 1000) + this.selectedTime
+        deadline: Math.floor(Date.now() / 1000) + 3600 * 24 * 365 * 3
       }
       if (this.imageBase64) {
         data.base64_image = this.imageBase64
@@ -169,34 +147,21 @@ export default {
               question_id: 1,
               problem_id: res.data.id
             }
-
             api.post('/answers', data1, { headers: this.getCred() })
               .then((res2) => {
-                const data2 = {
-                  content: this.helpUserInfo,
+                const data3 = {
+                  content: this.helpContent,
                   department_id: departmentId,
                   company_id: companyId,
                   user_id: this.getUser().id,
-                  question_id: 2,
+                  question_id: 3,
                   problem_id: res.data.id
                 }
-                api.post('/answers', data2, { headers: this.getCred() })
-                  .then((res3) => {
-                    const data3 = {
-                      content: this.helpContent,
-                      department_id: departmentId,
-                      company_id: companyId,
-                      user_id: this.getUser().id,
-                      question_id: 3,
-                      problem_id: res.data.id
-                    }
-                    api.post('/answers', data3, { headers: this.getCred() })
-                      .then((res4) => {
-                        this.processing = false
-                        this.$nuxt.$router.push({ path: '/help/?helpId=' + res.data.id })
-                        this.finishLoad()
-                      })
-                      .catch(() => { this.finishLoad() })
+                api.post('/answers', data3, { headers: this.getCred() })
+                  .then((res4) => {
+                    this.processing = false
+                    this.$nuxt.$router.push({ path: '/help/?helpId=' + res.data.id })
+                    this.finishLoad()
                   })
                   .catch(() => { this.finishLoad() })
               })

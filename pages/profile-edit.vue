@@ -1,106 +1,65 @@
 <template>
   <v-layout>
     <v-container v-if="isAuthenticated()">
-      <h2>活動の履歴</h2>
-      <v-row>
-        <v-col cols="6">
-          <v-card class="comment-genre">
-            <v-card-title>
-              投稿したお悩みのカテゴリー
-            </v-card-title>
-            <v-card-text>
-              <VueDoughnut :chart-data="commentChart(problemSummary)" :options="enqueteOptions" :width="400" />
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="6">
-          <v-card class="comment-genre">
-            <v-card-title>
-              コメントしたカテゴリー
-            </v-card-title>
-            <v-card-text>
-              <VueDoughnut :chart-data="commentChart(commentSummary)" :options="enqueteOptions" :width="400" />
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-      <h2>{{ getUserInfo().name }}さんの投稿したお悩み</h2>
-      <v-row
-        v-if="isAuthenticated()"
-        align="center"
-        justify="center"
-      >
-        <v-col v-for="item in problemData" :key="`my-problem-${item.id}`" class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-          <v-card :href="item.url" elevation="0">
-            <div class="d-flex flex-no-wrap">
-              <v-avatar
-                class="ma-3"
-                size="125"
-                tile
-                boarder
-              >
-                <v-img :src="item.image_url" />
-              </v-avatar>
-              <div class="detail-card">
-                <div class="help-title">
-                  {{ item.title }}
-                </div>
-                <div><v-icon>mdi-calendar</v-icon>{{ unix2daystr(item.deadline) }}</div>
-              </div>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-      <h2>{{ getUserInfo().name }}さんの投稿したコメント</h2>
-      <div id="help-answer">
-        <v-col v-for="comment in commentData" :key="`comment-${comment.id}`">
-          <v-card :to="comment.problem.url" elevation="0">
-            <v-card-title>
-              {{ comment.content }}
-            </v-card-title>
-            <v-card-subtitle>
-              「{{ comment.problem.title }}」への回答
-            </v-card-subtitle>
-          </v-card>
-        </v-col>
-      </div>
-      <v-card>
-        <v-card-title>
-          コインを送る
-        </v-card-title>
-        <v-card-subtitle>
-          所持コイン：{{ userInfo.coin }}枚
-        </v-card-subtitle>
+      <h2>プロフィールを編集</h2>
+      <v-card class="mb-6">
         <v-card-text>
-          <v-select
-            v-model="selectedUser"
-            :items="colleagues"
-            item-text="name"
-            item-value="id"
-            label="送信先"
-            dense
-          />
-          <v-text-field
-            v-model="coinAmount"
+          <div v-if="imageUploading" class="text-center">
+            <v-progress-circular
+              :size="50"
+              color="primary"
+              indeterminate
+            />
+          </div>
+          <div v-else-if="profileImageUrl">
+            <v-img :src="profileImageUrl" :max-width="200" />
+          </div>
+          <v-file-input
+            id="help-image"
+            @change="onImageChange"
+            accept="image/png, image/jpeg, image/bmp"
+            placeholder="見出し画像(任意)"
+            prepend-icon="mdi-camera"
           />
         </v-card-text>
         <v-btn
-          @click="clickCoinButton"
+          @click="clickProfileImageSendButton"
+          block
+          color="primary"
+          :disabled="imageUploading"
+        >
+          プロフィール画像を確定する
+        </v-btn>
+      </v-card>
+      <v-card>
+        <v-card-title>
+          紹介文
+        </v-card-title>
+        <v-card-text>
+          <v-textarea
+            id="help-detail"
+            v-model="profileDescription"
+            counter="200"
+            outlined
+          />
+        </v-card-text>
+        <v-btn
+          @click="clickProfileSendButton"
           block
           color="primary"
         >
-          送信する
+          紹介文を確定する
         </v-btn>
       </v-card>
     </v-container>
     <v-dialog
-      v-model="messageDialog"
+      v-model="completeDialog"
       max-width="694px"
     >
-      <v-card>
-        <v-card-text>
-          {{ message.message }}
-        </v-card-text>
+      <v-card class="pa-2">
+        <v-card-title>
+          変更が完了しました。
+        </v-card-title>
       </v-card>
     </v-dialog>
   </v-layout>
@@ -136,7 +95,7 @@ export default {
       profileDescription: '',
       profileImageUrl: '',
       imageUploading: false,
-      messageDialog: false,
+      completeDialog: false,
       message: { message: '', level: 'none' }
     }
   },
@@ -203,7 +162,7 @@ export default {
         .then((x) => {
           this.setUserInfo({ data: x.data })
           this.message = { message: '更新が完了しました.', level: 'success' }
-          this.messageDialog = true
+          this.completeDialog = true
         })
     },
     clickProfileImageSendButton () {
@@ -212,7 +171,7 @@ export default {
         .then((x) => {
           this.setUserInfo({ data: x.data })
           this.message = { message: '更新が完了しました.', level: 'success' }
-          this.messageDialog = true
+          this.completeDialog = true
         })
     },
     clickCoinButton () {

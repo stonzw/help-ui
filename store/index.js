@@ -65,6 +65,30 @@ export const getters = {
   },
   getColleagues (state) {
     return state.colleagues
+  },
+  getCompanyName (state) {
+    if (state.userInfo) {
+      if (state.userInfo.company) {
+        return state.userInfo.company.name
+      }
+    }
+    return ''
+  },
+  getCompanyMessage (state) {
+    if (state.userInfo) {
+      if (state.userInfo.company) {
+        return state.userInfo.company.message
+      }
+    }
+    return ''
+  },
+  getCompanyDetail (state) {
+    if (state.userInfo) {
+      if (state.userInfo.company) {
+        return state.userInfo.company.detail
+      }
+    }
+    return ''
   }
 }
 
