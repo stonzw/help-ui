@@ -29,6 +29,16 @@
         </v-card-text>
       </v-card>
     </v-container>
+    <v-dialog
+      v-model="completeDialog"
+      max-width="694px"
+    >
+      <v-card class="pa-2">
+        <v-card-title>
+          会社情報の変更が完了しました。
+        </v-card-title>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 <script>
@@ -38,7 +48,8 @@ export default {
   data () {
     return {
       message: '',
-      name: ''
+      name: '',
+      completeDialog: false
     }
   },
   computed: {
@@ -52,7 +63,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['fetchUser', 'creaetUser', 'setUserInfo']),
+    ...mapActions(['fetchUser', 'creaetUser', 'setUserInfo', 'setUserInfoCompany']),
     ...mapGetters(['isAuthenticated', 'getUserInfo', 'getCred']),
     clickRegisterButton () {
       const data = {
@@ -62,7 +73,8 @@ export default {
       }
       api.put(`companies/${this.userInfo.company.id}`, data, { headers: this.cred })
         .then((res) => {
-          console.log(res)
+          this.setUserInfoCompany({ data: res.data })
+          this.completeDialog = true
         })
     }
   }

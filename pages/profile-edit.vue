@@ -157,7 +157,7 @@ export default {
       }
     },
     clickProfileSendButton () {
-      const data = { 'description': this.profileDescription }
+      const data = { 'description': this.profileDescription, 'company_id': this.userInfo.company_id }
       api.put(`user_infos/${this.userInfo.id}`, data, { headers: this.getCred() })
         .then((x) => {
           this.setUserInfo({ data: x.data })
@@ -166,7 +166,7 @@ export default {
         })
     },
     clickProfileImageSendButton () {
-      const data = { 'image': this.profileImageUrl }
+      const data = { 'image': this.profileImageUrl, 'company_id': this.userInfo.company_id }
       api.put(`user_infos/${this.userInfo.id}`, data, { headers: this.getCred() })
         .then((x) => {
           this.setUserInfo({ data: x.data })

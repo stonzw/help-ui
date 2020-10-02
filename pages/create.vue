@@ -89,12 +89,7 @@ export default {
       processing: true,
       selectedGenre: { label: '', value: null },
       selectedTime: { label: '', value: null },
-      genres: [
-        { label: '活動報告', value: 1 },
-        { label: 'ドキュメント', value: 2 },
-        { label: '問いかけ', value: 3 },
-        { label: '雑談', value: 4 }
-      ],
+      genres: [],
       rules: {
         required: value => !!value || 'Required.',
         max25: value => value.length <= 25 || '25文字以内で入力してください',
@@ -106,14 +101,33 @@ export default {
   },
   computed: ['userInfo'],
   mounted () {
+    this.fetchGenre()
     this.fetchUser()
   },
   methods: {
     ...mapMutations(['startLoad', 'finishLoad']),
     ...mapActions(['fetchUser']),
-    ...mapGetters(['isAuthenticated', 'getUser', 'getUserInfo', 'getCred']),
+    ...mapGetters(['isAuthenticated', 'isAdminUser', 'getUser', 'getUserInfo', 'getCred']),
     validate () {
       this.$refs.form.validate()
+    },
+    fetchGenre () {
+      if (this.isAdminUser()) {
+        this.genres = [
+          { label: '運営からのお知らせ', value: 1 },
+          { label: '活動記録', value: 2 },
+          { label: '質問', value: 3 },
+          { label: '募集', value: 4 },
+          { label: '雑記', value: 5 }
+        ]
+      } else {
+        this.genres = [
+          { label: '活動記録', value: 2 },
+          { label: '質問', value: 3 },
+          { label: '募集', value: 4 },
+          { label: '雑記', value: 5 }
+        ]
+      }
     },
     putHelp () {
       this.validate()

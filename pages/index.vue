@@ -162,6 +162,43 @@
             </v-btn>
           </v-row>
         </div>
+        <div id="other-area" v-if="(mode == 'all' | mode == 'other')">
+          <h2>{{ genreid2name[5] }}</h2>
+          <v-row
+            v-if="isAuthenticated() & (mode == 'all' | mode == 'other')"
+            align="center"
+            justify="center"
+          >
+            <v-col v-for="item in getOtherProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+              <v-card :href="item.url" elevation="0">
+                <div class="d-flex flex-no-wrap">
+                  <v-avatar
+                    class="ma-3"
+                    size="125"
+                    tile
+                    boarder
+                  >
+                    <v-img :src="item.image_url" />
+                  </v-avatar>
+                  <div class="detail-card">
+                    <div class="help-title">
+                      {{ item.title }}
+                    </div>
+                    <div><v-icon>mdi-calendar</v-icon> {{ iso2daystr(item.deadline) }} </div>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-btn v-if="mode == 'all'" @click="clickOtherButton" color="primary" rounded>
+              {{ genreid2name[5] }}をもっとみる<v-icon>mdi-chevron-right</v-icon>
+            </v-btn>
+            <v-btn v-else @click="clickResetButton" color="primary" rounded>
+              <v-icon>mdi-chevron-left</v-icon>戻る
+            </v-btn>
+          </v-row>
+        </div>
       </v-container>
     </div>
   </v-layout>

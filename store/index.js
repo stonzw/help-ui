@@ -101,6 +101,14 @@ export const mutations = {
     state.userInfo = data
     state.title = data.company.name
   },
+  setUserInfoCompany (state, data) {
+    state.userInfo.company = data
+    this.$cookies.set('user_info', state.userInfo, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30
+    })
+    state.title = state.userInfo.company.name
+  },
   setUserFromRes (state, res) {
     const user = res.data.data
     this.$cookies.set('user', user, {
@@ -193,6 +201,9 @@ export const actions = {
   },
   async setUserInfo ({ commit }, { data }) {
     await commit('setUserInfo', data)
+  },
+  async setUserInfoCompany ({ commit }, { data }) {
+    await commit('setUserInfoCompany', data)
   },
   async fetchColleagues ({ commit }, { companyId }) {
     const res = await api.get(
@@ -287,6 +298,16 @@ export const actions = {
     try {
       const otherRes = await api.get(
         `/search-problem?genre_id=${process.env.OTHER_ID}&company_id=${this.state.userInfo.company_id}`,
+        { headers: this.state.cred }
+      )
+      commit('setOtherProblem', otherRes)
+      commit('finishLoad')
+    } catch (error) {
+      commit('finishLoad')
+    }
+    try {
+      const otherRes = await api.get(
+        `/search-problem?genre_id=5&company_id=${this.state.userInfo.company_id}`,
         { headers: this.state.cred }
       )
       commit('setOtherProblem', otherRes)
