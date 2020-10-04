@@ -17,6 +17,7 @@ export const state = () => ({
   workProblem: [],
   humanProblem: [],
   healthProblem: [],
+  boshuProblem: [],
   otherProblem: [],
   departments: [],
   colleagues: [],
@@ -53,6 +54,9 @@ export const getters = {
   },
   getHealthProblem (state) {
     return state.healthProblem
+  },
+  getBoshuProblem (state) {
+    return state.boshuProblem
   },
   getOtherProblem (state) {
     return state.otherProblem
@@ -175,6 +179,9 @@ export const mutations = {
   },
   setHealthProblem (state, res) {
     state.healthProblem = parseProblem(res)
+  },
+  setBoshuProblem (state, res) {
+    state.boshuProblem = parseProblem(res)
   },
   setOtherProblem (state, res) {
     state.otherProblem = parseProblem(res)
@@ -303,11 +310,11 @@ export const actions = {
       commit('finishLoad')
     }
     try {
-      const otherRes = await api.get(
-        `/search-problem?genre_id=${process.env.OTHER_ID}&company_id=${this.state.userInfo.company_id}`,
+      const boshuRes = await api.get(
+        `/search-problem?genre_id=${process.env.BOSHU_ID}&company_id=${this.state.userInfo.company_id}`,
         { headers: this.state.cred }
       )
-      commit('setOtherProblem', otherRes)
+      commit('setBoshuProblem', boshuRes)
       commit('finishLoad')
     } catch (error) {
       commit('finishLoad')

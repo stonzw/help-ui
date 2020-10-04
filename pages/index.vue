@@ -138,7 +138,7 @@
             align="center"
             justify="center"
           >
-            <v-col v-for="item in getOtherProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <v-col v-for="item in getBoshuProblem().slice(0, lastIdx)" :key="item.id" class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <v-card :href="item.url" elevation="0">
                 <div class="d-flex flex-no-wrap">
                   <v-avatar
@@ -245,6 +245,7 @@ export default {
       'getWorkProblem',
       'getHealthProblem',
       'getHumanProblem',
+      'getBoshuProblem',
       'getOtherProblem',
       'getCompanyName',
       'getCompanyMessage',
