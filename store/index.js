@@ -89,6 +89,13 @@ export const getters = {
       }
     }
     return ''
+  },
+  getHeaderImageURL (state) {
+    if (state.userInfo) {
+      if (state.userInfo.company) {
+        return state.userInfo.company.header_image
+      }
+    }
   }
 }
 

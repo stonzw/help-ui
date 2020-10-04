@@ -14,12 +14,16 @@
             {{ c.description }}
           </div>
         </v-card-text>
+        <v-card-subtitle>
+          参加日: {{ parseDatetime(c.created_at) }}
+        </v-card-subtitle>
       </v-card>
     </v-container>
   </v-layout>
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import moment from 'moment'
 export default {
   data () {
     return {
@@ -56,7 +60,10 @@ export default {
   },
   methods: {
     ...mapActions(['fetchUser', 'fetchColleagues', 'setUserInfo']),
-    ...mapGetters(['isAuthenticated', 'getUserInfo', 'getCred'])
+    ...mapGetters(['isAuthenticated', 'getUserInfo', 'getCred']),
+    parseDatetime (daystr) {
+      return moment(daystr).format('YYYY-MM-DD')
+    }
   }
 }
 </script>

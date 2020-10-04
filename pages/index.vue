@@ -2,16 +2,22 @@
   <v-layout>
     <div class="wrapper">
       <v-card id="jumbotron" class="d-flex flex-column jumbotron" color="secondary" elevation="0" rounded="false">
-        <v-container>
-          <v-flex class="center">
-            <h2 class="copy-write">
-              {{ getCompanyMessage() }}
-            </h2>
-            <h3>
-              {{ getCompanyDetail() }}
-            </h3>
-          </v-flex>
-        </v-container>
+        <v-img
+          class="white--text align-center"
+          height="400px"
+          :src="getHeaderImageURL()"
+        >
+          <v-container>
+            <v-flex class="center">
+              <h2 class="copy-write">
+                {{ getCompanyMessage() }}
+              </h2>
+              <h3 class="community-detail">
+                {{ getCompanyDetail() }}
+              </h3>
+            </v-flex>
+          </v-container>
+        </v-img>
       </v-card>
       <v-container v-if="isAuthenticated()" class="d-flex flex-column">
         <div id="human-area" v-if="mode == 'all' | mode == 'human'">
@@ -242,7 +248,8 @@ export default {
       'getOtherProblem',
       'getCompanyName',
       'getCompanyMessage',
-      'getCompanyDetail'
+      'getCompanyDetail',
+      'getHeaderImageURL'
     ]),
     iso2daystr (iso) {
       return moment(iso).format('YYYY年MM月DD日 投稿')
@@ -387,5 +394,9 @@ export default {
   font-size: 1.4rem;
   font-weight: 700;
   margin-left: 2rem;
+}
+.community-detail {
+  font-weight: 800;
+  font-size: 1.2rem;
 }
 </style>
