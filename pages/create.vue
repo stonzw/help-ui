@@ -12,7 +12,7 @@
         >
           <v-card>
             <v-card-title>
-              相談してみましょう
+              投稿してみましょう
             </v-card-title>
             <v-card-text>
               <v-form
@@ -78,7 +78,7 @@ import api from '~/plugins/api'
 export default {
   head () {
     return {
-      title: '相談ページ'
+      title: '投稿ページ'
     }
   },
   data () {

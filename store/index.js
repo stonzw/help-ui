@@ -5,7 +5,7 @@ function parseProblem (res) {
     const item = p
     item.url = `/help/?helpId=${p.id}`
     return item
-  })
+  }).sort((a, b) => { return b.id - a.id })
 }
 
 export const state = () => ({
@@ -97,9 +97,12 @@ export const getters = {
   getHeaderImageURL (state) {
     if (state.userInfo) {
       if (state.userInfo.company) {
-        return state.userInfo.company.header_image
+        if (state.userInfo.company.header_image) {
+          return state.userInfo.company.header_image
+        }
       }
     }
+    return ''
   }
 }
 

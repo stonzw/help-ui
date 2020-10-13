@@ -122,33 +122,6 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item v-if="isAdminUser()" :to="'/admin/sendmail'" router link>
-            <v-list-item-action>
-              <v-icon>mdi-account-plus</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>招待メールの送信</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item v-if="isAdminUser()" :to="'/admin/dashboard'" router link>
-            <v-list-item-action>
-              <v-icon>mdi-chart-line</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>管理者ダッシュボード</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item v-if="isAdminUser()" :to="'/admin/edit'" router link>
-            <v-list-item-action>
-              <v-icon>mdi-account-multiple-outline</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>コミュニティ情報の編集</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
           <v-list-item to="/password-change">
             <v-list-item-action>
               <v-icon>mdi-account-key</v-icon>
@@ -176,6 +149,34 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
+
+          <v-list-item v-if="isAdminUser()" :to="'/admin/edit'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-account-multiple-outline</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>コミュニティ情報の編集</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item v-if="isAdminUser()" :to="'/admin/sendmail'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-account-plus</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>招待メールの送信</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item v-if="isAdminUser()" :to="'/admin/dashboard'" router link>
+            <v-list-item-action>
+              <v-icon>mdi-chart-line</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>管理者ダッシュボード</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
       </v-list>
     </v-navigation-drawer>
     <v-content>

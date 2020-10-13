@@ -34,7 +34,7 @@
           >
             <v-card>
               <v-card-title class="d-flex justify-space-around">
-                相談内容を削除する
+                投稿を削除する
               </v-card-title>
               <v-card-text class="d-flex justify-space-around">
                 <v-btn
@@ -60,7 +60,7 @@
           >
             <v-card>
               <v-card-title>
-                相談内容を編集する
+                投稿を編集する
               </v-card-title>
               <v-card-text>
                 <v-form id="create-help-form">
@@ -93,7 +93,7 @@
           <div id="help-content">
             <v-card v-for="item in contents" :key="`answer-${item.id}`" elevation="0">
               <p v-if="editableId != item.id" class="text-content">
-                {{ item.content }}
+                <span v-html="item.content.replace(/\n/g, '<br>')"></span>
                 <v-btn v-if="owner === getUser().id" @click="clickEditButton(item.id, item.content)" text block color="primary">
                   編集する
                   <v-icon>
@@ -123,7 +123,6 @@
               <v-card-text>
                 <p v-if="isOwner | comment.user_id == getUser().id" v-html="comment.content" class="text-content" />
                 <div v-if="isOwner | comment.user_id == getUserInfo().id" class="comment-author" style="text-align: end;">
-                  {{ getDepartments()[`${comment.user.department_id}`].name }}
                   {{ comment.user.name }}さんの回答
                 </div>
                 <v-img v-else :src="comment.image_url" />
@@ -233,6 +232,10 @@ function replaceLink (text) {
   matchLink.forEach((url) => {
     if (text.includes('youtube')) {
       const videoId = url.match(/\?v=[a-zA-Z0-9_-]+/gi)[0].slice(3)
+      const iframe = `<iframe id="ytplayer" type="text/html" width="640" height="360" src='https://www.youtube.com/embed/${videoId}' frameborder="0"></iframe>`
+      text = text.replace(url, iframe)
+    } else if (text.includes('youtu.be')) {
+      const videoId = url.match(/youtu.be\/([a-zA-Z0-9_-]+)/gi)[0].slice(9)
       const iframe = `<iframe id="ytplayer" type="text/html" width="640" height="360" src='https://www.youtube.com/embed/${videoId}' frameborder="0"></iframe>`
       text = text.replace(url, iframe)
     } else {
@@ -463,7 +466,7 @@ export default {
         checked: false,
         company_id: this.getUserInfo().company_id,
         department_id: this.getUserInfo().department_id,
-        sender_name: this.getUserInfo().name + ` (相談内容: ${this.helpTitle}」)`,
+        sender_name: this.getUserInfo().name + ` (投稿: ${this.helpTitle}」)`,
         sender_email: this.getUser().email
       }
       if (this.owner === this.getUser().id) {

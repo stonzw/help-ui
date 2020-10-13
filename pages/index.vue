@@ -79,7 +79,7 @@
                     <div class="help-title">
                       {{ item.title }}
                     </div>
-                    <div><v-icon>mdi-calendar</v-icon>{{ iso2daystr(item.deadline) }}</div>
+                    <div><v-icon>mdi-calendar</v-icon>{{ iso2daystr(item.created_at) }}</div>
                   </div>
                 </div>
               </v-card>
@@ -116,7 +116,7 @@
                     <div class="help-title">
                       {{ item.title }}
                     </div>
-                    <div><v-icon>mdi-calendar</v-icon> {{ iso2daystr(item.deadline) }} </div>
+                    <div><v-icon>mdi-calendar</v-icon> {{ iso2daystr(item.created_at) }} </div>
                   </div>
                 </div>
               </v-card>
@@ -131,10 +131,10 @@
             </v-btn>
           </v-row>
         </div>
-        <div id="other-area" v-if="(mode == 'all' | mode == 'other')">
+        <div id="other-area" v-if="(mode == 'all' | mode == 'boshu')">
           <h2>{{ genreid2name[4] }}</h2>
           <v-row
-            v-if="isAuthenticated() & (mode == 'all' | mode == 'other')"
+            v-if="isAuthenticated() & (mode == 'all' | mode == 'boshu')"
             align="center"
             justify="center"
           >
@@ -153,14 +153,14 @@
                     <div class="help-title">
                       {{ item.title }}
                     </div>
-                    <div><v-icon>mdi-calendar</v-icon> {{ iso2daystr(item.deadline) }} </div>
+                    <div><v-icon>mdi-calendar</v-icon> {{ iso2daystr(item.created_at) }} </div>
                   </div>
                 </div>
               </v-card>
             </v-col>
           </v-row>
           <v-row align="center" justify="center">
-            <v-btn v-if="mode == 'all'" @click="clickOtherButton" color="primary" rounded>
+            <v-btn v-if="mode == 'all'" @click="clickBoshuButton" color="primary" rounded>
               {{ genreid2name[4] }}をもっとみる<v-icon>mdi-chevron-right</v-icon>
             </v-btn>
             <v-btn v-else @click="clickResetButton" color="primary" rounded>
@@ -190,7 +190,7 @@
                     <div class="help-title">
                       {{ item.title }}
                     </div>
-                    <div><v-icon>mdi-calendar</v-icon> {{ iso2daystr(item.deadline) }} </div>
+                    <div><v-icon>mdi-calendar</v-icon> {{ iso2daystr(item.created_at) }} </div>
                   </div>
                 </div>
               </v-card>
@@ -266,6 +266,10 @@ export default {
     clickHealthButton () {
       this.mode = 'health'
       this.lastIdx = this.getHealthProblem().length
+    },
+    clickBoshuButton () {
+      this.mode = 'boshu'
+      this.lastIdx = this.getBoshuProblem().length
     },
     clickOtherButton () {
       this.mode = 'other'

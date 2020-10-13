@@ -1,12 +1,12 @@
 <template>
   <v-layout>
     <v-container v-if="isAuthenticated()">
-      <h2>活動の履歴</h2>
+      <h2>投稿の割合</h2>
       <v-row>
         <v-col cols="6">
           <v-card class="comment-genre">
             <v-card-title>
-              投稿したお悩みのカテゴリー
+              投稿のカテゴリー
             </v-card-title>
             <v-card-text>
               <VueDoughnut :chart-data="commentChart(problemSummary)" :options="enqueteOptions" :width="400" />
@@ -24,7 +24,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <h2>{{ getUserInfo().name }}さんの投稿したお悩み</h2>
+      <h2>{{ getUserInfo().name }}さんの投稿一覧</h2>
       <v-row
         v-if="isAuthenticated()"
         align="center"
@@ -64,34 +64,6 @@
           </v-card>
         </v-col>
       </div>
-      <v-card>
-        <v-card-title>
-          コインを送る
-        </v-card-title>
-        <v-card-subtitle>
-          所持コイン：{{ userInfo.coin }}枚
-        </v-card-subtitle>
-        <v-card-text>
-          <v-select
-            v-model="selectedUser"
-            :items="colleagues"
-            item-text="name"
-            item-value="id"
-            label="送信先"
-            dense
-          />
-          <v-text-field
-            v-model="coinAmount"
-          />
-        </v-card-text>
-        <v-btn
-          @click="clickCoinButton"
-          block
-          color="primary"
-        >
-          送信する
-        </v-btn>
-      </v-card>
     </v-container>
     <v-dialog
       v-model="messageDialog"
@@ -187,11 +159,11 @@ export default {
     commentChart (data) {
       if (data) {
         return {
-          labels: ['Human', 'Work', 'Health'],
+          labels: ['運営からのお知らせ', '活動報告', '質問', '募集', '雑記'],
           datasets: [
             {
-              data: [data.human, data.work, data.health],
-              backgroundColor: ['#A4A1FB', '#FC8373', '#85E388']
+              data: [data.info, data.act, data.question, data.bosyu, data.other],
+              backgroundColor: ['#E38885', '#A4A1FB', '#FC8373', '#85E388', '#8372FC']
             }
           ]
         }

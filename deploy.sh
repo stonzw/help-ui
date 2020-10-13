@@ -5,5 +5,5 @@
 # まだインストールされていない場合は npm をインストールする
 [ ! -d "node_modules" ] && npm install
 
-npm run generate
+yarn generate
 aws s3 sync dist/ s3://www.help-knowledge.com --profile=help-ui

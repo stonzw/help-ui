@@ -60,6 +60,12 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    proxy: true
+  },
+  proxy: {
+    '/youtube': {
+      target: 'https://youtu.be'
+    }
   },
   /*
   ** vuetify module configuration

@@ -19,6 +19,16 @@
         </v-btn>
       </v-card>
     </v-container>
+    <v-dialog
+      v-model="completeDialog"
+      max-width="694px"
+    >
+      <v-card class="pa-2">
+        <v-card-title>
+          切り替えました
+        </v-card-title>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 <script>
@@ -29,7 +39,8 @@ export default {
     return {
       userInfoList: null,
       communityList: null,
-      selectedCommunity: null
+      selectedCommunity: null,
+      completeDialog: false
     }
   },
   computed: {
@@ -59,6 +70,7 @@ export default {
       this.userInfoList.map((x) => {
         if (x.company.id === this.selectedCommunity) {
           this.setUserInfo({ data: x })
+          this.completeDialog = true
         }
       })
     }
