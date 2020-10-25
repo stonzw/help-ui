@@ -317,7 +317,7 @@ export default {
             this.contents = answers.data
               .map(
                 (x) => {
-                  return { 'id': x.id, 'question_id': x.question_id, 'content': x.content }
+                  return { 'id': x.id, 'question_id': x.question_id, 'content': replaceLink(x.content) }
                 }
               ).filter(
                 (x) => {
