@@ -168,15 +168,6 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item v-if="isAdminUser()" :to="'/admin/dashboard'" router link>
-            <v-list-item-action>
-              <v-icon>mdi-chart-line</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>管理者ダッシュボード</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
       </v-list>
     </v-navigation-drawer>
     <v-content>
