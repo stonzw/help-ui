@@ -21,7 +21,9 @@ export const state = () => ({
   otherProblem: [],
   departments: [],
   colleagues: [],
-  title: ''
+  title: '',
+  companies: [],
+  company: null
 })
 
 export const getters = {
@@ -208,6 +210,12 @@ export const mutations = {
   },
   setColleagues (state, data) {
     state.colleagues = data
+  },
+  setCompany (state, data) {
+    state.company = data
+  },
+  setCompanies (state, data) {
+    state.companies = data
   }
 }
 
@@ -282,6 +290,14 @@ export const actions = {
   async fetchTitle ({ commit }, { companyId }) {
     const res = await api.get(`companies/${companyId}`)
     commit('setTitle', res.data.name)
+  },
+  async fetchCompany ({ commit }, { companyId }) {
+    const res = await api.get(`companies/${companyId}`)
+    commit('setCompany', res.data)
+  },
+  async fetchCompanies ({ commit }) {
+    const res = await api.get(`companies`)
+    commit('setCompanies', res.data)
   },
   async fetchProblem ({ commit }) {
     commit('startLoad')
