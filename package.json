@@ -26,7 +26,7 @@
     "gulp": "^4.0.2",
     "gulp-awspublish": "^4.1.1",
     "gulp-cloudfront-invalidate-aws-publish": "^1.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "nuxt": "^2.0.0",
     "vue-chartjs": "^3.5.0",
     "vuex": "^3.1.2"
